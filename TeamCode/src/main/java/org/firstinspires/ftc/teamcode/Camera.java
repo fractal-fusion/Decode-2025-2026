@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -120,6 +121,35 @@ public class Camera {
         }
         return null;
     }
+    
+    public double getBearing() {
+        List<AprilTagDetection> currentDetections = aprilTagProcessor.getDetections();
+        
+        for (AprilTagDetection detection : currentDetections) {
+            if (detection.metadata != null && detection.id > 0){
+                if (detection.id == 20 || detection.id == 24) { //check for recognized blue (20) or red (24) alliance apriltag
+                    return detection.ftcPose.bearing;
+                }
+            }
+        }
+
+        return 0.0;
+    }
+
+    public void turnOnCamera(){
+        visionPortal.resumeStreaming();
+    }
+
+    public void turnOffCamera(){
+        visionPortal.stopStreaming();
+    }
+
+    public void setExposure(int exposureMs){
+        ExposureControl exposureControl = visionPortal.getCameraControl(ExposureControl.class);
+        if (exposureControl.getMode() != ExposureControl.Mode.Manual) {
+            exposureControl.setMode(ExposureControl.Mode.Manual);
+        }
+    }//finish method
 
     //TODO: make methods for detecting a specific apriltag, detecting the current pattern, and getting the pose
     
