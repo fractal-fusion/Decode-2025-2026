@@ -15,6 +15,14 @@ public class Camera {
     private AprilTagProcessor aprilTagProcessor;
     private VisionPortal visionPortal;
 
+//    private Color[]  GPP = {Color.GREEN, Color.PURPLE, Color.PURPLE};
+//    private Color[]  PGP = {Color.PURPLE, Color.GREEN, Color.PURPLE};
+//    private Color[]  PPG = {Color.PURPLE, Color.PURPLE, Color.GREEN};
+
+    private final int GPP_id = 21;
+    private final int PGP_id = 22;
+    private final int PPG_id = 23;
+
     public Camera(OpMode linearOpMode) {
         //initialize opmode variable for current opmode
         this.opMode = linearOpMode;
@@ -91,6 +99,26 @@ public class Camera {
         opMode.telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
         opMode.telemetry.addLine("RBE = Range, Bearing & Elevation");
 
+    }
+
+    public Color[] getMosaic() {
+        List<AprilTagDetection> currentDetections = aprilTagProcessor.getDetections();
+
+        for (AprilTagDetection detection : currentDetections) { //get all detections
+            if (detection.id > 0) { //check if a recognized apriltag was detected (-1 is an unrecognized apriltag)
+                switch (detection.id) { //check which mosaic pattern and return a list of the colors
+                    case GPP_id:
+                        return new Color[]{Color.GREEN, Color.PURPLE, Color.PURPLE};
+                    case PGP_id:
+                        return new Color[]{Color.PURPLE, Color.GREEN, Color.PURPLE};
+                    case PPG_id:
+                        return new Color[]{Color.PURPLE, Color.PURPLE, Color.GREEN};
+                    default:
+                        return null; //return null if detected apriltag is not a mosaic apriltag
+                }
+            }
+        }
+        return null;
     }
 
     //TODO: make methods for detecting a specific apriltag, detecting the current pattern, and getting the pose

@@ -10,6 +10,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -28,6 +29,8 @@ public class CameraTestOpmodeModular extends LinearOpMode {
 
         while (opModeIsActive()) {
             camera.telemetryAprilTag();
+            telemetry.addData("Mosaic: ", Arrays.toString(camera.getMosaic()));
+            telemetry.update();
         }
     }
 
