@@ -17,8 +17,8 @@ public class testShooterOpmode extends LinearOpMode {
 
         while (opModeIsActive())
         {
-            shooter.shoot(gamepad1);
-            telemetry.addData("power", shooter.power);
+            shooter.testShoot(gamepad1);
+            telemetry.addData("power", shooter.shootPower);
             telemetry.update();
         }
     }
