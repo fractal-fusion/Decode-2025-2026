@@ -9,6 +9,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class Camera {
 
@@ -144,12 +145,19 @@ public class Camera {
         visionPortal.stopStreaming();
     }
 
-    public void setExposure(int exposureMs){
-        ExposureControl exposureControl = visionPortal.getCameraControl(ExposureControl.class);
-        if (exposureControl.getMode() != ExposureControl.Mode.Manual) {
-            exposureControl.setMode(ExposureControl.Mode.Manual);
+    public void setExposure(int exposureMs) {
+        if (visionPortal == null) {
+            return;
         }
-    }//finish method
+
+        if (visionPortal.getCameraState() == VisionPortal.CameraState.STREAMING){
+            ExposureControl exposureControl = visionPortal.getCameraControl(ExposureControl.class);
+            if (exposureControl.getMode() != ExposureControl.Mode.Manual) {
+                exposureControl.setMode(ExposureControl.Mode.Manual);
+            }
+            exposureControl.setExposure((long) exposureMs, TimeUnit.MILLISECONDS);
+        }
+    }
 
     //TODO: make methods for detecting a specific apriltag, detecting the current pattern, and getting the pose
     
