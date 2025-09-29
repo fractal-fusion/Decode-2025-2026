@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -158,6 +159,18 @@ public class Camera {
             exposureControl.setExposure((long) exposureMs, TimeUnit.MILLISECONDS);
         }
     }
+
+    public void setGain(int gain) {
+        if (visionPortal == null) {
+            return;
+        }
+
+        if (visionPortal.getCameraState() == VisionPortal.CameraState.STREAMING){
+            GainControl gainControl = visionPortal.getCameraControl(GainControl.class);
+            gainControl.setGain(gain);
+        }
+    }
+
 
     //TODO: make methods for detecting a specific apriltag, detecting the current pattern, and getting the pose
     
