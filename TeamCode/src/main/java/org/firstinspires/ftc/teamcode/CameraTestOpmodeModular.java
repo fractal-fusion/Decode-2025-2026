@@ -20,7 +20,7 @@ public class CameraTestOpmodeModular extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        Camera camera = new Camera(this);
+        Camera camera = new Camera(this, 2);
 
         telemetry.addLine("Robot Ready.");
         telemetry.update();

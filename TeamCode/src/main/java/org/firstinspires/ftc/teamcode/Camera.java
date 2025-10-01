@@ -26,7 +26,7 @@ public class Camera {
     private final int PGP_id = 22;
     private final int PPG_id = 23;
 
-    public Camera(OpMode linearOpMode) {
+    public Camera(OpMode linearOpMode, int decimation) {
         //initialize opmode variable for current opmode
         this.opMode = linearOpMode;
 
@@ -53,7 +53,7 @@ public class Camera {
         // Decimation = 3 ..  Detect 2" Tag from 4  feet away at 30 Frames Per Second (default)
         // Decimation = 3 ..  Detect 5" Tag from 10 feet away at 30 Frames Per Second (default)
         // Note: Decimation can be changed on-the-fly to adapt during a match.
-        aprilTagProcessor.setDecimation(2);
+        aprilTagProcessor.setDecimation(decimation);
 
         //use builder pattern to configure vision portal settings
         VisionPortal.Builder builder = new VisionPortal.Builder();

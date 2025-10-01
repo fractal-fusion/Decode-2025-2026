@@ -9,15 +9,40 @@ public class productionOpmode extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        Drivetrain drivetrain = new Drivetrain(this);
         Shooter shooter = new Shooter(this);
+        Camera camera = new Camera(this, 3);
+
+
+        camera.setExposure(6); //low exposure and high gain to reduce blur for autoalignment
+        camera.setGain(250);
 
         telemetry.addLine("Robot Ready.");
         telemetry.update();
 
         waitForStart();
 
+
+
         while (opModeIsActive())
         {
+            //update the imu with the rotation of the robot
+            drivetrain.updateIMU();
+
+            //drivetrain controls (field centric drive + autoalignment)
+            if (gamepad1.a) {
+//                camera.turnOnCamera();
+                drivetrain.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, drivetrain.calculateAutoAlignPower(camera.getBearing()));
+            }
+            else {
+//                camera.turnOffCamera();
+                drivetrain.drive(gamepad1);
+            }
+
+            if (gamepad1.x) {
+                drivetrain.resetIMU();
+            }
+
 
         }
     }

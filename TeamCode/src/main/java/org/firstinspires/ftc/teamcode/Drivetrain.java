@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
@@ -15,7 +16,14 @@ public class Drivetrain {
     public DcMotor frontRight;
     public DcMotor backRight;
     public IMU imu;
-    public double botHeading;
+
+    //botHeading used for field centric drive
+    private double botHeading;
+
+    //constants used for tuning auto alignment
+    private final double AUTO_ALIGN_MAX_SPEED = 0.3; //auto alignment speed is clipped to minimum negative this and maximum positive this (bilateral tolerance)
+    private final double AUTO_ALIGN_GAIN = 0.01; //converts degrees to power, at a 1:100 ratio (ex: 25 degrees = 0.25 power)
+
     private OpMode opMode;
 
 
@@ -56,9 +64,9 @@ public class Drivetrain {
         double x = gamepad.left_stick_x;
         double rx = gamepad.right_stick_x;
 
-        double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
+        double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading); //always offset the robot's heading to only move in the four cardinal directions
         double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
-        rotX = rotX * 1.1;
+        rotX = rotX * 1.1; //counter imperfect strafing
 
         //speed control with triggers
         double maxSpeed = 0.5;
@@ -81,7 +89,7 @@ public class Drivetrain {
     public void drive(double x, double y, double rotation)
     {
         //get gamepad inputs
-        double ypower = y;
+        double ypower = -y;
         double xpower = x * 1.1;
         double rotationpower = rotation;
 
@@ -97,6 +105,12 @@ public class Drivetrain {
         backLeft.setPower(backLeftPower);
         frontRight.setPower(frontRightPower);
         backRight.setPower(backRightPower);
+    }
+
+    public double calculateAutoAlignPower(double bearing) {
+        double autoAlignPower;
+        autoAlignPower = Range.clip(bearing * AUTO_ALIGN_GAIN, -AUTO_ALIGN_MAX_SPEED, AUTO_ALIGN_MAX_SPEED);
+        return autoAlignPower;
     }
 
 //unused and unfinished drivetrain methods
