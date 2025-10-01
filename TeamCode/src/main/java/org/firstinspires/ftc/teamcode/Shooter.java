@@ -13,12 +13,13 @@ public class Shooter{
     public DcMotor shooterRight;
     public Servo shooterRampRight;
     public Servo shooterRampLeft;
-    public Servo shooterRaiserRight;
-    public Servo shooterRaiserLeft;
+    public Servo shooterPitchRight;
+    public Servo shooterPitchLeft;
     public double shootPower = 0;
     public double rampPosition = 0;
     private final double AngleToServo = 1/180;
     private final double raisedRampPosition = 0.8;
+    private final double baselinePitchPosition = 0.16;
     private OpMode opMode;
     public Shooter(OpMode linearOpmode) {
         this.opMode = linearOpmode;
@@ -27,10 +28,14 @@ public class Shooter{
 
         shooterRampRight = opMode.hardwareMap.get(Servo.class, "rampright" );
         shooterRampLeft = opMode.hardwareMap.get(Servo.class, "rampleft" );
-        shooterRaiserLeft = opMode.hardwareMap.get(Servo.class, "raiserleft" );
-        shooterRaiserRight = opMode.hardwareMap.get(Servo.class, "raiserright" );
+        shooterPitchRight = opMode.hardwareMap.get(Servo.class, "raiserright" );
+        shooterPitchLeft = opMode.hardwareMap.get(Servo.class, "raiserleft" );
 
-        shooterLeft.setDirection(DcMotor.Direction.REVERSE);
+
+        shooterLeft.setDirection(DcMotor.Direction.REVERSE); //reverse shooter left motor
+
+        shooterPitchRight.setDirection(Servo.Direction.REVERSE);
+        shooterRampRight.setDirection(Servo.Direction.REVERSE); //reverse servos used for pitch rotation
     }
 
     public void updateGamepad(Gamepad gamepad) {
@@ -74,9 +79,18 @@ public class Shooter{
         shooterRampRight.setPosition(rampPosition);
         shooterRampLeft.setPosition(rampPosition);
     }
-    public void raiseRamp(){
-        shooterRaiserRight.setPosition(raisedRampPosition);
-        shooterRaiserLeft.setPosition(raisedRampPosition);
-    }
 
+    //methods to set pitch and position of ramp
+    public void baselineAngle(){
+        shooterPitchRight.setPosition(baselinePitchPosition);
+        shooterPitchLeft.setPosition(baselinePitchPosition);
+    }
+    public void raiseRamp(){
+        shooterPitchRight.setPosition(raisedRampPosition);
+        shooterPitchLeft.setPosition(raisedRampPosition);
+    }
+    public void servoTest(Servo servo, double servoPos){ //method to test individual servos
+        servo.setPosition(servoPos);
+    }
+// back motors outside, front motors at second to outside, shooters at second to inside, and rest at inside.
 }
