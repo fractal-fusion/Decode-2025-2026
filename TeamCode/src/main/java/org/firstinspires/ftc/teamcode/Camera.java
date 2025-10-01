@@ -170,8 +170,4 @@ public class Camera {
             gainControl.setGain(gain);
         }
     }
-
-
-    //TODO: make methods for detecting a specific apriltag, detecting the current pattern, and getting the pose
-    
 }
