@@ -18,6 +18,7 @@ public class Shooter{
     public Servo shooterPitchLeft;
     public double shootPower = 0;
     public double rampPosition = 0;
+    public double pitchPosition = 0;
     private OpMode opMode;
     //test servo variables
     public static String testServo = "rampright";
@@ -68,7 +69,7 @@ public class Shooter{
         }
     }
 
-    public void controlRampAngle(Gamepad gamepad){
+    public void controlRampPosition(Gamepad gamepad){
         updateGamepad(gamepad);
 
         if(currentGamepad.right_bumper && !previousGamepad.right_bumper){
@@ -77,10 +78,33 @@ public class Shooter{
             rampPosition -= 0.05;
         }
 
-        rampPosition = Math.max(0, Math.min(shootPower, 1));
+        rampPosition = Math.max(0, Math.min(rampPosition, 1));
 
         shooterRampRight.setPosition(rampPosition);
         shooterRampLeft.setPosition(rampPosition);
+
+        opMode.telemetry.addData("servoposRight", shooterRampRight.getPosition());
+        opMode.telemetry.addData("servoposLeft", shooterRampLeft.getPosition());
+        opMode.telemetry.update();
+    }
+
+    public void controlPitchPosition(Gamepad gamepad){
+        updateGamepad(gamepad);
+
+        if(currentGamepad.right_bumper && !previousGamepad.right_bumper){
+            pitchPosition += 0.05;
+        } else if (currentGamepad.left_bumper && !previousGamepad.left_bumper) {
+            pitchPosition -= 0.05;
+        }
+
+        pitchPosition = Math.max(0, Math.min(pitchPosition, 1));
+
+        shooterPitchRight.setPosition(pitchPosition);
+        shooterPitchLeft.setPosition(pitchPosition);
+
+        opMode.telemetry.addData("servoposRight", shooterPitchRight.getPosition());
+        opMode.telemetry.addData("servoposLeft", shooterPitchLeft.getPosition());
+        opMode.telemetry.update();
     }
 
     public void shoot(){
