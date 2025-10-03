@@ -16,19 +16,18 @@ public class Intake {
     public Intake(LinearOpMode linearOpMode){
         this.opMode = linearOpMode;
 
-//        driver = opMode.hardwareMap.get(DcMotor.class, "driver");
-//        intake = opMode.hardwareMap.get(DcMotor.class, "intake");
+        driver = opMode.hardwareMap.get(DcMotor.class, "driver");
+        intake = opMode.hardwareMap.get(DcMotor.class, "intake");
         flicker = opMode.hardwareMap.get(Servo.class, "flicker");
-//        intake.setDirection(DcMotor.Direction.REVERSE); // reverse direction so positive is intake, negative is outtake
+        intake.setDirection(DcMotor.Direction.REVERSE); // reverse direction so positive is intake, negative is outtake
+
+        flicker.setDirection(Servo.Direction.REVERSE); //reverse flicker servo so increasing to position 1 is flick inside
     }
 
     public void intake(){ //skeleton methods
-        intake.setPower(1);
+        //raise pitch, turn on driver and intake
     }
-    public void driver(){
-        driver.setPower(1);
 
-    }
     public void flickerPos(double pos){
         flicker.setPosition(pos);
     }

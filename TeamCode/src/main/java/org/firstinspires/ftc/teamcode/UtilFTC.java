@@ -1,8 +1,14 @@
-//package org.firstinspires.ftc.teamcode;
-//
-//import com.qualcomm.robotcore.hardware.Gamepad;
-//
-//public class UtilFTC {
+package org.firstinspires.ftc.teamcode;
+
+import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.Servo;
+
+import java.io.LineNumberReader;
+
+
+public class UtilFTC {
 //    public Gamepad previousGamepad1 = new Gamepad();
 //    public Gamepad previousGamepad2 = new Gamepad();;
 //    public Gamepad currentGamepad1 = new Gamepad();;
@@ -24,5 +30,5 @@
 //
 //        return !(previousGamepad1 == currentGamepad1);
 //    }
-//}
-//
+}
+

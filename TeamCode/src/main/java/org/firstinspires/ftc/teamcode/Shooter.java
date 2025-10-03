@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
-
+@Config
 public class Shooter{
     public Gamepad currentGamepad = new Gamepad(); //gamepads for rising ed
     public Gamepad previousGamepad = new Gamepad();
@@ -17,10 +18,11 @@ public class Shooter{
     public Servo shooterPitchLeft;
     public double shootPower = 0;
     public double rampPosition = 0;
-    private final double AngleToServo = 1/180;
-    private final double raisedRampPosition = 0.8;
-    private final double baselinePitchPosition = 0.16;
     private OpMode opMode;
+    //test servo variables
+    public static String testServo = "rampright";
+    public Servo TESTSERVO;
+    private double testPosition = 0.5;
     public Shooter(OpMode linearOpmode) {
         this.opMode = linearOpmode;
         shooterLeft = opMode.hardwareMap.get(DcMotor.class, "shooterleft");
@@ -28,9 +30,10 @@ public class Shooter{
 
         shooterRampRight = opMode.hardwareMap.get(Servo.class, "rampright" );
         shooterRampLeft = opMode.hardwareMap.get(Servo.class, "rampleft" );
-        shooterPitchRight = opMode.hardwareMap.get(Servo.class, "raiserright" );
-        shooterPitchLeft = opMode.hardwareMap.get(Servo.class, "raiserleft" );
+        shooterPitchRight = opMode.hardwareMap.get(Servo.class, "pitchright" );
+        shooterPitchLeft = opMode.hardwareMap.get(Servo.class, "pitchleft" );
 
+        TESTSERVO = opMode.hardwareMap.get(Servo.class, testServo);
 
         shooterLeft.setDirection(DcMotor.Direction.REVERSE); //reverse shooter left motor
 
@@ -80,17 +83,26 @@ public class Shooter{
         shooterRampLeft.setPosition(rampPosition);
     }
 
-    //methods to set pitch and position of ramp
-    public void baselineAngle(){
-        shooterPitchRight.setPosition(baselinePitchPosition);
-        shooterPitchLeft.setPosition(baselinePitchPosition);
+    public void shoot(){
+        //lower pitch and set ramp height, start shooter motors
+        //start flicker servo
     }
-    public void raiseRamp(){
-        shooterPitchRight.setPosition(raisedRampPosition);
-        shooterPitchLeft.setPosition(raisedRampPosition);
-    }
-    public void servoTest(Servo servo, double servoPos){ //method to test individual servos
-        servo.setPosition(servoPos);
+
+    public void controlTestServo(Gamepad gamepad){ //method to test individual servos
+        updateGamepad(gamepad);
+
+        if(currentGamepad.right_bumper && !previousGamepad.right_bumper){
+            testPosition += 0.05;
+        } else if (currentGamepad.left_bumper && !previousGamepad.left_bumper) {
+            testPosition -= 0.05;
+        }
+
+        testPosition = Math.max(0, Math.min(testPosition, 1));
+
+        TESTSERVO.setPosition(testPosition);
+
+        opMode.telemetry.addData("servopos:", TESTSERVO.getPosition());
+        opMode.telemetry.update();
     }
 // back motors outside, front motors at second to outside, shooters at second to inside, and rest at inside.
 }
