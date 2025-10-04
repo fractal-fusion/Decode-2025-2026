@@ -19,6 +19,7 @@ public class Shooter{
     public double shootPower = 0;
     public double rampPosition = 0;
     public double pitchPosition = 0;
+    boolean on = false;
     private OpMode opMode;
     //test servo variables
     public static String testServo = "rampright";
@@ -36,10 +37,10 @@ public class Shooter{
 
         TESTSERVO = opMode.hardwareMap.get(Servo.class, testServo);
 
-        shooterLeft.setDirection(DcMotor.Direction.REVERSE); //reverse shooter left motor
+        shooterRight.setDirection(DcMotor.Direction.REVERSE); //reverse shooter right motor so positive is out
 
         shooterPitchRight.setDirection(Servo.Direction.REVERSE);
-        shooterRampRight.setDirection(Servo.Direction.REVERSE); //reverse servos used for pitch rotation
+        shooterRampRight.setDirection(Servo.Direction.REVERSE); //reverse servos used for rotation so positive is rotate up
     }
 
     public void updateGamepad(Gamepad gamepad) {
@@ -104,8 +105,6 @@ public class Shooter{
 
         updateGamepad(gamepad);
 
-        boolean on = false;
-
         if(currentGamepad.dpad_up && !previousGamepad.dpad_up){
             shootPower += .1;
         } else if (currentGamepad.dpad_down && !previousGamepad.dpad_down) {
@@ -115,7 +114,9 @@ public class Shooter{
         if (currentGamepad.a && !previousGamepad.a){
             on = !on;
         }
+
         shootPower = Math.max(0, Math.min(shootPower, 1));
+
         if(on){
             shooterLeft.setPower(shootPower);
             shooterRight.setPower(shootPower);

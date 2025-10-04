@@ -18,12 +18,12 @@ public class testOpmode extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            shooter.testShoot(gamepad1);
-            telemetry.addData("power", shooter.shootPower);
+//            shooter.testShoot(gamepad1);
+//            telemetry.addData("power", shooter.shootPower);
 //            telemetry.update();
-//            if(gamepad1.dpad_up) {
-//                shooter.servoTest(shooter.shooterRampRight, .5);
-//            }
+
+            shooter.shooterRight.setPower(0.8);
+            shooter.shooterLeft.setPower(0.8);
 
             if (gamepad1.x) {
                 intake.intake.setPower(1);
