@@ -28,7 +28,6 @@ public class productionOpmode extends LinearOpMode {
         {
             //update the imu with the rotation of the robot
             drivetrain.updateIMU();
-
             //drivetrain controls (field centric drive + autoalignment)
             if (gamepad1.a) {
 //                camera.turnOnCamera();
@@ -42,8 +41,6 @@ public class productionOpmode extends LinearOpMode {
             if (gamepad1.x) {
                 drivetrain.resetIMU();
             }
-
-
         }
     }
 }

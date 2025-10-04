@@ -39,8 +39,8 @@ public class Drivetrain {
 
         // adjust the orientation parameters
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
+                RevHubOrientationOnRobot.LogoFacingDirection.FORWARD,
+                RevHubOrientationOnRobot.UsbFacingDirection.LEFT));
         // actually set the parameters
         imu.initialize(parameters);
 
@@ -138,7 +138,6 @@ public class Drivetrain {
 //        frontLeft.setPower(1);
 //        backLeft.setPower(-1);
 //    }
-    //TODO: set correct imu orientation
 }
 
 

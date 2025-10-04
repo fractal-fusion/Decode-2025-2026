@@ -47,27 +47,6 @@ public class Shooter{
 
         currentGamepad.copy(gamepad);
     }
-    public void testShoot(Gamepad gamepad){
-
-        updateGamepad(gamepad);
-
-        boolean on = false;
-
-        if(currentGamepad.right_bumper && !previousGamepad.right_bumper){
-            shootPower += .1;
-        } else if (currentGamepad.left_bumper && !previousGamepad.left_bumper) {
-            shootPower -= .1;
-        }
-
-        if (currentGamepad.a && !previousGamepad.a){
-            on = !on;
-        }
-        shootPower = Math.max(0, Math.min(shootPower, 1));
-        if(on){
-            shooterLeft.setPower(shootPower);
-            shooterRight.setPower(shootPower);
-        }
-    }
 
     public void controlRampPosition(Gamepad gamepad){
         updateGamepad(gamepad);
@@ -106,10 +85,45 @@ public class Shooter{
         opMode.telemetry.addData("servoposLeft", shooterPitchLeft.getPosition());
         opMode.telemetry.update();
     }
+    public void setRampPosition(double position){
+        shooterPitchRight.setPosition(position);
+        shooterPitchLeft.setPosition(position);
+    }
 
+    public void setPitchPosition(double position){
+        shooterPitchRight.setPosition(position);
+        shooterPitchLeft.setPosition(position);
+    }
     public void shoot(){
         //lower pitch and set ramp height, start shooter motors
         //start flicker servo
+    }
+    //TODO: transfer tickspersecond to rpm
+
+    public void testShoot(Gamepad gamepad){
+
+        updateGamepad(gamepad);
+
+        boolean on = false;
+
+        if(currentGamepad.dpad_up && !previousGamepad.dpad_up){
+            shootPower += .1;
+        } else if (currentGamepad.dpad_down && !previousGamepad.dpad_down) {
+            shootPower -= .1;
+        }
+
+        if (currentGamepad.a && !previousGamepad.a){
+            on = !on;
+        }
+        shootPower = Math.max(0, Math.min(shootPower, 1));
+        if(on){
+            shooterLeft.setPower(shootPower);
+            shooterRight.setPower(shootPower);
+        }
+        else {
+            shooterLeft.setPower(0);
+            shooterRight.setPower(0);
+        }
     }
 
     public void controlTestServo(Gamepad gamepad){ //method to test individual servos
@@ -128,5 +142,7 @@ public class Shooter{
         opMode.telemetry.addData("servopos:", TESTSERVO.getPosition());
         opMode.telemetry.update();
     }
+
+
 // back motors outside, front motors at second to outside, shooters at second to inside, and rest at inside.
 }
