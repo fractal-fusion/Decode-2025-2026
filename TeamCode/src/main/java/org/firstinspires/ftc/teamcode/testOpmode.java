@@ -21,6 +21,8 @@ public class testOpmode extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+            shooter.updateGamepad(gamepad1);
+
             drivetrain.drive(gamepad2);
 
             shooter.testShoot(gamepad1);

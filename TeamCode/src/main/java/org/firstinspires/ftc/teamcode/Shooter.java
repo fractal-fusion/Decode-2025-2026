@@ -17,7 +17,8 @@ public class Shooter{
     public Servo shooterPitchRight;
     public Servo shooterPitchLeft;
     private OpMode opMode;
-    public static double pitchIntakePosition = 0.075;
+    public static double PITCH_INTAKE_POSITION = 0.075;
+    public static double RAMP_SCORE_POSITION = 0.25;
     public double testShootPower = 0;
     public double testRampPosition = 0;
     public double testPitchPosition = 0;
@@ -52,7 +53,6 @@ public class Shooter{
     }
 
     public void controlRampPosition(Gamepad gamepad){
-        updateGamepad(gamepad);
 
         if(currentGamepad.right_bumper && !previousGamepad.right_bumper){
             testRampPosition += 0.05;
@@ -71,7 +71,6 @@ public class Shooter{
     }
 
     public void controlPitchPosition(Gamepad gamepad){
-        updateGamepad(gamepad);
 
         if(currentGamepad.right_bumper && !previousGamepad.right_bumper){
             testPitchPosition += 0.05;
@@ -129,7 +128,6 @@ public class Shooter{
     }
 
     public void controlTestServo(Gamepad gamepad){ //method to test individual servos
-        updateGamepad(gamepad);
 
         if(currentGamepad.right_bumper && !previousGamepad.right_bumper){
             testPosition += 0.05;
