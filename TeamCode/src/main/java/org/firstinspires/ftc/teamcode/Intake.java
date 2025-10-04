@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorImplEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Intake {
@@ -28,8 +26,8 @@ public class Intake {
         //raise pitch, turn on driver and intake
     }
 
-    public void flickerPos(double pos){
-        flicker.setPosition(pos);
+    public void flickerPosition(double position){
+        flicker.setPosition(position);
     }
 
 }

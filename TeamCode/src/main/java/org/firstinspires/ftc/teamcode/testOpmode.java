@@ -12,18 +12,19 @@ public class testOpmode extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         Shooter shooter = new Shooter(this);
         Intake intake = new Intake(this);
+        Drivetrain drivetrain = new Drivetrain(this);
+        shooter.setTestPitchPosition(0);
+        intake.flickerPosition(0);
         telemetry.addLine("Robot Ready.");
         telemetry.update();
 
         waitForStart();
 
         while (opModeIsActive()) {
-//            shooter.testShoot(gamepad1);
-//            telemetry.addData("power", shooter.shootPower);
-//            telemetry.update();
+            drivetrain.drive(gamepad2);
 
-            shooter.shooterRight.setPower(0.8);
-            shooter.shooterLeft.setPower(0.8);
+            shooter.testShoot(gamepad1);
+            telemetry.addData("power", shooter.testShootPower);
 
             if (gamepad1.x) {
                 intake.intake.setPower(1);
@@ -36,10 +37,10 @@ public class testOpmode extends LinearOpMode {
                 intake.driver.setPower(0);
             }
             if (gamepad1.dpad_right) {
-                intake.flickerPos(.6);
+                intake.flickerPosition(.6);
 
             } else if (gamepad1.dpad_left) {
-                intake.flickerPos(0);
+                intake.flickerPosition(0);
             }
 
 //            shooter.controlTestServo(gamepad1);

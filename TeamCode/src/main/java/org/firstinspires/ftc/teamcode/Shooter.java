@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 @Config
 public class Shooter{
-    public Gamepad currentGamepad = new Gamepad(); //gamepads for rising ed
+    public Gamepad currentGamepad = new Gamepad(); //gamepads for rising edge detector
     public Gamepad previousGamepad = new Gamepad();
     public DcMotor shooterLeft;
     public DcMotor shooterRight;
@@ -16,11 +16,13 @@ public class Shooter{
     public Servo shooterRampLeft;
     public Servo shooterPitchRight;
     public Servo shooterPitchLeft;
-    public double shootPower = 0;
-    public double rampPosition = 0;
-    public double pitchPosition = 0;
-    boolean on = false;
     private OpMode opMode;
+    public static double pitchIntakePosition = 0.075;
+    public double testShootPower = 0;
+    public double testRampPosition = 0;
+    public double testPitchPosition = 0;
+    boolean on = false; //boolean for on or off intake
+
     //test servo variables
     public static String testServo = "rampright";
     public Servo TESTSERVO;
@@ -53,15 +55,15 @@ public class Shooter{
         updateGamepad(gamepad);
 
         if(currentGamepad.right_bumper && !previousGamepad.right_bumper){
-            rampPosition += 0.05;
+            testRampPosition += 0.05;
         } else if (currentGamepad.left_bumper && !previousGamepad.left_bumper) {
-            rampPosition -= 0.05;
+            testRampPosition -= 0.05;
         }
 
-        rampPosition = Math.max(0, Math.min(rampPosition, 1));
+        testRampPosition = Math.max(0, Math.min(testRampPosition, 1));
 
-        shooterRampRight.setPosition(rampPosition);
-        shooterRampLeft.setPosition(rampPosition);
+        shooterRampRight.setPosition(testRampPosition);
+        shooterRampLeft.setPosition(testRampPosition);
 
         opMode.telemetry.addData("servoposRight", shooterRampRight.getPosition());
         opMode.telemetry.addData("servoposLeft", shooterRampLeft.getPosition());
@@ -72,26 +74,26 @@ public class Shooter{
         updateGamepad(gamepad);
 
         if(currentGamepad.right_bumper && !previousGamepad.right_bumper){
-            pitchPosition += 0.05;
+            testPitchPosition += 0.05;
         } else if (currentGamepad.left_bumper && !previousGamepad.left_bumper) {
-            pitchPosition -= 0.05;
+            testPitchPosition -= 0.05;
         }
 
-        pitchPosition = Math.max(0, Math.min(pitchPosition, 1));
+        testPitchPosition = Math.max(0, Math.min(testPitchPosition, 1));
 
-        shooterPitchRight.setPosition(pitchPosition);
-        shooterPitchLeft.setPosition(pitchPosition);
+        shooterPitchRight.setPosition(testPitchPosition);
+        shooterPitchLeft.setPosition(testPitchPosition);
 
         opMode.telemetry.addData("servoposRight", shooterPitchRight.getPosition());
         opMode.telemetry.addData("servoposLeft", shooterPitchLeft.getPosition());
         opMode.telemetry.update();
     }
-    public void setRampPosition(double position){
+    public void setTestRampPosition(double position){
         shooterPitchRight.setPosition(position);
         shooterPitchLeft.setPosition(position);
     }
 
-    public void setPitchPosition(double position){
+    public void setTestPitchPosition(double position){
         shooterPitchRight.setPosition(position);
         shooterPitchLeft.setPosition(position);
     }
@@ -103,23 +105,22 @@ public class Shooter{
 
     public void testShoot(Gamepad gamepad){
 
-        updateGamepad(gamepad);
-
         if(currentGamepad.dpad_up && !previousGamepad.dpad_up){
-            shootPower += .1;
+            testShootPower += .1;
         } else if (currentGamepad.dpad_down && !previousGamepad.dpad_down) {
-            shootPower -= .1;
+            testShootPower -= .1;
         }
 
         if (currentGamepad.a && !previousGamepad.a){
             on = !on;
         }
 
-        shootPower = Math.max(0, Math.min(shootPower, 1));
+        testShootPower = Math.max(0, Math.min(testShootPower, 1));
 
         if(on){
-            shooterLeft.setPower(shootPower);
-            shooterRight.setPower(shootPower);
+            setTestPitchPosition(0);
+            shooterLeft.setPower(testShootPower);
+            shooterRight.setPower(testShootPower);
         }
         else {
             shooterLeft.setPower(0);
