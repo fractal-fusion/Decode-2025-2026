@@ -28,7 +28,7 @@ public class Shooter{
     public double testShootPower = 0;
     public double testRampPosition = 0;
     public double testPitchPosition = 0;
-    boolean on = false; //boolean for on or off intake
+    public boolean on = false; //boolean for on or off intake
 
     //test servo variables
     public static String testServo = "rampright";
@@ -127,28 +127,26 @@ public class Shooter{
         opMode.telemetry.addData("servoposLeft", shooterPitchLeft.getPosition());
         opMode.telemetry.update();
     }
+
     public void testShoot(Gamepad gamepad){
 
-        if(currentGamepad.dpad_up && !previousGamepad.dpad_up){
-            testShootPower += .1;
-        } else if (currentGamepad.dpad_down && !previousGamepad.dpad_down) {
-            testShootPower -= .1;
-        }
-
+//        if(currentGamepad.dpad_up && !previousGamepad.dpad_up){
+//            testShootPower += .1;
+//        } else if (currentGamepad.dpad_down && !previousGamepad.dpad_down) {
+//            testShootPower -= .1;
+//        }
+//
         if (currentGamepad.a && !previousGamepad.a){
             on = !on;
         }
-
-        testShootPower = Math.max(0, Math.min(testShootPower, 1));
+//
+//        testShootPower = Math.max(0, Math.min(testShootPower, 1));
 
         if(on){
-            setPitchPosition(0);
-            shooterLeft.setPower(testShootPower);
-            shooterRight.setPower(testShootPower);
+            turnOnShooter();
         }
-        else if (!on) {
-            shooterLeft.setPower(0);
-            shooterRight.setPower(0);
+        else {
+            turnOffShooter();
         }
     }
 

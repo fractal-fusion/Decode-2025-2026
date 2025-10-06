@@ -26,7 +26,7 @@ public class testOpmode extends LinearOpMode {
             drivetrain.drive(gamepad1);
 
             shooter.testShoot(gamepad1);
-            telemetry.addData("power", shooter.testShootPower);
+            telemetry.addData("shooter power:", shooter.on);
 
             if (gamepad1.x) {
                 intake.intake.setPower(1);
