@@ -23,7 +23,7 @@ public class testOpmode extends LinearOpMode {
         while (opModeIsActive()) {
             shooter.updateGamepad(gamepad1);
 
-            drivetrain.drive(gamepad2);
+            drivetrain.drive(gamepad1);
 
             shooter.testShoot(gamepad1);
             telemetry.addData("power", shooter.testShootPower);

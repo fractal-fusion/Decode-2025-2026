@@ -44,3 +44,5 @@ public class productionOpmode extends LinearOpMode {
         }
     }
 }
+
+//TODO: make the pitch only go to zero when the shooter is at the right velocity, create cycling control

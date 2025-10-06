@@ -146,7 +146,7 @@ public class Shooter{
             shooterLeft.setPower(testShootPower);
             shooterRight.setPower(testShootPower);
         }
-        else {
+        else if (!on) {
             shooterLeft.setPower(0);
             shooterRight.setPower(0);
         }
