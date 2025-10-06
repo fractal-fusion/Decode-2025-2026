@@ -31,7 +31,7 @@ public class productionOpmode extends LinearOpMode {
             //drivetrain controls (field centric drive + autoalignment)
             if (gamepad1.a) {
 //                camera.turnOnCamera();
-                drivetrain.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, drivetrain.calculateAutoAlignPower(camera.getBearing()));
+                drivetrain.driveAutoAlign(gamepad1.left_stick_x, gamepad1.left_stick_y, drivetrain.calculateAutoAlignPower(camera.getBearing()));
             }
             else {
 //                camera.turnOffCamera();

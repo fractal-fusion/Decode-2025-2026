@@ -13,7 +13,7 @@ public class testOpmode extends LinearOpMode {
         Shooter shooter = new Shooter(this);
         Intake intake = new Intake(this);
         Drivetrain drivetrain = new Drivetrain(this);
-        shooter.setTestPitchPosition(0);
+        shooter.setPitchPosition(0);
         intake.flickerPosition(0);
         telemetry.addLine("Robot Ready.");
         telemetry.update();
@@ -46,7 +46,7 @@ public class testOpmode extends LinearOpMode {
             }
 
 //            shooter.controlTestServo(gamepad1);
-            shooter.controlRampPosition(gamepad1);
+            shooter.testControlRampPosition(gamepad1);
 //            shooter.controlPitchPosition(gamepad1);
         }
     }

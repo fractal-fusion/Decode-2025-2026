@@ -86,11 +86,11 @@ public class Drivetrain {
         frontRight.setPower(frontRightPower * maxSpeedMultiplier);
         backRight.setPower(backRightPower * maxSpeedMultiplier);
     }
-    public void drive(double x, double y, double rotation)
+    public void driveAutoAlign(double x, double y, double rotation)
     {
         //get gamepad inputs
-        double ypower = -y;
-        double xpower = x * 1.1;
+        double ypower = -y * 0.2; // lower the power when auto aligning
+        double xpower = x * 0.21; //multiplied by an extra 0.1 to counter imperfect strafing
         double rotationpower = rotation;
 
         //solve for power

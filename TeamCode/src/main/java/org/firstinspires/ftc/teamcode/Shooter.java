@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -17,8 +18,13 @@ public class Shooter{
     public Servo shooterPitchRight;
     public Servo shooterPitchLeft;
     private OpMode opMode;
+
+    //static variables for shooter
     public static double PITCH_INTAKE_POSITION = 0.075;
     public static double RAMP_SCORE_POSITION = 0.25;
+    public static double TARGET_RPM = 5400;
+    public static double TARGET_RPM_TICKS_PER_SECOND = TARGET_RPM/60 * 28; //divide rpm by 60 to get rotations per second,
+                                                                            //which multiplied by 28 ticks per revolution returns ticks per second
     public double testShootPower = 0;
     public double testRampPosition = 0;
     public double testPitchPosition = 0;
@@ -42,17 +48,51 @@ public class Shooter{
 
         shooterRight.setDirection(DcMotor.Direction.REVERSE); //reverse shooter right motor so positive is out
 
+        shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); //slow down the motor faster
+
+        shooterRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        shooterLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //reset encoders on initialization
+
         shooterPitchRight.setDirection(Servo.Direction.REVERSE);
         shooterRampRight.setDirection(Servo.Direction.REVERSE); //reverse servos used for rotation so positive is rotate up
     }
 
-    public void updateGamepad(Gamepad gamepad) {
+    public void turnOnShooter(){
+        shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        ((DcMotorEx) shooterRight).setVelocity(TARGET_RPM_TICKS_PER_SECOND);
+        ((DcMotorEx) shooterLeft).setVelocity(TARGET_RPM_TICKS_PER_SECOND);
+    }
+
+    public void turnOffShooter(){
+        shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        ((DcMotorEx) shooterRight).setVelocity(0);
+        ((DcMotorEx) shooterLeft).setVelocity(0);
+    }
+
+    public void setRampPosition(double position){
+        shooterRampRight.setPosition(position);
+        shooterRampLeft.setPosition(position);
+    }
+
+    public void setPitchPosition(double position){
+        shooterPitchRight.setPosition(position);
+        shooterPitchLeft.setPosition(position);
+    }
+
+
+    //test methods
+    public void updateGamepad(Gamepad gamepad) { //debounce method
         previousGamepad.copy(currentGamepad);
 
         currentGamepad.copy(gamepad);
     }
 
-    public void controlRampPosition(Gamepad gamepad){
+    public void testControlRampPosition(Gamepad gamepad){
 
         if(currentGamepad.right_bumper && !previousGamepad.right_bumper){
             testRampPosition += 0.05;
@@ -70,7 +110,7 @@ public class Shooter{
         opMode.telemetry.update();
     }
 
-    public void controlPitchPosition(Gamepad gamepad){
+    public void testControlPitchPosition(Gamepad gamepad){
 
         if(currentGamepad.right_bumper && !previousGamepad.right_bumper){
             testPitchPosition += 0.05;
@@ -87,21 +127,6 @@ public class Shooter{
         opMode.telemetry.addData("servoposLeft", shooterPitchLeft.getPosition());
         opMode.telemetry.update();
     }
-    public void setTestRampPosition(double position){
-        shooterPitchRight.setPosition(position);
-        shooterPitchLeft.setPosition(position);
-    }
-
-    public void setTestPitchPosition(double position){
-        shooterPitchRight.setPosition(position);
-        shooterPitchLeft.setPosition(position);
-    }
-    public void shoot(){
-        //lower pitch and set ramp height, start shooter motors
-        //start flicker servo
-    }
-    //TODO: transfer tickspersecond to rpm
-
     public void testShoot(Gamepad gamepad){
 
         if(currentGamepad.dpad_up && !previousGamepad.dpad_up){
@@ -117,7 +142,7 @@ public class Shooter{
         testShootPower = Math.max(0, Math.min(testShootPower, 1));
 
         if(on){
-            setTestPitchPosition(0);
+            setPitchPosition(0);
             shooterLeft.setPower(testShootPower);
             shooterRight.setPower(testShootPower);
         }
@@ -127,7 +152,7 @@ public class Shooter{
         }
     }
 
-    public void controlTestServo(Gamepad gamepad){ //method to test individual servos
+    public void testControlServo(Gamepad gamepad){ //method to test individual servos
 
         if(currentGamepad.right_bumper && !previousGamepad.right_bumper){
             testPosition += 0.05;
