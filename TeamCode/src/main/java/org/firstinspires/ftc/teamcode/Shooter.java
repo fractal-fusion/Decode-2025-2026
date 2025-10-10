@@ -56,6 +56,11 @@ public class Shooter{
 
         shooterPitchRight.setDirection(Servo.Direction.REVERSE);
         shooterRampRight.setDirection(Servo.Direction.REVERSE); //reverse servos used for rotation so positive is rotate up
+
+        shooterRampRight.setPosition(0); //zero all servoes on initialization, set the ramp to flat and the pitch to flat too
+        shooterRampLeft.setPosition(0);
+        shooterPitchRight.setPosition(0);
+        shooterPitchLeft.setPosition(0);
     }
 
     public void turnOnShooter(){
@@ -84,6 +89,26 @@ public class Shooter{
         shooterPitchLeft.setPosition(position);
     }
 
+    public boolean shooterAtTargetVelocity() {
+        if (((DcMotorEx) shooterLeft).getVelocity() >= TARGET_RPM_TICKS_PER_SECOND
+        && ((DcMotorEx) shooterRight).getVelocity() >= TARGET_RPM_TICKS_PER_SECOND){
+            return true;
+        }
+        return false;
+    }
+
+    public void toggleShooter(){
+        if (currentGamepad.a && !previousGamepad.a){
+            on = !on;
+        }
+
+        if(on){
+            turnOnShooter();
+        }
+        else {
+            turnOffShooter();
+        }
+    }
 
     //test methods
     public void updateGamepad(Gamepad gamepad) { //debounce method

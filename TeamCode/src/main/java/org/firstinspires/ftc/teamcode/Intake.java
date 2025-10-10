@@ -37,6 +37,22 @@ public class Intake {
         intake.setDirection(DcMotor.Direction.REVERSE); // reverse direction so positive is intake, negative is outtake
 
         flicker.setDirection(Servo.Direction.REVERSE); //reverse flicker servo so increasing to position 1 is flick inside
+        flicker.setPosition(FLICKER_OPEN_POSITION); //open flicker on initialization
+    }
+
+    public void turnOnIntake(){
+        intake.setPower(1);
+        driver.setPower(1);
+    }
+
+    public void turnOnOuttake(){
+        intake.setPower(-1);
+        driver.setPower(-1);
+    }
+
+    public void turnOffIntake(){
+        intake.setPower(0);
+        driver.setPower(0);
     }
 
     public void activateFlickerOpenTimer(){ //turn on flicker and turn it off after a certain amount of time
@@ -45,7 +61,7 @@ public class Intake {
     }
 
     public void checkFlickerOpenTimer() {
-        if (currentTime > currentTime + 500 && flicker.getPosition() == FLICKER_CLOSE_POSITION) { //after 500 milliseconds open the flicker
+        if (flicker.getPosition() == FLICKER_CLOSE_POSITION && currentTime > currentTime + 500) { //after 500 milliseconds open the flicker
             flicker.setPosition(FLICKER_OPEN_POSITION);
         }
     }
