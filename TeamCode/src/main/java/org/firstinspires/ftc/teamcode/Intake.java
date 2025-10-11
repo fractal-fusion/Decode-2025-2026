@@ -24,7 +24,7 @@ public class Intake {
 
     //variables for setting flicker time
     private ElapsedTime timer;
-    private double currentTime;
+    public double currentTime;
 
     public Intake(LinearOpMode linearOpMode){
         this.opMode = linearOpMode;
@@ -55,14 +55,18 @@ public class Intake {
         driver.setPower(0);
     }
 
-    public void activateFlickerOpenTimer(){ //turn on flicker and turn it off after a certain amount of time
+    public void resetFlickerOpenTimer(){ //turn on flicker and turn it off after a certain amount of time
         timer.reset();
+    }
+
+    public void updateFlickerOpenTimer(){
         currentTime = timer.time();
     }
 
     public void checkFlickerOpenTimer() {
-        if (flicker.getPosition() == FLICKER_CLOSE_POSITION && currentTime > currentTime + 500) { //after 500 milliseconds open the flicker
+        if (currentTime > 1) { //after a second open the flicker
             flicker.setPosition(FLICKER_OPEN_POSITION);
+            flickerIsOpen = true;
         }
     }
 

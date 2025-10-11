@@ -20,10 +20,11 @@ public class Shooter{
     private OpMode opMode;
 
     //static variables for shooter
-    public static double PITCH_INTAKE_POSITION = 0.075;
-    public static double RAMP_SCORE_POSITION = 0.25;
+    public static double PITCH_INTAKE_POSITION = 0.05;
+    public static double RAMP_SCORE_POSITION = 0.15;
     public static double TARGET_RPM = 5400;
     public static double TARGET_RPM_TICKS_PER_SECOND = TARGET_RPM/60 * 28; //divide rpm by 60 to get rotations per second,
+    public static double TARGET_RPM_TOLERANCE_TICKS_PER_SECOND = 200;
                                                                             //which multiplied by 28 ticks per revolution returns ticks per second
     public double testShootPower = 0;
     public double testRampPosition = 0;
@@ -90,22 +91,32 @@ public class Shooter{
     }
 
     public boolean shooterAtTargetVelocity() {
-        if (((DcMotorEx) shooterLeft).getVelocity() >= TARGET_RPM_TICKS_PER_SECOND
-        && ((DcMotorEx) shooterRight).getVelocity() >= TARGET_RPM_TICKS_PER_SECOND){
+        if (((DcMotorEx) shooterLeft).getVelocity() >= TARGET_RPM_TICKS_PER_SECOND - TARGET_RPM_TOLERANCE_TICKS_PER_SECOND
+        && ((DcMotorEx) shooterRight).getVelocity() >= TARGET_RPM_TICKS_PER_SECOND - TARGET_RPM_TOLERANCE_TICKS_PER_SECOND){
             return true;
         }
         return false;
     }
 
+    public double shooterLeftGetVelocity() {
+        return (((DcMotorEx) shooterLeft).getVelocity());
+    }
+
+    public double shooterRightGetVelocity() {
+        return (((DcMotorEx) shooterRight).getVelocity());
+    }
+
     public void toggleShooter(){
-        if (currentGamepad.a && !previousGamepad.a){
+        if (currentGamepad.x && !previousGamepad.x){
             on = !on;
         }
 
         if(on){
+            setRampPosition(RAMP_SCORE_POSITION);
             turnOnShooter();
         }
         else {
+            setRampPosition(0);
             turnOffShooter();
         }
     }

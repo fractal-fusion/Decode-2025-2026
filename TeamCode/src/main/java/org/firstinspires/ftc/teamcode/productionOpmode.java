@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 
 @TeleOp(name="productionOpmode", group="Robot")
@@ -49,7 +48,9 @@ public class productionOpmode extends LinearOpMode {
             //mechanism intake control
             if(gamepad2.a){
                 intake.turnOnIntake();
-                shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION);
+                if (!shooter.shooterAtTargetVelocity()){
+                    shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION);
+                }
             }
             else if (gamepad2.b){
                 intake.turnOnOuttake();
@@ -60,8 +61,10 @@ public class productionOpmode extends LinearOpMode {
             //mechanism intake flicker control
             if(gamepad2.dpad_left) {
                 intake.toggleFlicker();
-                intake.activateFlickerOpenTimer();
+                intake.resetFlickerOpenTimer();
             }
+
+            intake.updateFlickerOpenTimer(); //update the timer with the current time
             intake.checkFlickerOpenTimer(); //automatically open flicker after 500ms if its closed
 
             //mechanism shooter control
@@ -73,6 +76,12 @@ public class productionOpmode extends LinearOpMode {
                 shooter.setPitchPosition(0); //flatten the pitch when scoring so balls can pass to shooter motors
             }
 
+            telemetry.addData("intake current time:", intake.currentTime);
+            telemetry.addData("shooter left velocity:", shooter.shooterLeftGetVelocity());
+            telemetry.addData("shooter right velocity:", shooter.shooterRightGetVelocity());
+
+            telemetry.addData("shooter at velocity:", shooter.shooterAtTargetVelocity());
+            telemetry.update();
         }
     }
 }
