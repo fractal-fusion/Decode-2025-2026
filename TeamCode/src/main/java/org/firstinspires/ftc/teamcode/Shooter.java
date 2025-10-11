@@ -24,7 +24,7 @@ public class Shooter{
     public static double RAMP_SCORE_POSITION = 0.15;
     public static double TARGET_RPM = 5400;
     public static double TARGET_RPM_TICKS_PER_SECOND = TARGET_RPM/60 * 28; //divide rpm by 60 to get rotations per second,
-    public static double TARGET_RPM_TOLERANCE_TICKS_PER_SECOND = 200;
+    public static double TARGET_RPM_TOLERANCE_TICKS_PER_SECOND = 400;
                                                                             //which multiplied by 28 ticks per revolution returns ticks per second
     public double testShootPower = 0;
     public double testRampPosition = 0;

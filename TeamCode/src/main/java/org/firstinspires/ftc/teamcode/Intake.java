@@ -63,8 +63,8 @@ public class Intake {
         currentTime = timer.time();
     }
 
-    public void checkFlickerOpenTimer() {
-        if (currentTime > 1) { //after a second open the flicker
+    public void checkFlickerOpenTimer(Gamepad gamepad) {
+        if (currentTime > 1 && !gamepad.dpad_left) { //after a second open the flicker
             flicker.setPosition(FLICKER_OPEN_POSITION);
             flickerIsOpen = true;
         }

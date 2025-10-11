@@ -65,7 +65,7 @@ public class productionOpmode extends LinearOpMode {
             }
 
             intake.updateFlickerOpenTimer(); //update the timer with the current time
-            intake.checkFlickerOpenTimer(); //automatically open flicker after 500ms if its closed
+            intake.checkFlickerOpenTimer(gamepad2); //automatically open flicker after a second if its closed, unless the gamepad button is held down
 
             //mechanism shooter control
             if (gamepad2.x) {
@@ -76,12 +76,12 @@ public class productionOpmode extends LinearOpMode {
                 shooter.setPitchPosition(0); //flatten the pitch when scoring so balls can pass to shooter motors
             }
 
-            telemetry.addData("intake current time:", intake.currentTime);
-            telemetry.addData("shooter left velocity:", shooter.shooterLeftGetVelocity());
-            telemetry.addData("shooter right velocity:", shooter.shooterRightGetVelocity());
-
-            telemetry.addData("shooter at velocity:", shooter.shooterAtTargetVelocity());
-            telemetry.update();
+//            telemetry.addData("intake current time:", intake.currentTime);
+//            telemetry.addData("shooter left velocity:", shooter.shooterLeftGetVelocity());
+//            telemetry.addData("shooter right velocity:", shooter.shooterRightGetVelocity());
+//
+//            telemetry.addData("shooter at velocity:", shooter.shooterAtTargetVelocity());
+//            telemetry.update();
         }
     }
 }
