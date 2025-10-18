@@ -22,10 +22,20 @@ public class Shooter{
     //static variables for shooter
     public static double PITCH_INTAKE_POSITION = 0.05;
     public static double PITCH_CYCLE_POSTION = 0.34;
-    public static double RAMP_SCORE_POSITION = 0.14;
-    public static double TARGET_RPM = 5000;
-    public static double TARGET_RPM_TICKS_PER_SECOND = TARGET_RPM/60 * 28; //divide rpm by 60 to get rotations per second,
-    public static double TARGET_RPM_TOLERANCE_TICKS_PER_SECOND = 200;
+    public static double FAR_RAMP_SCORE_POSITION = 0.2; //temporarily set to the close position
+    public static double FAR_TARGET_RPM = 4300; //temporarily set to the close position
+    public static double FAR_TARGET_RPM_TICKS_PER_SECOND = FAR_TARGET_RPM /60 * 28; //divide rpm by 60 to get rotations per second,
+
+    public static double CLOSE_RAMP_SCORE_POSITION = 0.2;
+    public static double CLOSE_TARGET_RPM = 4500;
+    public static double CLOSE_TARGET_RPM_TICKS_PER_SECOND = CLOSE_TARGET_RPM/60 * 28; //divide rpm by 60 to get rotations per second,
+
+    public double currentRampScorePosition;
+    public double currentTargetRPMTicksPerSecond;
+
+    //TODO: toggle the targetrpm for close and far
+
+    public static double TARGET_RPM_TOLERANCE_TICKS_PER_SECOND = 100;
                                                                             //which multiplied by 28 ticks per revolution returns ticks per second
     public double testShootPower = 0;
     public double testRampPosition = 0;
@@ -69,8 +79,8 @@ public class Shooter{
         shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        ((DcMotorEx) shooterRight).setVelocity(TARGET_RPM_TICKS_PER_SECOND);
-        ((DcMotorEx) shooterLeft).setVelocity(TARGET_RPM_TICKS_PER_SECOND);
+        ((DcMotorEx) shooterRight).setVelocity(FAR_TARGET_RPM_TICKS_PER_SECOND);
+        ((DcMotorEx) shooterLeft).setVelocity(FAR_TARGET_RPM_TICKS_PER_SECOND);
     }
 
     public void turnOnShooter(double RPM){
@@ -100,8 +110,8 @@ public class Shooter{
     }
 
     public boolean shooterAtTargetVelocity() {
-        if (((DcMotorEx) shooterLeft).getVelocity() >= TARGET_RPM_TICKS_PER_SECOND - TARGET_RPM_TOLERANCE_TICKS_PER_SECOND
-        && ((DcMotorEx) shooterRight).getVelocity() >= TARGET_RPM_TICKS_PER_SECOND - TARGET_RPM_TOLERANCE_TICKS_PER_SECOND){
+        if (((DcMotorEx) shooterLeft).getVelocity() >= FAR_TARGET_RPM_TICKS_PER_SECOND - TARGET_RPM_TOLERANCE_TICKS_PER_SECOND
+        && ((DcMotorEx) shooterRight).getVelocity() >= FAR_TARGET_RPM_TICKS_PER_SECOND - TARGET_RPM_TOLERANCE_TICKS_PER_SECOND){
             return true;
         }
         return false;
@@ -121,7 +131,7 @@ public class Shooter{
         }
 
         if(on){
-            setRampPosition(RAMP_SCORE_POSITION);
+            setRampPosition(FAR_RAMP_SCORE_POSITION);
             turnOnShooter();
         }
         else {

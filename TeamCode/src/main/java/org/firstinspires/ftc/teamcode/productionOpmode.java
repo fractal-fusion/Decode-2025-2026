@@ -13,7 +13,7 @@ public class productionOpmode extends LinearOpMode {
         Shooter shooter = new Shooter(this);
         Intake intake = new Intake(this);
         Camera camera = new Camera(this, 3);
-
+//        ColorDetector colorDetector = new ColorDetector(this);
 
         camera.setExposure(6); //low exposure and high gain to reduce blur for autoalignment
         camera.setGain(250);
@@ -93,4 +93,3 @@ public class productionOpmode extends LinearOpMode {
     }
 }
 
-//TODO: make the pitch only go to zero when the shooter is at the right velocity, create cycling control
