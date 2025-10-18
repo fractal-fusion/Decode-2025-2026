@@ -22,7 +22,7 @@ public class Shooter{
     //static variables for shooter
     public static double PITCH_INTAKE_POSITION = 0.05;
     public static double PITCH_CYCLE_POSTION = 0.34;
-    public static double RAMP_SCORE_POSITION = 0.2;
+    public static double RAMP_SCORE_POSITION = 0.14;
     public static double TARGET_RPM = 5000;
     public static double TARGET_RPM_TICKS_PER_SECOND = TARGET_RPM/60 * 28; //divide rpm by 60 to get rotations per second,
     public static double TARGET_RPM_TOLERANCE_TICKS_PER_SECOND = 200;
