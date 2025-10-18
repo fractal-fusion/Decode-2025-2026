@@ -55,6 +55,10 @@ public class productionOpmode extends LinearOpMode {
             else if (gamepad2.b){
                 intake.turnOnOuttake();
             }
+            else if (gamepad2.y){
+                shooter.setPitchPosition(Shooter.PITCH_CYCLE_POSTION);
+                intake.turnOnIntake();
+            }
             else {
                 intake.turnOffIntake();
             }

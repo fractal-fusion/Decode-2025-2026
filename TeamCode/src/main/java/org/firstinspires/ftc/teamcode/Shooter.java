@@ -21,8 +21,9 @@ public class Shooter{
 
     //static variables for shooter
     public static double PITCH_INTAKE_POSITION = 0.05;
+    public static double PITCH_CYCLE_POSTION = 0.25;
     public static double RAMP_SCORE_POSITION = 0.15;
-    public static double TARGET_RPM = 5400;
+    public static double TARGET_RPM = 5000;
     public static double TARGET_RPM_TICKS_PER_SECOND = TARGET_RPM/60 * 28; //divide rpm by 60 to get rotations per second,
     public static double TARGET_RPM_TOLERANCE_TICKS_PER_SECOND = 400;
                                                                             //which multiplied by 28 ticks per revolution returns ticks per second
@@ -70,6 +71,14 @@ public class Shooter{
 
         ((DcMotorEx) shooterRight).setVelocity(TARGET_RPM_TICKS_PER_SECOND);
         ((DcMotorEx) shooterLeft).setVelocity(TARGET_RPM_TICKS_PER_SECOND);
+    }
+
+    public void turnOnShooter(double offsetRPM){
+        shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        ((DcMotorEx) shooterRight).setVelocity(TARGET_RPM_TICKS_PER_SECOND + (offsetRPM/60 * 28) );
+        ((DcMotorEx) shooterLeft).setVelocity(TARGET_RPM_TICKS_PER_SECOND + (offsetRPM/60 * 28) );
     }
 
     public void turnOffShooter(){
