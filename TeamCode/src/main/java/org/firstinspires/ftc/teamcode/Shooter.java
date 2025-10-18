@@ -23,7 +23,7 @@ public class Shooter{
     public static double PITCH_INTAKE_POSITION = 0.05;
     public static double PITCH_CYCLE_POSTION = 0.34;
     public static double FAR_RAMP_SCORE_POSITION = 0.2; //temporarily set to the close position
-    public static double FAR_TARGET_RPM = 4300; //temporarily set to the close position
+    public static double FAR_TARGET_RPM = 4150; //temporarily set to the close position
     public static double FAR_TARGET_RPM_TICKS_PER_SECOND = FAR_TARGET_RPM /60 * 28; //divide rpm by 60 to get rotations per second,
 
     public static double CLOSE_RAMP_SCORE_POSITION = 0.2;
@@ -35,7 +35,7 @@ public class Shooter{
 
     //TODO: toggle the targetrpm for close and far
 
-    public static double TARGET_RPM_TOLERANCE_TICKS_PER_SECOND = 100;
+    public static double TARGET_RPM_TOLERANCE_TICKS_PER_SECOND = 50;
                                                                             //which multiplied by 28 ticks per revolution returns ticks per second
     public double testShootPower = 0;
     public double testRampPosition = 0;
