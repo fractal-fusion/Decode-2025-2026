@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -8,7 +9,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-
+@Config
 public class Drivetrain {
     //declare motors
     public DcMotor frontLeft;
@@ -21,8 +22,8 @@ public class Drivetrain {
     private double botHeading;
 
     //constants used for tuning auto alignment
-    private final double AUTO_ALIGN_MAX_SPEED = 0.3; //auto alignment speed is clipped to minimum negative this and maximum positive this (bilateral tolerance)
-    private final double AUTO_ALIGN_GAIN = 0.01; //converts degrees to power, at a 1:100 ratio (ex: 25 degrees = 0.25 power)
+    public static double AUTO_ALIGN_MAX_SPEED = 0.3; //auto alignment speed is clipped to minimum negative this and maximum positive this (bilateral tolerance)
+    public static double AUTO_ALIGN_GAIN = 0.02; //converts degrees to power, at a 1:100 ratio (ex: 25 degrees = 0.25 power)
 
     private OpMode opMode;
 
@@ -89,8 +90,8 @@ public class Drivetrain {
     public void driveAutoAlign(double x, double y, double rotation)
     {
         //get gamepad inputs
-        double ypower = -y * 0.2; // lower the power when auto aligning
-        double xpower = x * 0.21; //multiplied by an extra 0.1 to counter imperfect strafing
+        double ypower = -y * 0.25; // lower the power when auto aligning
+        double xpower = x * 0.26; //multiplied by an extra 0.1 to counter imperfect strafing
         double rotationpower = rotation;
 
         //solve for power

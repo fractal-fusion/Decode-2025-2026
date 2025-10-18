@@ -36,7 +36,7 @@ public class productionOpmode extends LinearOpMode {
 
             //drivetrain controls (field centric drive + autoalignment)
             if (gamepad1.a) {
-                drivetrain.driveAutoAlign(gamepad1.left_stick_x, gamepad1.left_stick_y, drivetrain.calculateAutoAlignPower(camera.getBearing()));
+                drivetrain.driveAutoAlign(gamepad1.left_stick_x, gamepad1.left_stick_y, drivetrain.calculateAutoAlignPower(-camera.getBearing()));
             }
             else if (gamepad1.x) {
                 drivetrain.resetIMU();
@@ -58,6 +58,7 @@ public class productionOpmode extends LinearOpMode {
             else if (gamepad2.y){
                 shooter.setPitchPosition(Shooter.PITCH_CYCLE_POSTION);
                 intake.turnOnIntake();
+                shooter.turnOnShooter(10);
             }
             else {
                 intake.turnOffIntake();
@@ -85,7 +86,9 @@ public class productionOpmode extends LinearOpMode {
 //            telemetry.addData("shooter right velocity:", shooter.shooterRightGetVelocity());
 //
 //            telemetry.addData("shooter at velocity:", shooter.shooterAtTargetVelocity());
-//            telemetry.update();
+            telemetry.addData("apriltag bearing:", camera.getBearing());
+            telemetry.addData("drive power:", drivetrain.calculateAutoAlignPower(camera.getBearing()));
+            telemetry.update();
         }
     }
 }
