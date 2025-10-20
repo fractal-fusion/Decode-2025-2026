@@ -83,6 +83,9 @@ public class productionOpmode extends LinearOpMode {
             if (shooter.shooterAtTargetVelocity()){
                 shooter.setPitchPosition(0); //flatten the pitch when scoring so balls can pass to shooter motors
             }
+            else if (!shooter.shooterAtTargetVelocity()){
+                shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION);
+            }
 
 //            telemetry.addData("intake current time:", intake.currentTime);
 //            telemetry.addData("shooter left velocity:", shooter.shooterLeftGetVelocity());
