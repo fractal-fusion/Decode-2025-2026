@@ -23,7 +23,7 @@ public class productionOpmode extends LinearOpMode {
 
         waitForStart();
 
-
+        if (isStopRequested()) return;
 
         while (opModeIsActive())
         {
@@ -55,7 +55,7 @@ public class productionOpmode extends LinearOpMode {
             else if (gamepad2.b){
                 intake.turnOnOuttake();
             }
-            else if (gamepad2.y){
+            else if (gamepad2.right_bumper){
                 shooter.setPitchPosition(Shooter.PITCH_CYCLE_POSTION);
                 intake.turnOnIntake();
                 shooter.turnOnShooter(10);
@@ -74,7 +74,10 @@ public class productionOpmode extends LinearOpMode {
 
             //mechanism shooter control
             if (gamepad2.x) {
-                shooter.toggleShooter();
+                shooter.toggleShooterClose();
+            }
+            else if (gamepad2.y){
+                shooter.toggleShooterFar();
             }
             //flatten the pitch when scoring so balls can pass to shooter motors
             if (shooter.shooterAtTargetVelocity()){

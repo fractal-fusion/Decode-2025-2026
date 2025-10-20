@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.widget.Button;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -20,20 +22,19 @@ public class Shooter{
     private OpMode opMode;
 
     //static variables for shooter
+    public static double RPM_TO_TICKS_PER_SECOND = 28.0 / 60.0; //divide rpm by 60 to get rotations per second, then multiply by 28 since that's the ticks per revolution
     public static double PITCH_INTAKE_POSITION = 0.05;
     public static double PITCH_CYCLE_POSTION = 0.34;
     public static double FAR_RAMP_SCORE_POSITION = 0.2; //temporarily set to the close position
     public static double FAR_TARGET_RPM = 4150; //temporarily set to the close position
-    public static double FAR_TARGET_RPM_TICKS_PER_SECOND = FAR_TARGET_RPM /60 * 28; //divide rpm by 60 to get rotations per second,
+    public static double FAR_TARGET_RPM_TICKS_PER_SECOND = FAR_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
 
     public static double CLOSE_RAMP_SCORE_POSITION = 0.2;
     public static double CLOSE_TARGET_RPM = 4500;
-    public static double CLOSE_TARGET_RPM_TICKS_PER_SECOND = CLOSE_TARGET_RPM/60 * 28; //divide rpm by 60 to get rotations per second,
+    public static double CLOSE_TARGET_RPM_TICKS_PER_SECOND = CLOSE_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
 
     public double currentRampScorePosition;
     public double currentTargetRPMTicksPerSecond;
-
-    //TODO: toggle the targetrpm for close and far
 
     public static double TARGET_RPM_TOLERANCE_TICKS_PER_SECOND = 50;
                                                                             //which multiplied by 28 ticks per revolution returns ticks per second
@@ -79,16 +80,16 @@ public class Shooter{
         shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        ((DcMotorEx) shooterRight).setVelocity(FAR_TARGET_RPM_TICKS_PER_SECOND);
-        ((DcMotorEx) shooterLeft).setVelocity(FAR_TARGET_RPM_TICKS_PER_SECOND);
+        ((DcMotorEx) shooterRight).setVelocity(currentTargetRPMTicksPerSecond);
+        ((DcMotorEx) shooterLeft).setVelocity(currentTargetRPMTicksPerSecond);
     }
 
     public void turnOnShooter(double RPM){
         shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        ((DcMotorEx) shooterRight).setVelocity(RPM/60 * 28);
-        ((DcMotorEx) shooterLeft).setVelocity(RPM/60 * 28);
+        ((DcMotorEx) shooterRight).setVelocity(RPM * RPM_TO_TICKS_PER_SECOND);
+        ((DcMotorEx) shooterLeft).setVelocity(RPM * RPM_TO_TICKS_PER_SECOND);
     }
 
     public void turnOffShooter(){
@@ -110,8 +111,8 @@ public class Shooter{
     }
 
     public boolean shooterAtTargetVelocity() {
-        if (((DcMotorEx) shooterLeft).getVelocity() >= FAR_TARGET_RPM_TICKS_PER_SECOND - TARGET_RPM_TOLERANCE_TICKS_PER_SECOND
-        && ((DcMotorEx) shooterRight).getVelocity() >= FAR_TARGET_RPM_TICKS_PER_SECOND - TARGET_RPM_TOLERANCE_TICKS_PER_SECOND){
+        if (((DcMotorEx) shooterLeft).getVelocity() >= currentTargetRPMTicksPerSecond - TARGET_RPM_TOLERANCE_TICKS_PER_SECOND
+        && ((DcMotorEx) shooterRight).getVelocity() >= currentTargetRPMTicksPerSecond - TARGET_RPM_TOLERANCE_TICKS_PER_SECOND){
             return true;
         }
         return false;
@@ -125,19 +126,51 @@ public class Shooter{
         return (((DcMotorEx) shooterRight).getVelocity());
     }
 
-    public void toggleShooter(){
+    public void toggleShooterClose(){
         if (currentGamepad.x && !previousGamepad.x){
+
+            setCurrentRampScorePosition(CLOSE_RAMP_SCORE_POSITION);
+            setCurrentTargetRPMTicksPerSecond(CLOSE_TARGET_RPM);
+
             on = !on;
         }
 
         if(on){
-            setRampPosition(FAR_RAMP_SCORE_POSITION);
+            setRampPosition(currentRampScorePosition);
             turnOnShooter();
         }
         else {
             setRampPosition(0);
             turnOffShooter();
         }
+    }
+
+    public void toggleShooterFar(){
+
+        if (currentGamepad.y && !previousGamepad.y){
+
+            setCurrentRampScorePosition(CLOSE_RAMP_SCORE_POSITION);
+            setCurrentTargetRPMTicksPerSecond(CLOSE_TARGET_RPM);
+
+            on = !on;
+        }
+
+        if(on){
+            setRampPosition(currentRampScorePosition);
+            turnOnShooter();
+        }
+        else {
+            setRampPosition(0);
+            turnOffShooter();
+        }
+    }
+
+    public void setCurrentRampScorePosition(double position) {
+        currentRampScorePosition = position;
+    }
+
+    public void setCurrentTargetRPMTicksPerSecond(double RPM) {
+        currentTargetRPMTicksPerSecond = RPM * RPM_TO_TICKS_PER_SECOND;
     }
 
     //test methods
