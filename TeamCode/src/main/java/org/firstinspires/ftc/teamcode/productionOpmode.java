@@ -46,9 +46,9 @@ public class productionOpmode extends LinearOpMode {
             }
 
             //mechanism intake control
-            if(gamepad2.a){
+            if(gamepad2.a) {
                 intake.turnOnIntake();
-                if (!shooter.shooterAtTargetVelocity()){
+                if (!shooter.shooterAtTargetVelocity()) {
                     shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION);
                 }
             }
@@ -56,12 +56,14 @@ public class productionOpmode extends LinearOpMode {
                 intake.turnOnOuttake();
             }
             else if (gamepad2.right_bumper){
+                shooter.cycling = true;
                 shooter.setPitchPosition(Shooter.PITCH_CYCLE_POSTION);
                 intake.turnOnIntake();
-                shooter.turnOnShooter(10);
+                shooter.turnOnShooter(50);
             }
             else {
                 intake.turnOffIntake();
+                shooter.cycling = false;
             }
             //mechanism intake flicker control
             if(gamepad2.dpad_left) {
@@ -80,17 +82,20 @@ public class productionOpmode extends LinearOpMode {
                 shooter.toggleShooterFar();
             }
             //flatten the pitch when scoring so balls can pass to shooter motors
-            if (shooter.shooterAtTargetVelocity()){
-                shooter.setPitchPosition(0); //flatten the pitch when scoring so balls can pass to shooter motors
+            if (shooter.shooterAtTargetVelocity() && !shooter.cycling && shooter.checkPitchDebounceTimer()){
+                shooter.setPitchPosition(0);
+                shooter.resetPitchTimer(); //reset the debounce
             }
-            else if (!shooter.shooterAtTargetVelocity()){
-                shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION);
+            else if (!shooter.shooterAtTargetVelocity() && !shooter.cycling){
+                shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION); //automatically raise the pitch when not ready to shoot
             }
 
+            shooter.updatePitchDebounceTimer(); //update the debounce timer
+
 //            telemetry.addData("intake current time:", intake.currentTime);
-//            telemetry.addData("shooter left velocity:", shooter.shooterLeftGetVelocity());
-//            telemetry.addData("shooter right velocity:", shooter.shooterRightGetVelocity());
-//
+            telemetry.addData("shooter left velocity:", shooter.shooterLeftGetVelocity());
+            telemetry.addData("shooter right velocity:", shooter.shooterRightGetVelocity());
+
 //            telemetry.addData("shooter at velocity:", shooter.shooterAtTargetVelocity());
             telemetry.addData("apriltag bearing:", camera.getBearing());
             telemetry.addData("drive power:", drivetrain.calculateAutoAlignPower(camera.getBearing()));

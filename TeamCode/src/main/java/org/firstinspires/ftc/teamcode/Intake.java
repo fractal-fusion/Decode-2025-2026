@@ -24,7 +24,7 @@ public class Intake {
 
     //variables for setting flicker time
     private ElapsedTime timer;
-    public double currentTime;
+    private double currentFlickerTime;
 
     public Intake(LinearOpMode linearOpMode){
         this.opMode = linearOpMode;
@@ -60,11 +60,11 @@ public class Intake {
     }
 
     public void updateFlickerOpenTimer(){
-        currentTime = timer.time();
+        currentFlickerTime = timer.time();
     }
 
     public void checkFlickerOpenTimer(Gamepad gamepad) {
-        if (currentTime > 1 && !gamepad.dpad_left) { //after a second open the flicker
+        if (currentFlickerTime > 1 && !gamepad.dpad_left) { //after a second open the flicker
             flicker.setPosition(FLICKER_OPEN_POSITION);
             flickerIsOpen = true;
         }

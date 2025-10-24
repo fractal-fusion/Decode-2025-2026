@@ -1,13 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.widget.Button;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Config
 public class Shooter{
@@ -41,7 +40,11 @@ public class Shooter{
     public double testShootPower = 0;
     public double testRampPosition = 0;
     public double testPitchPosition = 0;
-    public boolean on = false; //boolean for on or off intake
+    public boolean on = false; //boolean for on or off shooter
+    public boolean cycling = false; //boolean for cycling or not
+    private ElapsedTime timer;
+    public double currentPitchTime;
+    public static double PITCH_DEBOUNCE_SECONDS = 0.2;
 
     //test servo variables
     public static String testServo = "rampright";
@@ -49,6 +52,8 @@ public class Shooter{
     private double testPosition = 0.5;
     public Shooter(OpMode linearOpmode) {
         this.opMode = linearOpmode;
+        timer = new ElapsedTime();
+
         shooterLeft = opMode.hardwareMap.get(DcMotor.class, "shooterleft");
         shooterRight = opMode.hardwareMap.get(DcMotor.class, "shooterright");
 
@@ -70,10 +75,8 @@ public class Shooter{
         shooterPitchRight.setDirection(Servo.Direction.REVERSE);
         shooterRampRight.setDirection(Servo.Direction.REVERSE); //reverse servos used for rotation so positive is rotate up
 
-        shooterRampRight.setPosition(0); //zero all servoes on initialization, set the ramp to flat and the pitch to flat too
+        shooterRampRight.setPosition(0); //zero ramp servoes on initialization
         shooterRampLeft.setPosition(0);
-        shooterPitchRight.setPosition(0);
-        shooterPitchLeft.setPosition(0);
     }
 
     public void turnOnShooter(){
@@ -144,7 +147,6 @@ public class Shooter{
             turnOffShooter();
         }
     }
-
     public void toggleShooterFar(){
 
         if (currentGamepad.y && !previousGamepad.y){
@@ -173,13 +175,23 @@ public class Shooter{
         currentTargetRPMTicksPerSecond = RPM * RPM_TO_TICKS_PER_SECOND;
     }
 
-    //test methods
     public void updateGamepad(Gamepad gamepad) { //debounce method
         previousGamepad.copy(currentGamepad);
 
         currentGamepad.copy(gamepad);
     }
 
+    public void resetPitchTimer(){
+        timer.reset();
+    }
+    public void updatePitchDebounceTimer(){
+        currentPitchTime = timer.time();
+    }
+    public boolean checkPitchDebounceTimer(){
+        return currentPitchTime > PITCH_DEBOUNCE_SECONDS;
+    }
+
+    //test methods
     public void testControlRampPosition(Gamepad gamepad){
 
         if(currentGamepad.right_bumper && !previousGamepad.right_bumper){
