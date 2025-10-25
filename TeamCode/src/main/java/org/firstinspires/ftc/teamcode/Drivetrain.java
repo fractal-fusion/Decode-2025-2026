@@ -25,7 +25,7 @@ public class Drivetrain {
     public static double AUTO_ALIGN_MAX_SPEED = 0.3; //auto alignment speed is clipped to minimum negative this and maximum positive this (bilateral tolerance)
     public static double AUTO_ALIGN_GAIN = 0.02; //converts degrees to power, at a 1:100 ratio (ex: 25 degrees = 0.25 power)
 
-    //TODO: tune this gain, currently overshooting a little
+    //TODO: need to tune maybe a little sometimes a little off from left side?
 
     private OpMode opMode;
 

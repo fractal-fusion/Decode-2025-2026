@@ -28,11 +28,11 @@ public class Shooter{
     public static double PITCH_CYCLE_POSITION = 0.18;
     public static double RAMP_CYCLE_POSITION = 0.2;
     public static double FAR_RAMP_SCORE_POSITION = 0.2; //temporarily set to the close position
-    public static double FAR_TARGET_RPM = 4150; //temporarily set to the close position
+    public static double FAR_TARGET_RPM = 4500; //temporarily set to the close position //TODO: TUNE RPMS
     public static double FAR_TARGET_RPM_TICKS_PER_SECOND = FAR_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
 
     public static double CLOSE_RAMP_SCORE_POSITION = 0.2;
-    public static double CLOSE_TARGET_RPM = 4500;
+    public static double CLOSE_TARGET_RPM = 4150;
     public static double CLOSE_TARGET_RPM_TICKS_PER_SECOND = CLOSE_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
 
     public double currentRampScorePosition;
