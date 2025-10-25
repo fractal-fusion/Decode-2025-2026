@@ -95,6 +95,7 @@ public class productionOpmode extends LinearOpMode {
 //            telemetry.addData("intake current time:", intake.currentTime);
             telemetry.addData("shooter left velocity:", shooter.shooterLeftGetVelocity());
             telemetry.addData("shooter right velocity:", shooter.shooterRightGetVelocity());
+            telemetry.addData("shooter at velocity:", shooter.shooterAtTargetVelocity());
 
 //            telemetry.addData("shooter at velocity:", shooter.shooterAtTargetVelocity());
             telemetry.addData("apriltag bearing:", camera.getBearing());

@@ -77,6 +77,8 @@ public class Shooter{
 
         shooterRampRight.setPosition(0); //zero ramp servoes on initialization
         shooterRampLeft.setPosition(0);
+
+        setCurrentTargetRPMTicksPerSecond(CLOSE_TARGET_RPM); //default the current target rpm ticks per second to close target rpm
     }
 
     public void turnOnShooter(){
@@ -114,11 +116,8 @@ public class Shooter{
     }
 
     public boolean shooterAtTargetVelocity() {
-        if (((DcMotorEx) shooterLeft).getVelocity() >= currentTargetRPMTicksPerSecond - TARGET_RPM_TOLERANCE_TICKS_PER_SECOND
-        && ((DcMotorEx) shooterRight).getVelocity() >= currentTargetRPMTicksPerSecond - TARGET_RPM_TOLERANCE_TICKS_PER_SECOND){
-            return true;
-        }
-        return false;
+        return ((DcMotorEx) shooterLeft).getVelocity() >= currentTargetRPMTicksPerSecond - TARGET_RPM_TOLERANCE_TICKS_PER_SECOND
+                && ((DcMotorEx) shooterRight).getVelocity() >= currentTargetRPMTicksPerSecond - TARGET_RPM_TOLERANCE_TICKS_PER_SECOND;
     }
 
     public double shooterLeftGetVelocity() {
