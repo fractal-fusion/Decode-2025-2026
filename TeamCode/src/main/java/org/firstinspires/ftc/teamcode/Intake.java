@@ -16,6 +16,7 @@ public class Intake {
     //static variables for positions of the flicker servo
     public static final double FLICKER_OPEN_POSITION = 0;
     public static final double FLICKER_CLOSE_POSITION = 0.6;
+//    public static final double FLICKER_CYCLE_POSITION = 0.25;
 
     //gamepads for rising edge detector
     public Gamepad currentGamepad = new Gamepad();
@@ -89,7 +90,7 @@ public class Intake {
         currentGamepad.copy(gamepad);
     }
 
-    public void flickerPosition(double position){
+    public void setFlickerPosition(double position){
         flicker.setPosition(position);
     }
 

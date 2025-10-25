@@ -61,6 +61,7 @@ public class productionOpmode extends LinearOpMode {
 //                shooter.setRampPosition(Shooter.RAMP_CYCLE_POSITION);
                 intake.turnOnIntake();
                 shooter.turnOnShooter(Shooter.CYCLING_RPM);
+//                intake.setFlickerPosition(Intake.FLICKER_CYCLE_POSITION);
             }
             else {
                 intake.turnOffIntake();
