@@ -57,13 +57,18 @@ public class productionOpmode extends LinearOpMode {
             }
             else if (gamepad2.right_bumper){
                 shooter.cycling = true;
-                shooter.setPitchPosition(Shooter.PITCH_CYCLE_POSTION);
+                shooter.setPitchPosition(Shooter.PITCH_CYCLE_POSITION);
+//                shooter.setRampPosition(Shooter.RAMP_CYCLE_POSITION);
                 intake.turnOnIntake();
-                shooter.turnOnShooter(50);
+                shooter.turnOnShooter(Shooter.CYCLING_RPM);
             }
             else {
                 intake.turnOffIntake();
                 shooter.cycling = false;
+                if (!shooter.on) { //make sure shooter is off after cycling and not shooting
+                    shooter.turnOffShooter();
+//                    shooter.setRampPosition(0);
+                }
             }
             //mechanism intake flicker control
             if(gamepad2.dpad_left) {

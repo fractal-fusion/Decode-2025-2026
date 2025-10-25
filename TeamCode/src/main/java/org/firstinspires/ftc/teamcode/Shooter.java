@@ -22,8 +22,11 @@ public class Shooter{
 
     //static variables for shooter
     public static double RPM_TO_TICKS_PER_SECOND = 28.0 / 60.0; //divide rpm by 60 to get rotations per second, then multiply by 28 since that's the ticks per revolution
+
+    public static double CYCLING_RPM = 800;
     public static double PITCH_INTAKE_POSITION = 0.05;
-    public static double PITCH_CYCLE_POSTION = 0.34;
+    public static double PITCH_CYCLE_POSITION = 0.2;
+    public static double RAMP_CYCLE_POSITION = 0.2;
     public static double FAR_RAMP_SCORE_POSITION = 0.2; //temporarily set to the close position
     public static double FAR_TARGET_RPM = 4150; //temporarily set to the close position
     public static double FAR_TARGET_RPM_TICKS_PER_SECOND = FAR_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
@@ -66,8 +69,8 @@ public class Shooter{
 
         shooterRight.setDirection(DcMotor.Direction.REVERSE); //reverse shooter right motor so positive is out
 
-        shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); //slow down the motor faster
+//        shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); //slow down the motor faster
 
         shooterRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         shooterLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //reset encoders on initialization
