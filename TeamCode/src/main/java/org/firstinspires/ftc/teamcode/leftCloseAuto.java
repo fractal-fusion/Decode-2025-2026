@@ -80,12 +80,12 @@ public class leftCloseAuto extends LinearOpMode {
         while (opModeIsActive()){
             follower.update(); //update follower
             currentPose = follower.getPose(); //update current pose
-            shooter.updatePitchDebounceTimer(); //update pitch debounce timer to prevent pitch from going up too soon
 
             switch (pathState) {
                 case 0:
                     //hold the flicker in
                     intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
+                    shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION);
 
 
                     // Move to the scoring position from the start position
@@ -95,14 +95,14 @@ public class leftCloseAuto extends LinearOpMode {
                 case 1:
                     // Wait until we have passed all path constraints
                     if (!follower.isBusy()) {
-                        shooter.setCurrentRampScorePosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
                         shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_TARGET_RPM);
+                        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
+
                         shooter.turnOnShooter();
                         intake.turnOnIntake();
 
-                        if (shooter.shooterAtTargetVelocity() && shooter.checkPitchDebounceTimer()) {
+                        if (shooter.shooterAtTargetVelocity()) {
                             shooter.setPitchPosition(Shooter.PITCH_SCORE_POSITION);
-                            shooter.resetPitchTimer();
                         }
                         else {
                             shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION);

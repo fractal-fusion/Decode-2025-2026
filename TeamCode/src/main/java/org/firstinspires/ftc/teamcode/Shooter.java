@@ -135,14 +135,13 @@ public class Shooter{
     public void toggleShooterClose(){
         if (currentGamepad.x && !previousGamepad.x){
 
-            setCurrentRampScorePosition(CLOSE_RAMP_SCORE_POSITION);
             setCurrentTargetRPMTicksPerSecond(CLOSE_TARGET_RPM);
 
             on = !on;
         }
 
         if(on){
-            setRampPosition(currentRampScorePosition);
+            setRampPosition(CLOSE_RAMP_SCORE_POSITION);
             turnOnShooter();
         }
         else {
@@ -154,24 +153,19 @@ public class Shooter{
 
         if (currentGamepad.y && !previousGamepad.y){
 
-            setCurrentRampScorePosition(CLOSE_RAMP_SCORE_POSITION);
-            setCurrentTargetRPMTicksPerSecond(CLOSE_TARGET_RPM);
+            setCurrentTargetRPMTicksPerSecond(FAR_TARGET_RPM);
 
             on = !on;
         }
 
         if(on){
-            setRampPosition(currentRampScorePosition);
+            setRampPosition(FAR_RAMP_SCORE_POSITION);
             turnOnShooter();
         }
         else {
             setRampPosition(0);
             turnOffShooter();
         }
-    }
-
-    public void setCurrentRampScorePosition(double position) {
-        currentRampScorePosition = position;
     }
 
     public void setCurrentTargetRPMTicksPerSecond(double RPM) {
