@@ -89,7 +89,7 @@ public class productionOpmode extends LinearOpMode {
             }
             //flatten the pitch when scoring so balls can pass to shooter motors
             if (shooter.shooterAtTargetVelocity() && !shooter.cycling && shooter.checkPitchDebounceTimer()){
-                shooter.setPitchPosition(0);
+                shooter.setPitchPosition(Shooter.PITCH_SCORE_POSITION);
                 shooter.resetPitchTimer(); //reset the debounce
             }
             else if (!shooter.shooterAtTargetVelocity() && !shooter.cycling){

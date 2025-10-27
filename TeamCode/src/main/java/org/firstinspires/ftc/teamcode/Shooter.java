@@ -24,6 +24,7 @@ public class Shooter{
     public static double RPM_TO_TICKS_PER_SECOND = 28.0 / 60.0; //divide rpm by 60 to get rotations per second, then multiply by 28 since that's the ticks per revolution
 
     public static double CYCLING_RPM = 0;
+    public static double PITCH_SCORE_POSITION = 0.0; //flatten pitch so balls can pass for scoring
     public static double PITCH_INTAKE_POSITION = 0.05;
     public static double PITCH_CYCLE_POSITION = 0.18;
     public static double RAMP_CYCLE_POSITION = 0.2;

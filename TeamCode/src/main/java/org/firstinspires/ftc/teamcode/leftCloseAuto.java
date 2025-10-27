@@ -12,84 +12,110 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 @Autonomous(name="Blue Close Auto", group="Robot")
+@SuppressWarnings("FieldCanBeLocal")
 public class leftCloseAuto extends LinearOpMode {
-    //initialize subsystems
-    Drivetrain drivetrain = new Drivetrain(this);
-    Shooter shooter = new Shooter(this);
-    Intake intake = new Intake(this);
-    Camera camera = new Camera(this, 3);
-
     private Follower follower; //initialize the follower object
-    private Timer pathTimer, actionTimer, opmodeTimer; //declare the variables used when checking for path completion
+    private Timer pathTimer, opmodeTimer; //declare the time variables used when checking for path completion
+    private Pose currentPose;
     private int pathState; //finite state machine variable
 
     private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop; //define path chains (muliple paths interpolated)
 
-    private final Pose startPose = new Pose(28.5, 128, Math.toRadians(180)); // Start Pose of our robot.
+    private final Pose startPose = new Pose(56, 8, Math.toRadians(90)); // Start Pose of our robot
+    private final Pose scorePreloadPose = new Pose(72, 84, Math.toRadians(135));
+
     //TODO: SET OTHER POSES
 
 
     //BUILD PATHS TODO: actually build them using poses from visualizer
     public void buildPaths(){
         scorePreload = follower.pathBuilder()
+                .addPath(new BezierLine(startPose, scorePreloadPose))
+                .setLinearHeadingInterpolation(startPose.getHeading(), scorePreloadPose.getHeading())
                 .build();
-        grabPickupBottom = follower.pathBuilder()
-                .build();
-        scorePickupBottom = follower.pathBuilder()
-                .build();
-        grabPickupMiddle = follower.pathBuilder()
-                .build();
-        scorePickupMiddle = follower.pathBuilder()
-                .build();
-        grabPickupTop = follower.pathBuilder()
-                .build();
-        scorePickupTop = follower.pathBuilder()
-                .build();
+//        grabPickupBottom = follower.pathBuilder()
+//                .build();
+//        scorePickupBottom = follower.pathBuilder()
+//                .build();
+//        grabPickupMiddle = follower.pathBuilder()
+//                .build();
+//        scorePickupMiddle = follower.pathBuilder()
+//                .build();
+//        grabPickupTop = follower.pathBuilder()
+//                .build();
+//        scorePickupTop = follower.pathBuilder()
+//                .build();
     }
-    public void setPathState(int pState) {
+    public void setPathState(int pState){
         pathState = pState;
         pathTimer.resetTimer();
     }
 
-    public void updatePathState(){
-        switch (pathState) {
-            case 0:
-                // Move to the scoring position from the start position
-                follower.followPath(scorePreload);
-
-                //TODO: LOGIC FOR SCORING HERE or add a callback to run while following a path
-
-                setPathState(1);
-                break;
-            case 1:
-                // Wait until we have passed all path constraints
-                if (!follower.isBusy()) {
-                    // move to the first artifact pickup location from the scoring position
-                    follower.followPath(grabPickupBottom);
-                    setPathState(2);
-                }
-                break;
-        }
-    }
-
     @Override
     public void runOpMode() throws InterruptedException {
+        //initialize subsystems
+        Drivetrain drivetrain = new Drivetrain(this);
+        Shooter shooter = new Shooter(this);
+        Intake intake = new Intake(this);
+        Camera camera = new Camera(this, 3);
 
-        //initialize timers and followers
+        //initialize timers so they can be checked in the state machine
         pathTimer = new Timer();
         opmodeTimer = new Timer();
-        opmodeTimer.resetTimer();
 
-        buildPaths();
-        follower = Constants.createFollower(hardwareMap);
+        follower = Constants.createFollower(hardwareMap); //create pedropathing follower
         follower.setStartingPose(startPose);
+        follower.setMaxPower(0.8); //decrease max power to prevent flipping
+
+        buildPaths(); //build all paths
 
         if (isStopRequested()) return;
 
         waitForStart();
 
+        opmodeTimer.resetTimer(); //reset opmode total timer on start
+
+        setPathState(0);
+
         while (opModeIsActive()){
-            updatePathState();
+            follower.update(); //update follower
+            currentPose = follower.getPose(); //update current pose
+            shooter.updatePitchDebounceTimer(); //update pitch debounce timer to prevent pitch from going up too soon
+
+            switch (pathState) {
+                case 0:
+                    //hold the flicker in
+                    intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
+
+
+                    // Move to the scoring position from the start position
+                    follower.followPath(scorePreload, true);
+                    setPathState(1);
+                    break;
+                case 1:
+                    // Wait until we have passed all path constraints
+                    if (!follower.isBusy()) {
+                        shooter.setCurrentRampScorePosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
+                        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_TARGET_RPM);
+                        shooter.turnOnShooter();
+                        intake.turnOnIntake();
+
+                        if (shooter.shooterAtTargetVelocity() && shooter.checkPitchDebounceTimer()) {
+                            shooter.setPitchPosition(Shooter.PITCH_SCORE_POSITION);
+                            shooter.resetPitchTimer();
+                        }
+                        else {
+                            shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION);
+                        }
+                        // move to the first artifact pickup location from the scoring position
+//                    follower.followPath(grabPickupBottom);
+
+                        if (opmodeTimer.getElapsedTimeSeconds() > 10) {
+                            setPathState(-1); //end
+                        }
+                    }
+                    break;
+            } //run state machine
         }
     }
 }
