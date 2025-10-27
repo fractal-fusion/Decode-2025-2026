@@ -11,7 +11,7 @@ public class testOpmode extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Shooter shooter = new Shooter(this);
-        Intake intake = new Intake(this);
+        Intake intake = new Intake(this, Intake.FLICKER_OPEN_POSITION);
         Drivetrain drivetrain = new Drivetrain(this);
         ColorDetector colorDetector = new ColorDetector(this);
         shooter.setPitchPosition(0);

@@ -11,7 +11,7 @@ public class productionOpmode extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         Drivetrain drivetrain = new Drivetrain(this);
         Shooter shooter = new Shooter(this);
-        Intake intake = new Intake(this);
+        Intake intake = new Intake(this, Intake.FLICKER_OPEN_POSITION);
         Camera camera = new Camera(this, 3);
 //        ColorDetector colorDetector = new ColorDetector(this);
 

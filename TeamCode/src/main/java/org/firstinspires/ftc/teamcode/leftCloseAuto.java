@@ -56,7 +56,7 @@ public class leftCloseAuto extends LinearOpMode {
         //initialize subsystems
         Drivetrain drivetrain = new Drivetrain(this);
         Shooter shooter = new Shooter(this);
-        Intake intake = new Intake(this);
+        Intake intake = new Intake(this, Intake.FLICKER_CLOSE_POSITION);
         Camera camera = new Camera(this, 3);
 
         //initialize timers so they can be checked in the state machine

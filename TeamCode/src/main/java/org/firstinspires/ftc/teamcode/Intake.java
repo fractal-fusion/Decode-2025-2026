@@ -27,7 +27,7 @@ public class Intake {
     private ElapsedTime timer;
     private double currentFlickerTime;
 
-    public Intake(LinearOpMode linearOpMode){
+    public Intake(LinearOpMode linearOpMode, double initPosition){
         this.opMode = linearOpMode;
         timer = new ElapsedTime();
 
@@ -38,7 +38,7 @@ public class Intake {
         intake.setDirection(DcMotor.Direction.REVERSE); // reverse direction so positive is intake, negative is outtake
 
         flicker.setDirection(Servo.Direction.REVERSE); //reverse flicker servo so increasing to position 1 is flick inside
-        flicker.setPosition(FLICKER_OPEN_POSITION); //open flicker on initialization
+        flicker.setPosition(initPosition); //open flicker on initialization
     }
 
     public void turnOnIntake(){
