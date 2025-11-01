@@ -22,7 +22,7 @@ public class leftCloseAuto extends LinearOpMode {
     private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop; //define path chains (muliple paths interpolated)
 
     private final Pose startPose = new Pose(56, 8, Math.toRadians(90)); // Start Pose of our robot
-    private final Pose scorePreloadPose = new Pose(72, 84, Math.toRadians(135));
+    private final Pose scorePreloadPose = new Pose(76, 76, Math.toRadians(135));
 
     //TODO: SET OTHER POSES
 
@@ -67,6 +67,8 @@ public class leftCloseAuto extends LinearOpMode {
         follower.setStartingPose(startPose);
         follower.setMaxPower(1); //decrease max power to prevent flipping
 
+        shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION); //set pitch to intake position on initialize
+
         buildPaths(); //build all paths
 
         if (isStopRequested()) return;
@@ -80,6 +82,13 @@ public class leftCloseAuto extends LinearOpMode {
         while (opModeIsActive()){
             follower.update(); //update follower
             currentPose = follower.getPose(); //update current pose
+
+            shooter.updatePitchDebounceTimer(); //update pitch timer for staying down between each ball
+
+            telemetry.addData("shooter left velocity:", shooter.shooterLeftGetVelocity());
+            telemetry.addData("shooter right velocity:", shooter.shooterRightGetVelocity());
+            telemetry.addData("shooter at velocity:", shooter.shooterAtTargetVelocity());
+            telemetry.update();
 
             switch (pathState) {
                 case 0:
@@ -99,15 +108,17 @@ public class leftCloseAuto extends LinearOpMode {
                         shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
 
                         shooter.turnOnShooter();
-                        intake.turnOnIntake();
 
                         if (shooter.shooterAtTargetVelocity() && shooter.checkPitchDebounceTimer()) {
+                            intake.turnOnIntake();
                             shooter.setPitchPosition(Shooter.PITCH_SCORE_POSITION);
                             shooter.resetPitchTimer();
                         }
                         else if (!shooter.shooterAtTargetVelocity()){
+                            intake.turnOffIntake();
                             shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION);
                         }
+
                         // move to the first artifact pickup location from the scoring position
 //                    follower.followPath(grabPickupBottom);
 
@@ -117,7 +128,6 @@ public class leftCloseAuto extends LinearOpMode {
                     }
                     break;
             } //run state machine
-            shooter.updatePitchDebounceTimer(); //update pitch timer for staying down between each ball
         }
     }
 }

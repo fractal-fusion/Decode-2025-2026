@@ -28,7 +28,7 @@ public class Camera {
     private final int PGP_id = 22;
     private final int PPG_id = 23;
 
-    public static double HEADING_OFFSET = 1.5; //offset for autoalign
+    public static double HEADING_OFFSET = 2.5; //offset for autoalign
 
     public Camera(OpMode linearOpMode, int decimation) {
         //initialize opmode variable for current opmode

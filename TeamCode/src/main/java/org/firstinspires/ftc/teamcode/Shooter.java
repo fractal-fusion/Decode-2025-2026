@@ -40,7 +40,7 @@ public class Shooter{
     public double currentRampScorePosition;
     public double currentTargetRPMTicksPerSecond;
 
-    public static double TARGET_RPM_TOLERANCE_TICKS_PER_SECOND = 50;
+    public static double TARGET_RPM_TOLERANCE_TICKS_PER_SECOND = 25;
                                                                             //which multiplied by 28 ticks per revolution returns ticks per second
     public double testShootPower = 0;
     public double testRampPosition = 0;
