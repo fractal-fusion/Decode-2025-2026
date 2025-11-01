@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+@Config
 public class Camera {
 
     private OpMode opMode;
@@ -25,6 +27,8 @@ public class Camera {
     private final int GPP_id = 21;
     private final int PGP_id = 22;
     private final int PPG_id = 23;
+
+    public static double HEADING_OFFSET = 1.5; //offset for autoalign
 
     public Camera(OpMode linearOpMode, int decimation) {
         //initialize opmode variable for current opmode
@@ -130,7 +134,7 @@ public class Camera {
         for (AprilTagDetection detection : currentDetections) {
             if (detection.metadata != null && detection.id > 0){
                 if (detection.id == 20 || detection.id == 24) { //check for recognized blue (20) or red (24) alliance apriltag
-                    return detection.ftcPose.bearing;
+                    return detection.ftcPose.bearing + HEADING_OFFSET;
                 }
             }
         }

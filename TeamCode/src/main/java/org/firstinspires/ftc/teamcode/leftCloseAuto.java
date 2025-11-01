@@ -65,7 +65,7 @@ public class leftCloseAuto extends LinearOpMode {
 
         follower = Constants.createFollower(hardwareMap); //create pedropathing follower
         follower.setStartingPose(startPose);
-        follower.setMaxPower(0.8); //decrease max power to prevent flipping
+        follower.setMaxPower(1); //decrease max power to prevent flipping
 
         buildPaths(); //build all paths
 
@@ -101,10 +101,11 @@ public class leftCloseAuto extends LinearOpMode {
                         shooter.turnOnShooter();
                         intake.turnOnIntake();
 
-                        if (shooter.shooterAtTargetVelocity()) {
+                        if (shooter.shooterAtTargetVelocity() && shooter.checkPitchDebounceTimer()) {
                             shooter.setPitchPosition(Shooter.PITCH_SCORE_POSITION);
+                            shooter.resetPitchTimer();
                         }
-                        else {
+                        else if (!shooter.shooterAtTargetVelocity()){
                             shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION);
                         }
                         // move to the first artifact pickup location from the scoring position
@@ -116,6 +117,7 @@ public class leftCloseAuto extends LinearOpMode {
                     }
                     break;
             } //run state machine
+            shooter.updatePitchDebounceTimer(); //update pitch timer for staying down between each ball
         }
     }
 }

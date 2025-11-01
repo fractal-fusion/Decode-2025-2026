@@ -43,7 +43,7 @@ public class Intake {
 
     public void turnOnIntake(){
         intake.setPower(1);
-        driver.setPower(1);
+        driver.setPower(1); //TODO: try reducing driver motor speed to make shooting more consistent
     }
 
     public void turnOnOuttake(){
