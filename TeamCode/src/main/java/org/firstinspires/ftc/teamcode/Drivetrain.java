@@ -22,7 +22,7 @@ public class Drivetrain {
     private double botHeading;
 
     //constants used for tuning auto alignment
-    public static double AUTO_ALIGN_MAX_SPEED = 0.3; //auto alignment speed is clipped to minimum negative this and maximum positive this (bilateral tolerance)
+    public static double AUTO_ALIGN_MAX_SPEED = 0.4; //auto alignment speed is clipped to minimum negative this and maximum positive this (bilateral tolerance)
     public static double AUTO_ALIGN_GAIN = 0.02; //converts degrees to power, at a 1:100 ratio (ex: 25 degrees = 0.25 power)
 
     private OpMode opMode;
