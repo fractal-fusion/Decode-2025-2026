@@ -28,7 +28,10 @@ public class Camera {
     private final int PGP_id = 22;
     private final int PPG_id = 23;
 
-    public static double HEADING_OFFSET = 2.5; //offset for autoalign
+    public static double HEADING_OFFSET_CLOSE = 2.5; //offset for autoalign TODO: change this for far because the position is different
+    public static double HEADING_OFFSET_FAR = 5.0;
+
+    public double headingOffset;
 
     public Camera(OpMode linearOpMode, int decimation) {
         //initialize opmode variable for current opmode
@@ -134,12 +137,16 @@ public class Camera {
         for (AprilTagDetection detection : currentDetections) {
             if (detection.metadata != null && detection.id > 0){
                 if (detection.id == 20 || detection.id == 24) { //check for recognized blue (20) or red (24) alliance apriltag
-                    return detection.ftcPose.bearing + HEADING_OFFSET;
+                    return detection.ftcPose.bearing + headingOffset;
                 }
             }
         }
 
         return 0.0;
+    }
+
+    public void setHeadingOffset(double offset){
+        headingOffset = offset;
     }
 
     public void turnOnCamera(){

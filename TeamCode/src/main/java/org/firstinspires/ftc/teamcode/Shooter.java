@@ -29,7 +29,7 @@ public class Shooter{
     public static double PITCH_CYCLE_POSITION = 0.18;
     public static double RAMP_CYCLE_POSITION = 0.2;
     public static double FAR_RAMP_SCORE_POSITION = 0.23;
-    public static double FAR_TARGET_RPM = 5000; //TODO:tune far target rpm and score position
+    public static double FAR_TARGET_RPM = 5000;
 
     public static double FAR_TARGET_RPM_TICKS_PER_SECOND = FAR_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
 
@@ -40,7 +40,7 @@ public class Shooter{
     public double currentRampScorePosition;
     public double currentTargetRPMTicksPerSecond;
 
-    public static double TARGET_RPM_TOLERANCE_TICKS_PER_SECOND = 25;
+    public static double TARGET_RPM_TOLERANCE_TICKS_PER_SECOND = 30; //TODO: tune this and then tune rpms
                                                                             //which multiplied by 28 ticks per revolution returns ticks per second
     public double testShootPower = 0;
     public double testRampPosition = 0;

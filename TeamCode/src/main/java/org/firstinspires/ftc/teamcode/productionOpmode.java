@@ -82,9 +82,11 @@ public class productionOpmode extends LinearOpMode {
 
             //mechanism shooter control
             if (gamepad2.x) {
+                camera.setHeadingOffset(Camera.HEADING_OFFSET_CLOSE); //TODO: automate this by getting the distance
                 shooter.toggleShooterClose();
             }
             else if (gamepad2.y){
+                camera.setHeadingOffset(Camera.HEADING_OFFSET_FAR);
                 shooter.toggleShooterFar();
             }
             //flatten the pitch when scoring so balls can pass to shooter motors
