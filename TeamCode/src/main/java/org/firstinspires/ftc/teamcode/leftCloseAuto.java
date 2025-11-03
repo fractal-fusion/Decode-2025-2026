@@ -5,15 +5,16 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 @Autonomous(name="Blue Close Auto", group="Robot")
 @SuppressWarnings("FieldCanBeLocal")
 public class leftCloseAuto extends LinearOpMode {
+    Drivetrain drivetrain;
+    Shooter shooter;
+    Intake intake;
+    Camera camera;
     private Follower follower; //initialize the follower object
     private Timer pathTimer, opmodeTimer; //declare the time variables used when checking for path completion
     private Pose currentPose;
@@ -28,7 +29,7 @@ public class leftCloseAuto extends LinearOpMode {
 
 
     //BUILD PATHS TODO: actually build them using poses from visualizer
-    public void buildPaths(){
+    public void buildPaths() {
         scorePreload = follower.pathBuilder()
                 .addPath(new BezierLine(startPose, scorePreloadPose))
                 .setLinearHeadingInterpolation(startPose.getHeading(), scorePreloadPose.getHeading())
@@ -46,18 +47,15 @@ public class leftCloseAuto extends LinearOpMode {
 //        scorePickupTop = follower.pathBuilder()
 //                .build();
     }
-    public void setPathState(int pState){
-        pathState = pState;
-        pathTimer.resetTimer();
-    }
+
 
     @Override
     public void runOpMode() throws InterruptedException {
         //initialize subsystems
-        Drivetrain drivetrain = new Drivetrain(this);
-        Shooter shooter = new Shooter(this);
-        Intake intake = new Intake(this, Intake.FLICKER_CLOSE_POSITION);
-        Camera camera = new Camera(this, 3);
+        drivetrain = new Drivetrain(this);
+        shooter = new Shooter(this);
+        intake = new Intake(this, Intake.FLICKER_CLOSE_POSITION);
+        camera = new Camera(this, 3);
 
         //initialize timers so they can be checked in the state machine
         pathTimer = new Timer();
@@ -79,55 +77,82 @@ public class leftCloseAuto extends LinearOpMode {
 
         setPathState(0);
 
-        while (opModeIsActive()){
+        while (opModeIsActive()) {
             follower.update(); //update follower
             currentPose = follower.getPose(); //update current pose
 
-            shooter.updatePitchDebounceTimer(); //update pitch timer for staying down between each ball
+            shooter.updatePitchDownDebounceTimer(); //update pitch timer for staying down between each ball
+
+            updateStateMachine();
 
             telemetry.addData("shooter left velocity:", shooter.shooterLeftGetVelocity());
             telemetry.addData("shooter right velocity:", shooter.shooterRightGetVelocity());
             telemetry.addData("shooter at velocity:", shooter.shooterAtTargetVelocity());
             telemetry.update();
 
-            switch (pathState) {
-                case 0:
-                    //hold the flicker in
-                    intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
-                    shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION);
-
-
-                    // Move to the scoring position from the start position
-                    follower.followPath(scorePreload, true);
-                    setPathState(1);
-                    break;
-                case 1:
-                    // Wait until we have passed all path constraints
-                    if (!follower.isBusy()) {
-                        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_TARGET_RPM);
-                        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
-
-                        shooter.turnOnShooter();
-
-                        if (shooter.shooterAtTargetVelocity() && shooter.checkPitchDebounceTimer()) {
-                            intake.turnOnIntake();
-                            shooter.setPitchPosition(Shooter.PITCH_SCORE_POSITION);
-                            shooter.resetPitchTimer();
-                        }
-                        else if (!shooter.shooterAtTargetVelocity()){
-                            intake.turnOffIntake();
-                            shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION);
-                        }
-
-                        // move to the first artifact pickup location from the scoring position
-//                    follower.followPath(grabPickupBottom);
-
-                        if (opmodeTimer.getElapsedTimeSeconds() > 10) {
-                            setPathState(-1); //end
-                        }
-                    }
-                    break;
-            } //run state machine
         }
     }
+
+    public void updateStateMachine() {
+        switch (pathState) {
+            case 0:
+                //hold the flicker in
+                intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
+                shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION);
+
+
+                // Move to the scoring position from the start position
+                follower.followPath(scorePreload, true);
+                setPathState(1);
+                break;
+            case 1:
+                // Wait until we have passed all path constraints
+                if (!follower.isBusy()) {
+                    intializeBurstClose();
+                    burstShoot();
+
+                    // move to the first artifact pickup location from the scoring position
+//                    follower.followPath(grabPickupBottom);
+
+                    if (opmodeTimer.getElapsedTimeSeconds() > 10) {
+                        shooter.turnOffShooter();
+                        setPathState(-1); //end
+                    }
+                }
+                break;
+        } //run state machine
+    }
+
+    public void intializeBurstClose(){
+        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_TARGET_RPM);
+        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
+        shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
+    }
+
+    public void initalizeBurstFar(){
+        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.FAR_TARGET_RPM);
+        shooter.setRampPosition(Shooter.FAR_RAMP_SCORE_POSITION);
+        shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_FAR);
+    }
+
+    public void burstShoot(){
+        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_TARGET_RPM);
+        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
+        shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
+
+        shooter.turnOnShooter();
+        intake.turnOnIntake();
+
+        if (shooter.shooterAtTargetVelocity()) { //TODO: implement debounces here
+            shooter.setPitchPosition(Shooter.PITCH_SCORE_POSITION);
+        } else if (!shooter.shooterAtTargetVelocity()) {
+            shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION);
+        }
+    }
+
+    public void setPathState(int pState) {
+        pathState = pState;
+        pathTimer.resetTimer();
+    }
+
 }

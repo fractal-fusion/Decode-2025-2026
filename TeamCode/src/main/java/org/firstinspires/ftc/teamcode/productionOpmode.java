@@ -82,23 +82,35 @@ public class productionOpmode extends LinearOpMode {
 
             //mechanism shooter control
             if (gamepad2.x) {
-                camera.setHeadingOffset(Camera.HEADING_OFFSET_CLOSE); //TODO: automate this by getting the distance
                 shooter.toggleShooterClose();
             }
             else if (gamepad2.y){
-                camera.setHeadingOffset(Camera.HEADING_OFFSET_FAR);
                 shooter.toggleShooterFar();
             }
             //flatten the pitch when scoring so balls can pass to shooter motors
-            if (shooter.shooterAtTargetVelocity() && !shooter.cycling && shooter.checkPitchDebounceTimer()){
+            if (shooter.shooterAtTargetVelocity() && !shooter.cycling && shooter.pitchUpDebounceTimerOver()){
                 shooter.setPitchPosition(Shooter.PITCH_SCORE_POSITION);
-                shooter.resetPitchTimer(); //reset the debounce
+                shooter.resetPitchUpTimer();
             }
-            else if (!shooter.shooterAtTargetVelocity() && !shooter.cycling){
+            else if (!shooter.shooterAtTargetVelocity() && !shooter.cycling && shooter.pitchDownDebounceTimerOver()){
                 shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION); //automatically raise the pitch when not ready to shoot
+                shooter.resetPitchDownTimer(); //reset the debounce
             }
 
-            shooter.updatePitchDebounceTimer(); //update the debounce timer
+            shooter.updatePitchDownDebounceTimer(); //update the debounce timers
+            shooter.updatePitchUpDebounceTimer();
+
+            //DYNAMIC FAR AND CLOSE
+            if (camera.isFar) {
+                camera.setHeadingOffset(Camera.HEADING_OFFSET_FAR);
+                shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_FAR);
+            }
+            else {
+                camera.setHeadingOffset(Camera.HEADING_OFFSET_CLOSE);
+                shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
+            }
+
+            camera.updateIsFar();
 
 //            telemetry.addData("intake current time:", intake.currentTime);
             telemetry.addData("shooter left velocity:", shooter.shooterLeftGetVelocity());
@@ -106,6 +118,7 @@ public class productionOpmode extends LinearOpMode {
             telemetry.addData("shooter at velocity:", shooter.shooterAtTargetVelocity());
 
 //            telemetry.addData("shooter at velocity:", shooter.shooterAtTargetVelocity());
+            telemetry.addData("apriltag range:", camera.getRange());
             telemetry.addData("apriltag bearing:", camera.getBearing());
             telemetry.addData("drive power:", drivetrain.calculateAutoAlignPower(camera.getBearing()));
             telemetry.update();

@@ -25,7 +25,7 @@ public class Shooter{
 
     public static double CYCLING_RPM = 0;
     public static double PITCH_SCORE_POSITION = 0.0; //flatten pitch so balls can pass for scoring
-    public static double PITCH_INTAKE_POSITION = 0.05;
+    public static double PITCH_INTAKE_POSITION = 0.07;
     public static double PITCH_CYCLE_POSITION = 0.18;
     public static double RAMP_CYCLE_POSITION = 0.2;
     public static double FAR_RAMP_SCORE_POSITION = 0.23;
@@ -34,22 +34,26 @@ public class Shooter{
     public static double FAR_TARGET_RPM_TICKS_PER_SECOND = FAR_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
 
     public static double CLOSE_RAMP_SCORE_POSITION = 0.25;
-    public static double CLOSE_TARGET_RPM = 4500;
+    public static double CLOSE_TARGET_RPM = 4320;
     public static double CLOSE_TARGET_RPM_TICKS_PER_SECOND = CLOSE_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
 
     public double currentRampScorePosition;
     public double currentTargetRPMTicksPerSecond;
 
-    public static double TARGET_RPM_TOLERANCE_TICKS_PER_SECOND = 30; //TODO: tune this and then tune rpms
-                                                                            //which multiplied by 28 ticks per revolution returns ticks per second
+    public static double TARGET_RPM_TOLERANCE_RPM_CLOSE = 50;
+    public static double TARGET_RPM_TOLERANCE_RPM_FAR = 85;
+    public double targetRPMToleranceRPM = TARGET_RPM_TOLERANCE_RPM_CLOSE; //initially set to the tolerance for close
     public double testShootPower = 0;
     public double testRampPosition = 0;
     public double testPitchPosition = 0;
     public boolean on = false; //boolean for on or off shooter
     public boolean cycling = false; //boolean for cycling or not
-    private ElapsedTime timer;
-    public double currentPitchTime;
-    public static double PITCH_DEBOUNCE_SECONDS = 0.75; //TODO: tune this to see what is most consistent
+    private ElapsedTime pitchUpTimer;
+    public double currentPitchUpTime;
+    public static double PITCH_UP_DEBOUNCE_SECONDS = 0.8;
+    private ElapsedTime pitchDownTimer;
+    public double currentPitchDownTime;
+    public static double PITCH_DOWN_DEBOUNCE_SECONDS = 0.15; //TODO: tune this to see what is most consistent
 
     //test servo variables
     public static String testServo = "rampright";
@@ -57,7 +61,9 @@ public class Shooter{
     private double testPosition = 0.5;
     public Shooter(OpMode linearOpmode) {
         this.opMode = linearOpmode;
-        timer = new ElapsedTime();
+
+        pitchUpTimer = new ElapsedTime();
+        pitchDownTimer = new ElapsedTime();
 
         shooterLeft = opMode.hardwareMap.get(DcMotor.class, "shooterleft");
         shooterRight = opMode.hardwareMap.get(DcMotor.class, "shooterright");
@@ -121,8 +127,12 @@ public class Shooter{
     }
 
     public boolean shooterAtTargetVelocity() {
-        return ((DcMotorEx) shooterLeft).getVelocity() >= currentTargetRPMTicksPerSecond - TARGET_RPM_TOLERANCE_TICKS_PER_SECOND
-                && ((DcMotorEx) shooterRight).getVelocity() >= currentTargetRPMTicksPerSecond - TARGET_RPM_TOLERANCE_TICKS_PER_SECOND;
+        return ((DcMotorEx) shooterLeft).getVelocity() >= currentTargetRPMTicksPerSecond - (targetRPMToleranceRPM * RPM_TO_TICKS_PER_SECOND)
+                && ((DcMotorEx) shooterRight).getVelocity() >= currentTargetRPMTicksPerSecond - (targetRPMToleranceRPM * RPM_TO_TICKS_PER_SECOND);
+    }
+
+    public void setTargetRPMToleranceRPM(double RPM) {
+        targetRPMToleranceRPM = RPM;
     }
 
     public double shooterLeftGetVelocity() {
@@ -179,14 +189,23 @@ public class Shooter{
         currentGamepad.copy(gamepad);
     }
 
-    public void resetPitchTimer(){
-        timer.reset();
+    public void resetPitchDownTimer(){
+        pitchDownTimer.reset();
     }
-    public void updatePitchDebounceTimer(){
-        currentPitchTime = timer.time();
+    public void updatePitchDownDebounceTimer(){
+        currentPitchDownTime = pitchDownTimer.time();
     }
-    public boolean checkPitchDebounceTimer(){
-        return currentPitchTime > PITCH_DEBOUNCE_SECONDS;
+    public boolean pitchDownDebounceTimerOver(){
+        return currentPitchDownTime > PITCH_DOWN_DEBOUNCE_SECONDS;
+    }
+    public void resetPitchUpTimer(){
+        pitchUpTimer.reset();
+    }
+    public void updatePitchUpDebounceTimer(){
+        currentPitchUpTime = pitchUpTimer.time();
+    }
+    public boolean pitchUpDebounceTimerOver(){
+        return currentPitchUpTime > PITCH_UP_DEBOUNCE_SECONDS;
     }
 
     //test methods
