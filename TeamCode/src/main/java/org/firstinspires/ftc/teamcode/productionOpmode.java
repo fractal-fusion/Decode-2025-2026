@@ -89,9 +89,10 @@ public class productionOpmode extends LinearOpMode {
             }
 
             //flatten the pitch when scoring so balls can pass to shooter motors
-            if (shooter.passedThreshold && !shooter.cycling && shooter.pitchUpDebounceTimerOver()){
+            if ((shooter.passedThreshold && !shooter.cycling && shooter.pitchUpDebounceTimerOver()) || shooter.pitchTimeoutTimerOver()){
                 shooter.setPitchPosition(Shooter.PITCH_SCORE_POSITION);
                 shooter.resetPitchUpTimer();
+                shooter.resetPitchTimeoutTimer();
             }
             else if (!shooter.passedThreshold && !shooter.cycling && shooter.pitchDownDebounceTimerOver()){
                 shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION); //automatically raise the pitch when not ready to shoot
@@ -100,6 +101,7 @@ public class productionOpmode extends LinearOpMode {
 
             shooter.updatePitchDownDebounceTimer(); //update the debounce timers
             shooter.updatePitchUpDebounceTimer();
+            shooter.updatePitchTimeoutTimer();
 
             //check if shooter is past threshold
             shooter.updateShooterThreshold();

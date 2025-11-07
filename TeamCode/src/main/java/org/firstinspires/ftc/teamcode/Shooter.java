@@ -25,7 +25,7 @@ public class Shooter{
     public static double TICKS_PER_SECOND_TO_RPM = 60.0 / 28.0; //inverse of above
     public static double CYCLING_RPM = 0;
     public static double PITCH_SCORE_POSITION = 0.0; //flatten pitch so balls can pass for scoring
-    public static double PITCH_INTAKE_POSITION = 0.07;
+    public static double PITCH_INTAKE_POSITION = 0.054;
     public static double PITCH_CYCLE_POSITION = 0.18;
     public static double RAMP_CYCLE_POSITION = 0.2;
     public static double FAR_RAMP_SCORE_POSITION = 0.23;
@@ -41,7 +41,7 @@ public class Shooter{
     public double currentTargetRPMTicksPerSecond;
 
     public static double TARGET_RPM_TOLERANCE_RPM_CLOSE = 10;
-    public static double TARGET_RPM_TOLERANCE_RPM_FAR = 10;
+    public static double TARGET_RPM_TOLERANCE_RPM_FAR = 30;
     public double targetRPMToleranceRPM = TARGET_RPM_TOLERANCE_RPM_CLOSE; //initially set to the tolerance for close
     public double testShootPower = 0;
     public double testRampPosition = 0;
@@ -58,6 +58,9 @@ public class Shooter{
     private ElapsedTime pitchDownTimer;
     public double currentPitchDownTime;
     public static double PITCH_DOWN_DEBOUNCE_SECONDS = 0.15; //TODO: tune this to see what is most consistent
+    private ElapsedTime pitchTimeoutTimer; //timer for lowering the pitch when enough time has passed, overriding threshold
+    public double currentPitchTimeoutTime;
+    public static double PITCH_TIMEOUT_SECONDS = 1.2;
 
     //test servo variables
     public static String testServo = "rampright";
@@ -68,6 +71,7 @@ public class Shooter{
 
         pitchUpTimer = new ElapsedTime();
         pitchDownTimer = new ElapsedTime();
+        pitchTimeoutTimer = new ElapsedTime();
 
         shooterLeft = opMode.hardwareMap.get(DcMotor.class, "shooterleft");
         shooterRight = opMode.hardwareMap.get(DcMotor.class, "shooterright");
@@ -215,6 +219,16 @@ public class Shooter{
     }
     public boolean pitchUpDebounceTimerOver(){
         return currentPitchUpTime > PITCH_UP_DEBOUNCE_SECONDS;
+    }
+
+    public void resetPitchTimeoutTimer(){
+        pitchTimeoutTimer.reset();
+    }
+    public void updatePitchTimeoutTimer(){
+        currentPitchTimeoutTime = pitchUpTimer.time();
+    }
+    public boolean pitchTimeoutTimerOver(){
+        return currentPitchTimeoutTime > PITCH_TIMEOUT_SECONDS;
     }
 
     public void updateShooterThreshold(){
