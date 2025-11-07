@@ -48,7 +48,7 @@ public class productionOpmode extends LinearOpMode {
             //mechanism intake control
             if(gamepad2.a) {
                 intake.turnOnIntake();
-                if (!shooter.shooterAtTargetVelocity()) {
+                if (!shooter.on) {
                     shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION);
                 }
             }
@@ -92,8 +92,6 @@ public class productionOpmode extends LinearOpMode {
             if (shooter.passedThreshold && !shooter.cycling && shooter.pitchUpDebounceTimerOver()){
                 shooter.setPitchPosition(Shooter.PITCH_SCORE_POSITION);
                 shooter.resetPitchUpTimer();
-                shooter.passedThreshold = false;
-                shooter.ballsShot += 1;
             }
             else if (!shooter.passedThreshold && !shooter.cycling && shooter.pitchDownDebounceTimerOver()){
                 shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION); //automatically raise the pitch when not ready to shoot
@@ -105,6 +103,7 @@ public class productionOpmode extends LinearOpMode {
 
             //check if shooter is past threshold
             shooter.updateShooterThreshold();
+            shooter.updateShotBalls();
 
             //DYNAMIC FAR AND CLOSE
             if (camera.isFar) {

@@ -40,8 +40,8 @@ public class Shooter{
     public double currentRampScorePosition;
     public double currentTargetRPMTicksPerSecond;
 
-    public static double TARGET_RPM_TOLERANCE_RPM_CLOSE = 50;
-    public static double TARGET_RPM_TOLERANCE_RPM_FAR = 85;
+    public static double TARGET_RPM_TOLERANCE_RPM_CLOSE = 10;
+    public static double TARGET_RPM_TOLERANCE_RPM_FAR = 10;
     public double targetRPMToleranceRPM = TARGET_RPM_TOLERANCE_RPM_CLOSE; //initially set to the tolerance for close
     public double testShootPower = 0;
     public double testRampPosition = 0;
@@ -49,7 +49,9 @@ public class Shooter{
     public boolean on = false; //boolean for on or off shooter
     public boolean cycling = false; //boolean for cycling or not
     public boolean passedThreshold = false; //boolean for once the shooter reaches velocity
+    public static double LOWER_THRESHOLD_RPM = 3000;
     public int ballsShot = 0;
+    private boolean wasAboveThreshold = false; //boolean for keeping track of balls shot
     private ElapsedTime pitchUpTimer;
     public double currentPitchUpTime;
     public static double PITCH_UP_DEBOUNCE_SECONDS = 0.8;
@@ -133,6 +135,11 @@ public class Shooter{
                 && ((DcMotorEx) shooterRight).getVelocity() >= currentTargetRPMTicksPerSecond - (targetRPMToleranceRPM * RPM_TO_TICKS_PER_SECOND);
     }
 
+    public boolean shooterAtLowerThresholdVelocity() {
+        return ((DcMotorEx) shooterLeft).getVelocity() <= (LOWER_THRESHOLD_RPM * RPM_TO_TICKS_PER_SECOND)
+                && ((DcMotorEx) shooterRight).getVelocity() <= (LOWER_THRESHOLD_RPM * RPM_TO_TICKS_PER_SECOND);
+    }
+
     public void setTargetRPMToleranceRPM(double RPM) {
         targetRPMToleranceRPM = RPM;
     }
@@ -213,6 +220,18 @@ public class Shooter{
     public void updateShooterThreshold(){
         if (shooterAtTargetVelocity()) {
             passedThreshold = true;
+        } else if (shooterAtLowerThresholdVelocity()) {
+            passedThreshold = false;
+        }
+    }
+
+    public void updateShotBalls() {
+        if (on && passedThreshold) {
+            wasAboveThreshold = true;
+        }
+        if (wasAboveThreshold && shooterAtLowerThresholdVelocity()) {
+            wasAboveThreshold = false;
+            ballsShot += 1;
         }
     }
     //test methods

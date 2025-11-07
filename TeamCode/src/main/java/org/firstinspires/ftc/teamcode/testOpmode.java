@@ -13,7 +13,7 @@ public class testOpmode extends LinearOpMode {
         Shooter shooter = new Shooter(this);
         Intake intake = new Intake(this, Intake.FLICKER_OPEN_POSITION);
         Drivetrain drivetrain = new Drivetrain(this);
-        ColorDetector colorDetector = new ColorDetector(this);
+//        ColorDetector colorDetector = new ColorDetector(this);
         shooter.setPitchPosition(0);
         intake.setFlickerPosition(0);
 
@@ -30,7 +30,7 @@ public class testOpmode extends LinearOpMode {
             shooter.testShoot(gamepad1);
             telemetry.addData("shooter power:", shooter.on);
 
-            if (gamepad1.x) {
+            if (gamepad1.a) {
                 intake.intake.setPower(1);
                 intake.driver.setPower(1);
             } else if (gamepad1.b) {
@@ -47,10 +47,11 @@ public class testOpmode extends LinearOpMode {
                 intake.setFlickerPosition(0);
             }
 
+
 //            shooter.controlTestServo(gamepad1);
-            shooter.testControlRampPosition(gamepad1);
-//            shooter.controlPitchPosition(gamepad1);
-            colorDetector.telemetryColors();
+//            shooter.testControlRampPosition(gamepad1);
+            shooter.testControlPitchPosition(gamepad1);
+//            colorDetector.telemetryColors();
         }
     }
 }
