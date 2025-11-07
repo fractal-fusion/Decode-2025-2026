@@ -22,7 +22,7 @@ public class Shooter{
 
     //static variables for shooter
     public static double RPM_TO_TICKS_PER_SECOND = 28.0 / 60.0; //divide rpm by 60 to get rotations per second, then multiply by 28 since that's the ticks per revolution
-
+    public static double TICKS_PER_SECOND_TO_RPM = 60.0 / 28.0; //inverse of above
     public static double CYCLING_RPM = 0;
     public static double PITCH_SCORE_POSITION = 0.0; //flatten pitch so balls can pass for scoring
     public static double PITCH_INTAKE_POSITION = 0.07;
@@ -49,6 +49,7 @@ public class Shooter{
     public boolean on = false; //boolean for on or off shooter
     public boolean cycling = false; //boolean for cycling or not
     public boolean passedThreshold = false; //boolean for once the shooter reaches velocity
+    public int ballsShot = 0;
     private ElapsedTime pitchUpTimer;
     public double currentPitchUpTime;
     public static double PITCH_UP_DEBOUNCE_SECONDS = 0.8;
@@ -209,6 +210,11 @@ public class Shooter{
         return currentPitchUpTime > PITCH_UP_DEBOUNCE_SECONDS;
     }
 
+    public void updateShooterThreshold(){
+        if (shooterAtTargetVelocity()) {
+            passedThreshold = true;
+        }
+    }
     //test methods
     public void testControlRampPosition(Gamepad gamepad){
 

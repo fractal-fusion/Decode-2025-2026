@@ -87,11 +87,13 @@ public class productionOpmode extends LinearOpMode {
             else if (gamepad2.y){
                 shooter.toggleShooterFar();
             }
+
             //flatten the pitch when scoring so balls can pass to shooter motors
             if (shooter.passedThreshold && !shooter.cycling && shooter.pitchUpDebounceTimerOver()){
                 shooter.setPitchPosition(Shooter.PITCH_SCORE_POSITION);
                 shooter.resetPitchUpTimer();
                 shooter.passedThreshold = false;
+                shooter.ballsShot += 1;
             }
             else if (!shooter.passedThreshold && !shooter.cycling && shooter.pitchDownDebounceTimerOver()){
                 shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION); //automatically raise the pitch when not ready to shoot
@@ -102,9 +104,7 @@ public class productionOpmode extends LinearOpMode {
             shooter.updatePitchUpDebounceTimer();
 
             //check if shooter is past threshold
-            if (shooter.shooterAtTargetVelocity()) {
-                shooter.passedThreshold = true;
-            }
+            shooter.updateShooterThreshold();
 
             //DYNAMIC FAR AND CLOSE
             if (camera.isFar) {
@@ -119,9 +119,11 @@ public class productionOpmode extends LinearOpMode {
             camera.updateIsFar();
 
 //            telemetry.addData("intake current time:", intake.currentTime);
-            telemetry.addData("shooter left velocity:", shooter.shooterLeftGetVelocity());
-            telemetry.addData("shooter right velocity:", shooter.shooterRightGetVelocity());
+            telemetry.addData("shooter left velocity:", shooter.shooterLeftGetVelocity() * Shooter.TICKS_PER_SECOND_TO_RPM);
+            telemetry.addData("shooter right velocity:", shooter.shooterRightGetVelocity() * Shooter.TICKS_PER_SECOND_TO_RPM);
             telemetry.addData("shooter at velocity:", shooter.shooterAtTargetVelocity());
+            telemetry.addData("balls shot:", shooter.ballsShot);
+
 
 //            telemetry.addData("shooter at velocity:", shooter.shooterAtTargetVelocity());
             telemetry.addData("apriltag range:", camera.getRange());
