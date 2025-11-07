@@ -48,6 +48,7 @@ public class Shooter{
     public double testPitchPosition = 0;
     public boolean on = false; //boolean for on or off shooter
     public boolean cycling = false; //boolean for cycling or not
+    public boolean passedThreshold = false; //boolean for once the shooter reaches velocity
     private ElapsedTime pitchUpTimer;
     public double currentPitchUpTime;
     public static double PITCH_UP_DEBOUNCE_SECONDS = 0.8;

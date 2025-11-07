@@ -88,17 +88,23 @@ public class productionOpmode extends LinearOpMode {
                 shooter.toggleShooterFar();
             }
             //flatten the pitch when scoring so balls can pass to shooter motors
-            if (shooter.shooterAtTargetVelocity() && !shooter.cycling && shooter.pitchUpDebounceTimerOver()){
+            if (shooter.passedThreshold && !shooter.cycling && shooter.pitchUpDebounceTimerOver()){
                 shooter.setPitchPosition(Shooter.PITCH_SCORE_POSITION);
                 shooter.resetPitchUpTimer();
+                shooter.passedThreshold = false;
             }
-            else if (!shooter.shooterAtTargetVelocity() && !shooter.cycling && shooter.pitchDownDebounceTimerOver()){
+            else if (!shooter.passedThreshold && !shooter.cycling && shooter.pitchDownDebounceTimerOver()){
                 shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION); //automatically raise the pitch when not ready to shoot
                 shooter.resetPitchDownTimer(); //reset the debounce
             }
 
             shooter.updatePitchDownDebounceTimer(); //update the debounce timers
             shooter.updatePitchUpDebounceTimer();
+
+            //check if shooter is past threshold
+            if (shooter.shooterAtTargetVelocity()) {
+                shooter.passedThreshold = true;
+            }
 
             //DYNAMIC FAR AND CLOSE
             if (camera.isFar) {
