@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.pedropathing.geometry.BezierCurve;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.pedropathing.follower.Follower;
@@ -23,7 +24,11 @@ public class leftCloseAuto extends LinearOpMode {
     private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop; //define path chains (muliple paths interpolated)
 
     private final Pose startPose = new Pose(56, 8, Math.toRadians(90)); // Start Pose of our robot
-    private final Pose scorePreloadPose = new Pose(76, 76, Math.toRadians(135));
+    private final Pose scorePose = new Pose(76, 76, Math.toRadians(135));
+    private final Pose grabPickupTopPose = new Pose(16, 84, Math.toRadians(180));
+    private final Pose grabPickupTopPoseControlPoint1 = new Pose(60.923, 85.514);
+
+
 
     //TODO: SET OTHER POSES
 
@@ -31,13 +36,18 @@ public class leftCloseAuto extends LinearOpMode {
     //BUILD PATHS TODO: actually build them using poses from visualizer
     public void buildPaths() {
         scorePreload = follower.pathBuilder()
-                .addPath(new BezierLine(startPose, scorePreloadPose))
-                .setLinearHeadingInterpolation(startPose.getHeading(), scorePreloadPose.getHeading())
+                .addPath(new BezierLine(startPose, scorePose))
+                .setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading())
                 .build();
-//        grabPickupBottom = follower.pathBuilder()
-//                .build();
-//        scorePickupBottom = follower.pathBuilder()
-//                .build();
+        grabPickupTop = follower.pathBuilder()
+                .addPath(new BezierCurve(scorePose, grabPickupTopPoseControlPoint1, grabPickupTopPose))
+                .setLinearHeadingInterpolation(scorePose.getHeading(), grabPickupTopPose.getHeading())
+                .addPoseCallback(new Pose(20, 84), intake::closeFlicker, 0.5)
+                .build();
+        scorePickupTop = follower.pathBuilder()
+                .addPath(new BezierLine(grabPickupTopPose, scorePose))
+                .setLinearHeadingInterpolation(grabPickupTopPose.getHeading(), scorePose.getHeading())
+                .build();
 //        grabPickupMiddle = follower.pathBuilder()
 //                .build();
 //        scorePickupMiddle = follower.pathBuilder()
@@ -81,13 +91,14 @@ public class leftCloseAuto extends LinearOpMode {
             follower.update(); //update follower
             currentPose = follower.getPose(); //update current pose
 
-            shooter.updatePitchDownDebounceTimer(); //update pitch timer for staying down between each ball
+            shooter.update();
 
             updateStateMachine();
 
-            telemetry.addData("shooter left velocity:", shooter.shooterLeftGetVelocity());
-            telemetry.addData("shooter right velocity:", shooter.shooterRightGetVelocity());
+            telemetry.addData("shooter left velocity:", shooter.shooterLeftGetVelocity() * Shooter.TICKS_PER_SECOND_TO_RPM);
+            telemetry.addData("shooter right velocity:", shooter.shooterRightGetVelocity() * Shooter.TICKS_PER_SECOND_TO_RPM);
             telemetry.addData("shooter at velocity:", shooter.shooterAtTargetVelocity());
+            telemetry.addData("balls shot:", shooter.ballsShot);
             telemetry.update();
 
         }
@@ -95,26 +106,47 @@ public class leftCloseAuto extends LinearOpMode {
 
     public void updateStateMachine() {
         switch (pathState) {
-            case 0:
+            case 0: //move to score position for preload
                 //hold the flicker in
                 intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
-                shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION);
+//                shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION);
 
 
                 // Move to the scoring position from the start position
                 follower.followPath(scorePreload, true);
                 setPathState(1);
                 break;
-            case 1:
-                // Wait until we have passed all path constraints
+            case 1: //score preloads
                 if (!follower.isBusy()) {
                     intializeBurstClose();
                     burstShoot();
 
-                    // move to the first artifact pickup location from the scoring position
-//                    follower.followPath(grabPickupBottom);
+                    if (shooter.ballsShot >= 3) {
+                        shooter.turnOffShooter();
+                        setPathState(2); //end
+                    }
+                }
+                break;
+            case 2: // intake top row
+                if (!follower.isBusy()) {
 
-                    if (opmodeTimer.getElapsedTimeSeconds() > 10) {
+                    follower.followPath(grabPickupBottom);
+                    setPathState(3);
+                }
+                break;
+            case 3: //move to score position for top row
+                if (!follower.isBusy()) {
+                    follower.followPath(scorePickupTop);
+
+                    setPathState(4);
+                }
+                break;
+            case 4: //score top row
+                if (!follower.isBusy()) {
+                    intializeBurstClose();
+                    burstShoot();
+
+                    if (shooter.ballsShot >= 6) {
                         shooter.turnOffShooter();
                         setPathState(-1); //end
                     }
@@ -136,18 +168,11 @@ public class leftCloseAuto extends LinearOpMode {
     }
 
     public void burstShoot(){
-        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_TARGET_RPM);
-        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
-        shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
-
         shooter.turnOnShooter();
         intake.turnOnIntake();
 
-        if (shooter.shooterAtTargetVelocity()) { //TODO: implement debounces here
-            shooter.setPitchPosition(Shooter.PITCH_SCORE_POSITION);
-        } else if (!shooter.shooterAtTargetVelocity()) {
-            shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION);
-        }
+        shooter.controlShooterPitch();
+
     }
 
     public void setPathState(int pState) {

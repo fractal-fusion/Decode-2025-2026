@@ -40,7 +40,7 @@ public class Shooter{
     public double currentRampScorePosition;
     public double currentTargetRPMTicksPerSecond;
 
-    public static double TARGET_RPM_TOLERANCE_RPM_CLOSE = 10;
+    public static double TARGET_RPM_TOLERANCE_RPM_CLOSE = 2;
     public static double TARGET_RPM_TOLERANCE_RPM_FAR = 30;
     public double targetRPMToleranceRPM = TARGET_RPM_TOLERANCE_RPM_CLOSE; //initially set to the tolerance for close
     public double testShootPower = 0;
@@ -57,7 +57,7 @@ public class Shooter{
     public static double PITCH_UP_DEBOUNCE_SECONDS = 0.8;
     private ElapsedTime pitchDownTimer;
     public double currentPitchDownTime;
-    public static double PITCH_DOWN_DEBOUNCE_SECONDS = 0.15; //TODO: tune this to see what is most consistent
+    public static double PITCH_DOWN_DEBOUNCE_SECONDS = 0.6; //TODO: tune this to see what is most consistent
     private ElapsedTime pitchTimeoutTimer; //timer for lowering the pitch when enough time has passed, overriding threshold
     public double currentPitchTimeoutTime;
     public static double PITCH_TIMEOUT_SECONDS = 1.2;
@@ -192,6 +192,29 @@ public class Shooter{
         }
     }
 
+    public void controlShooterPitch(){
+        if ((passedThreshold && !cycling && pitchUpDebounceTimerOver()) /*|| (pitchTimeoutTimerOver() && on)*/){
+            setPitchPosition(Shooter.PITCH_SCORE_POSITION); //TODO: check to see if debounce is working
+            resetPitchUpTimer();
+            //resetPitchTimeoutTimer();
+        }
+        else if (!passedThreshold && !cycling && pitchDownDebounceTimerOver()){
+            setPitchPosition(Shooter.PITCH_INTAKE_POSITION); //automatically raise the pitch when not ready to shoot
+            resetPitchDownTimer(); //reset the debounce
+        }
+    }
+
+    public void update(){
+        //update the debounce timers
+        updatePitchDownDebounceTimer();
+        updatePitchUpDebounceTimer();
+        updatePitchTimeoutTimer();
+
+        //check if shooter is past threshold
+        updateShooterThreshold();
+        updateShotBalls();
+    }
+
     public void setCurrentTargetRPMTicksPerSecond(double RPM) {
         currentTargetRPMTicksPerSecond = RPM * RPM_TO_TICKS_PER_SECOND;
     }
@@ -248,6 +271,7 @@ public class Shooter{
             ballsShot += 1;
         }
     }
+
     //test methods
     public void testControlRampPosition(Gamepad gamepad){
 

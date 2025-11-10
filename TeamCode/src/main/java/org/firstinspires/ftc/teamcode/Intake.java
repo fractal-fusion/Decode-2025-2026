@@ -98,4 +98,14 @@ public class Intake {
         flicker.setPosition(position);
     }
 
+    //runnables for auto
+
+    public void closeFlicker(){
+        flicker.setPosition(FLICKER_CLOSE_POSITION);
+    }
+
+    public void openFlicker(){
+        flicker.setPosition(FLICKER_OPEN_POSITION);
+    }
+
 }
