@@ -29,7 +29,7 @@ public class Shooter{
     public static double PITCH_CYCLE_POSITION = 0.18;
     public static double RAMP_CYCLE_POSITION = 0.2;
     public static double FAR_RAMP_SCORE_POSITION = 0.23;
-    public static double FAR_TARGET_RPM = 5000;
+    public static double FAR_TARGET_RPM = 4900;
 
     public static double FAR_TARGET_RPM_TICKS_PER_SECOND = FAR_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
 
@@ -61,6 +61,7 @@ public class Shooter{
     private ElapsedTime pitchTimeoutTimer; //timer for lowering the pitch when enough time has passed, overriding threshold
     public double currentPitchTimeoutTime;
     public static double PITCH_TIMEOUT_SECONDS = 1.2;
+    private boolean timerDebounce = false; //debounce to prevent timer from resetting when it has already reset
 
     //test servo variables
     public static String testServo = "rampright";
@@ -158,6 +159,8 @@ public class Shooter{
 
     public void toggleShooterClose(){
         if (currentGamepad.x && !previousGamepad.x){
+            resetPitchUpTimer();
+            resetPitchDownTimer();
 
             setCurrentTargetRPMTicksPerSecond(CLOSE_TARGET_RPM);
 
@@ -176,6 +179,8 @@ public class Shooter{
     public void toggleShooterFar(){
 
         if (currentGamepad.y && !previousGamepad.y){
+            resetPitchUpTimer();
+            resetPitchDownTimer();
 
             setCurrentTargetRPMTicksPerSecond(FAR_TARGET_RPM);
 
@@ -193,14 +198,13 @@ public class Shooter{
     }
 
     public void controlShooterPitch(){
-        if ((passedThreshold && !cycling && pitchUpDebounceTimerOver()) /*|| (pitchTimeoutTimerOver() && on)*/){
+        if ((passedThreshold && !cycling && pitchUpDebounceTimerOver())){
             setPitchPosition(Shooter.PITCH_SCORE_POSITION); //TODO: check to see if debounce is working
-            resetPitchUpTimer();
-            //resetPitchTimeoutTimer();
         }
         else if (!passedThreshold && !cycling && pitchDownDebounceTimerOver()){
             setPitchPosition(Shooter.PITCH_INTAKE_POSITION); //automatically raise the pitch when not ready to shoot
-            resetPitchDownTimer(); //reset the debounce
+
+            resetPitchDownTimer();
         }
     }
 
@@ -268,6 +272,8 @@ public class Shooter{
         }
         if (wasAboveThreshold && shooterAtLowerThresholdVelocity()) {
             wasAboveThreshold = false;
+
+            resetPitchUpTimer();
             ballsShot += 1;
         }
     }

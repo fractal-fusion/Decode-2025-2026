@@ -132,6 +132,12 @@ public class productionOpmode extends LinearOpMode {
             telemetry.addData("apriltag range:", camera.getRange());
             telemetry.addData("apriltag bearing:", camera.getBearing());
             telemetry.addData("drive power:", drivetrain.calculateAutoAlignPower(camera.getBearing()));
+
+            telemetry.addData("pitch up time:", shooter.currentPitchUpTime);
+            telemetry.addData("pitch down time:", shooter.currentPitchDownTime);
+            telemetry.addData("pitch up debounce:", shooter.pitchUpDebounceTimerOver());
+            telemetry.addData("pitch down debounce:", shooter.pitchDownDebounceTimerOver());
+
             telemetry.update();
         }
     }
