@@ -54,10 +54,10 @@ public class Shooter{
     private boolean wasAboveThreshold = false; //boolean for keeping track of balls shot
     private ElapsedTime pitchUpTimer;
     public double currentPitchUpTime;
-    public static double PITCH_UP_DEBOUNCE_SECONDS = 0.8;
+    public static double PITCH_UP_DEBOUNCE_SECONDS = 1.2;
     private ElapsedTime pitchDownTimer;
     public double currentPitchDownTime;
-    public static double PITCH_DOWN_DEBOUNCE_SECONDS = 0.6; //TODO: tune this to see what is most consistent
+    public static double PITCH_DOWN_DEBOUNCE_SECONDS = 0.6;
     private ElapsedTime pitchTimeoutTimer; //timer for lowering the pitch when enough time has passed, overriding threshold
     public double currentPitchTimeoutTime;
     public static double PITCH_TIMEOUT_SECONDS = 1.2;
@@ -199,7 +199,7 @@ public class Shooter{
 
     public void controlShooterPitch(){
         if ((passedThreshold && !cycling && pitchUpDebounceTimerOver())){
-            setPitchPosition(Shooter.PITCH_SCORE_POSITION); //TODO: check to see if debounce is working
+            setPitchPosition(Shooter.PITCH_SCORE_POSITION);
         }
         else if (!passedThreshold && !cycling && pitchDownDebounceTimerOver()){
             setPitchPosition(Shooter.PITCH_INTAKE_POSITION); //automatically raise the pitch when not ready to shoot

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.BezierCurve;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -9,6 +10,9 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 
+import kotlinx.coroutines.InterruptibleKt;
+
+@Config
 @Autonomous(name="Blue Close Auto", group="Robot")
 @SuppressWarnings("FieldCanBeLocal")
 public class leftCloseAuto extends LinearOpMode {
@@ -20,6 +24,7 @@ public class leftCloseAuto extends LinearOpMode {
     private Timer pathTimer, opmodeTimer; //declare the time variables used when checking for path completion
     private Pose currentPose;
     private int pathState; //finite state machine variable
+    public static double INTAKE_DELAY_TIME = 1.5;
 
     private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop; //define path chains (muliple paths interpolated)
 
@@ -27,7 +32,6 @@ public class leftCloseAuto extends LinearOpMode {
     private final Pose scorePose = new Pose(76, 76, Math.toRadians(135));
     private final Pose grabPickupTopPose = new Pose(16, 84, Math.toRadians(180));
     private final Pose grabPickupTopPoseControlPoint1 = new Pose(60.923, 85.514);
-
 
 
     //TODO: SET OTHER POSES
@@ -73,7 +77,7 @@ public class leftCloseAuto extends LinearOpMode {
 
         follower = Constants.createFollower(hardwareMap); //create pedropathing follower
         follower.setStartingPose(startPose);
-        follower.setMaxPower(1); //decrease max power to prevent flipping
+        follower.setMaxPower(0.8); //decrease max power to prevent overshoot
 
         shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION); //set pitch to intake position on initialize
 
@@ -92,6 +96,7 @@ public class leftCloseAuto extends LinearOpMode {
             currentPose = follower.getPose(); //update current pose
 
             shooter.update();
+            shooter.controlShooterPitch();
 
             updateStateMachine();
 
@@ -99,6 +104,10 @@ public class leftCloseAuto extends LinearOpMode {
             telemetry.addData("shooter right velocity:", shooter.shooterRightGetVelocity() * Shooter.TICKS_PER_SECOND_TO_RPM);
             telemetry.addData("shooter at velocity:", shooter.shooterAtTargetVelocity());
             telemetry.addData("balls shot:", shooter.ballsShot);
+            telemetry.addData("pitch up time:", shooter.currentPitchUpTime);
+            telemetry.addData("pitch down time:", shooter.currentPitchDownTime);
+            telemetry.addData("pitch up debounce:", shooter.pitchUpDebounceTimerOver());
+            telemetry.addData("pitch down debounce:", shooter.pitchDownDebounceTimerOver());
             telemetry.update();
 
         }
@@ -119,7 +128,11 @@ public class leftCloseAuto extends LinearOpMode {
             case 1: //score preloads
                 if (!follower.isBusy()) {
                     intializeBurstClose();
-                    burstShoot();
+                    shooter.turnOnShooter();
+
+                    if (pathTimer.getElapsedTimeSeconds() > INTAKE_DELAY_TIME) {
+                        intake.turnOnIntake();
+                    }
 
                     if (shooter.ballsShot >= 3) {
                         shooter.turnOffShooter();
@@ -144,7 +157,7 @@ public class leftCloseAuto extends LinearOpMode {
             case 4: //score top row
                 if (!follower.isBusy()) {
                     intializeBurstClose();
-                    burstShoot();
+//                    burstShoot();
 
                     if (shooter.ballsShot >= 6) {
                         shooter.turnOffShooter();
@@ -171,13 +184,13 @@ public class leftCloseAuto extends LinearOpMode {
         shooter.turnOnShooter();
         intake.turnOnIntake();
 
-        shooter.controlShooterPitch();
-
     }
 
     public void setPathState(int pState) {
         pathState = pState;
         pathTimer.resetTimer();
+        shooter.resetPitchUpTimer();
+        shooter.resetPitchDownTimer();
     }
 
 }
