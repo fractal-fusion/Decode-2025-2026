@@ -111,5 +111,9 @@ public class Intake {
     public void openFlicker(){
         flicker.setPosition(FLICKER_OPEN_POSITION);
     }
+    public void holdFlicker(){
+        flicker.setPosition(FLICKER_HOLD_POSITION);
+    }
+
 
 }

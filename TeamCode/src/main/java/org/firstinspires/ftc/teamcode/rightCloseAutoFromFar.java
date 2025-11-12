@@ -48,7 +48,7 @@ import com.pedropathing.util.Timer;
 //                .addPath(new BezierCurve(scorePose, grabPickupTopPoseControlPoint1, grabPickupTopPose))
                     .addPath(new BezierLine(scorePose, grabPickupTopPose))
                     .setLinearHeadingInterpolation(scorePose.getHeading(), grabPickupTopPose.getHeading())
-                    .addPoseCallback(new Pose(124, 84), intake::closeFlicker, 0.5)
+                    .addPoseCallback(new Pose(124, 84), intake::holdFlicker, 0.5)
                     .build();
             scorePickupTop = follower.pathBuilder()
                     .addPath(new BezierLine(grabPickupTopPose, scorePose))
@@ -144,7 +144,7 @@ import com.pedropathing.util.Timer;
 
                             if (shooter.ballsShot >= 3) {
                                 turnOffShooterAuto();
-                                setPathState(-1); //end
+                                setPathState(2); //end
                             }
                         }
                     }
@@ -158,19 +158,35 @@ import com.pedropathing.util.Timer;
                     break;
                 case 3: //move to score position for top row
                     if (!follower.isBusy()) {
-                        follower.followPath(scorePickupTop);
+                        if (init){
+                            intake.turnOffIntake();
+                            init = false;
+                        }
+                        else{
+                            follower.followPath(scorePickupTop, true);
+                        }
 
                         setPathState(4);
                     }
                     break;
                 case 4: //score top row
                     if (!follower.isBusy()) {
-                        intializeBurstClose();
-//                    burstShoot();
+                        if(init){
+                            intializeBurstClose();
+                            turnOnShooterAuto();
 
-                        if (shooter.ballsShot >= 6) {
-                            shooter.turnOffShooter();
-                            setPathState(-1); //end
+                            init = false;
+                        }
+                        else{
+                            if (pathTimer.getElapsedTimeSeconds() > INTAKE_DELAY_TIME) {
+                                intake.turnOnIntake();
+                                intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
+                            }
+
+                            if (shooter.ballsShot >= 6) {
+                                turnOffShooterAuto();
+                                setPathState(-1); //end
+                            }
                         }
                     }
                     break;
