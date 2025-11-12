@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.pedropathing.geometry.BezierCurve;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.pedropathing.follower.Follower;
@@ -11,9 +10,9 @@ import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 
 @Config
-@Autonomous(name="Blue Close Auto", group="Robot")
+@Autonomous(name="Blue Close Auto From Far", group="Robot")
 @SuppressWarnings("FieldCanBeLocal")
-public class leftCloseAuto extends LinearOpMode {
+public class leftCloseAutoFromFar extends LinearOpMode {
     Drivetrain drivetrain;
     Shooter shooter;
     Intake intake;
