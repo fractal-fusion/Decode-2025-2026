@@ -21,8 +21,9 @@ public class leftCloseAuto extends LinearOpMode {
     private Follower follower; //initialize the follower object
     private Timer pathTimer, opmodeTimer; //declare the time variables used when checking for path completion
     private Pose currentPose;
-    private int pathState; //finite state machine variable
-    public static double INTAKE_DELAY_TIME = 1.5;
+    private int pathState = 0; //finite state machine variable
+    private boolean init = true;
+    public static double INTAKE_DELAY_TIME = 3;
     public static double SCORE_HEADING_OFFSET = 5; //score heading offset since center of goals are not exactly 45 degrees
 
     public double scoreHeading = Math.toRadians(135 + SCORE_HEADING_OFFSET);
@@ -30,7 +31,7 @@ public class leftCloseAuto extends LinearOpMode {
     private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop; //define path chains (muliple paths interpolated)
 
     private final Pose startPose = new Pose(56, 8, Math.toRadians(90)); // Start Pose of our robot
-    private final Pose scorePose = new Pose(72, 84, scoreHeading);
+    private final Pose scorePose = new Pose(72, 84, scoreHeading); //TODO: change this to not be middle
     private final Pose grabPickupTopPose = new Pose(16, 84, Math.toRadians(180));
     private final Pose grabPickupTopPoseControlPoint1 = new Pose(60.923, 85.514);
 
@@ -99,6 +100,9 @@ public class leftCloseAuto extends LinearOpMode {
 
             updateStateMachine();
 
+            shooter.update();
+            shooter.controlShooterPitch();
+
             telemetry.addData("shooter left velocity:", shooter.shooterLeftGetVelocity() * Shooter.TICKS_PER_SECOND_TO_RPM);
             telemetry.addData("shooter right velocity:", shooter.shooterRightGetVelocity() * Shooter.TICKS_PER_SECOND_TO_RPM);
             telemetry.addData("shooter at velocity:", shooter.shooterAtTargetVelocity());
@@ -113,33 +117,35 @@ public class leftCloseAuto extends LinearOpMode {
     }
 
     public void updateStateMachine() {
-        shooter.update();
-        shooter.controlShooterPitch();
-
         switch (pathState) {
             case 0: //move to score position for preload
                 //hold the flicker in
-                intake.setFlickerPosition(Intake.FLICKER_HOLD_POSITION);
-//                shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION);
-
-
-                // Move to the scoring position from the start position
-                follower.followPath(scorePreload, true);
-                setPathState(1);
+                if (init){
+                    intake.setFlickerPosition(Intake.FLICKER_HOLD_POSITION);
+                    init = false;
+                }
+                else{ //move to scoring position
+                    follower.followPath(scorePreload, true);
+                    setPathState(1);
+                }
                 break;
             case 1: //score preloads
                 if (!follower.isBusy()) {
-                    intializeBurstClose();
-                    shooter.turnOnShooter();
-
-                    if (pathTimer.getElapsedTimeSeconds() > INTAKE_DELAY_TIME) {
-                        intake.turnOnIntake();
-                        intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
+                    if(init){
+                        intializeBurstClose();
+                        shooter.turnOnShooter();
+                        init = false;
                     }
+                    else{
+                        if (pathTimer.getElapsedTimeSeconds() > INTAKE_DELAY_TIME) {
+                            intake.turnOnIntake();
+                            intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
+                        }
 
-                    if (shooter.ballsShot >= 3) {
-                        shooter.turnOffShooter();
-                        setPathState(2); //end
+                        if (shooter.ballsShot >= 3) {
+                            shooter.turnOffShooter();
+                            setPathState(2); //end
+                        }
                     }
                 }
                 break;
@@ -191,6 +197,7 @@ public class leftCloseAuto extends LinearOpMode {
 
     public void setPathState(int pState) {
         pathState = pState;
+        init = true;
         pathTimer.resetTimer();
         shooter.resetPitchUpTimer();
         shooter.resetPitchDownTimer();

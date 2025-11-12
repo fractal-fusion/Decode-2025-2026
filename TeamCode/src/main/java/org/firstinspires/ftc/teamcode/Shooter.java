@@ -99,6 +99,8 @@ public class Shooter{
         shooterRampLeft.setPosition(0);
 
         setCurrentTargetRPMTicksPerSecond(CLOSE_TARGET_RPM); //default the current target rpm ticks per second to close target rpm
+        setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
+
     }
 
     public void turnOnShooter(){
