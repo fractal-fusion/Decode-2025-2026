@@ -23,7 +23,7 @@ public class leftCloseAuto extends LinearOpMode {
     private Pose currentPose;
     private int pathState; //finite state machine variable
     public static double INTAKE_DELAY_TIME = 1.5;
-    public static double SCORE_HEADING_OFFSET = 3; //score heading offset since center of goals are not exactly 45 degrees
+    public static double SCORE_HEADING_OFFSET = 5; //score heading offset since center of goals are not exactly 45 degrees
 
     public double scoreHeading = Math.toRadians(135 + SCORE_HEADING_OFFSET);
 
@@ -97,9 +97,6 @@ public class leftCloseAuto extends LinearOpMode {
             follower.update(); //update follower
             currentPose = follower.getPose(); //update current pose
 
-            shooter.update();
-            shooter.controlShooterPitch();
-
             updateStateMachine();
 
             telemetry.addData("shooter left velocity:", shooter.shooterLeftGetVelocity() * Shooter.TICKS_PER_SECOND_TO_RPM);
@@ -116,10 +113,13 @@ public class leftCloseAuto extends LinearOpMode {
     }
 
     public void updateStateMachine() {
+        shooter.update();
+        shooter.controlShooterPitch();
+
         switch (pathState) {
             case 0: //move to score position for preload
                 //hold the flicker in
-                intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
+                intake.setFlickerPosition(Intake.FLICKER_HOLD_POSITION);
 //                shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION);
 
 
@@ -134,6 +134,7 @@ public class leftCloseAuto extends LinearOpMode {
 
                     if (pathTimer.getElapsedTimeSeconds() > INTAKE_DELAY_TIME) {
                         intake.turnOnIntake();
+                        intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
                     }
 
                     if (shooter.ballsShot >= 3) {

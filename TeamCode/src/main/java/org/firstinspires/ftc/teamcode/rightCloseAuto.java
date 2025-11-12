@@ -23,7 +23,7 @@ public class rightCloseAuto extends LinearOpMode {
     private Pose currentPose;
     private int pathState; //finite state machine variable
     public static double INTAKE_DELAY_TIME = 1.5;
-    public static double SCORE_HEADING_OFFSET = -3;
+    public static double SCORE_HEADING_OFFSET = -5;
     public static double scoreHeading = Math.toRadians(45 + SCORE_HEADING_OFFSET);
 
     private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop; //define path chains (muliple paths interpolated)
