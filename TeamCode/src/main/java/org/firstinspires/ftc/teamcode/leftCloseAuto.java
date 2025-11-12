@@ -31,7 +31,7 @@ public class leftCloseAuto extends LinearOpMode {
     private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop; //define path chains (muliple paths interpolated)
 
     private final Pose startPose = new Pose(56, 8, Math.toRadians(90)); // Start Pose of our robot
-    private final Pose scorePose = new Pose(72, 84, scoreHeading); //TODO: change this to not be middle
+    private final Pose scorePose = new Pose(58, 90, scoreHeading); //TODO: change this to not be middle
     private final Pose grabPickupTopPose = new Pose(16, 84, Math.toRadians(180));
     private final Pose grabPickupTopPoseControlPoint1 = new Pose(60.923, 85.514);
 
@@ -133,7 +133,8 @@ public class leftCloseAuto extends LinearOpMode {
                 if (!follower.isBusy()) {
                     if(init){
                         intializeBurstClose();
-                        shooter.turnOnShooter();
+                        turnOnShooterAuto();
+
                         init = false;
                     }
                     else{
@@ -143,8 +144,8 @@ public class leftCloseAuto extends LinearOpMode {
                         }
 
                         if (shooter.ballsShot >= 3) {
-                            shooter.turnOffShooter();
-                            setPathState(2); //end
+                            turnOffShooterAuto();
+                            setPathState(-1); //end
                         }
                     }
                 }
@@ -152,7 +153,7 @@ public class leftCloseAuto extends LinearOpMode {
             case 2: // intake top row
                 if (!follower.isBusy()) {
 
-                    follower.followPath(grabPickupBottom);
+                    follower.followPath(grabPickupTop);
                     setPathState(3);
                 }
                 break;
@@ -178,7 +179,7 @@ public class leftCloseAuto extends LinearOpMode {
     }
 
     public void intializeBurstClose(){
-        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_TARGET_RPM);
+        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM);
         shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
         shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
     }
@@ -189,10 +190,14 @@ public class leftCloseAuto extends LinearOpMode {
         shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_FAR);
     }
 
-    public void burstShoot(){
+    public void turnOnShooterAuto(){
         shooter.turnOnShooter();
-        intake.turnOnIntake();
+        shooter.on = true;
+    }
 
+    public void turnOffShooterAuto(){
+        shooter.turnOffShooter();
+        shooter.on = false;
     }
 
     public void setPathState(int pState) {

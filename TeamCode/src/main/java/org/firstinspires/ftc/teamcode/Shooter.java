@@ -30,11 +30,15 @@ public class Shooter{
     public static double RAMP_CYCLE_POSITION = 0.2;
     public static double FAR_RAMP_SCORE_POSITION = 0.23;
     public static double FAR_TARGET_RPM = 4900;
+    public static double FAR_AUTO_TARGET_RPM = 4800; //untested
+
 
     public static double FAR_TARGET_RPM_TICKS_PER_SECOND = FAR_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
 
     public static double CLOSE_RAMP_SCORE_POSITION = 0.25;
     public static double CLOSE_TARGET_RPM = 4320;
+    public static double CLOSE_AUTO_TARGET_RPM = 4120;
+
     public static double CLOSE_TARGET_RPM_TICKS_PER_SECOND = CLOSE_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
 
     public double currentRampScorePosition;
@@ -57,7 +61,7 @@ public class Shooter{
     public static double PITCH_UP_DEBOUNCE_SECONDS = 1.5;
     private ElapsedTime pitchDownTimer;
     public double currentPitchDownTime;
-    public static double PITCH_DOWN_DEBOUNCE_SECONDS = 0.6;
+    public static double PITCH_DOWN_DEBOUNCE_SECONDS = 0.15;
     private ElapsedTime pitchTimeoutTimer; //timer for lowering the pitch when enough time has passed, overriding threshold
     public double currentPitchTimeoutTime;
     public static double PITCH_TIMEOUT_SECONDS = 1.2;
@@ -200,13 +204,15 @@ public class Shooter{
     }
 
     public void controlShooterPitch(){
+//        opMode.telemetry.addLine("controlling pitch");
+
         if ((passedThreshold && !cycling && pitchUpDebounceTimerOver())){
             setPitchPosition(Shooter.PITCH_SCORE_POSITION);
         }
         else if (!passedThreshold && !cycling && pitchDownDebounceTimerOver()){
             setPitchPosition(Shooter.PITCH_INTAKE_POSITION); //automatically raise the pitch when not ready to shoot
 
-            resetPitchDownTimer();
+//            resetPitchDownTimer();
         }
     }
 
@@ -261,6 +267,7 @@ public class Shooter{
     }
 
     public void updateShooterThreshold(){
+//        opMode.telemetry.addData("passed threshold", passedThreshold);
         if (shooterAtTargetVelocity()) {
             passedThreshold = true;
         } else if (shooterAtLowerThresholdVelocity()) {
@@ -269,10 +276,12 @@ public class Shooter{
     }
 
     public void updateShotBalls() {
+//        opMode.telemetry.addLine("counting shot balls");
         if (on && passedThreshold) {
             wasAboveThreshold = true;
+            resetPitchDownTimer();
         }
-        if (wasAboveThreshold && shooterAtLowerThresholdVelocity()) {
+        if (on && wasAboveThreshold && shooterAtLowerThresholdVelocity()) {
             wasAboveThreshold = false;
 
             resetPitchUpTimer();
