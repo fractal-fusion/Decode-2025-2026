@@ -1,19 +1,19 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.pedropathing.geometry.BezierCurve;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Config
-@Autonomous(name="Blue Close Auto", group="Robot")
+@Autonomous(name="Red Close Auto", group="Robot")
 @SuppressWarnings("FieldCanBeLocal")
-public class leftCloseAuto extends LinearOpMode {
+public class rightCloseAuto extends LinearOpMode {
     Drivetrain drivetrain;
     Shooter shooter;
     Intake intake;
@@ -23,16 +23,15 @@ public class leftCloseAuto extends LinearOpMode {
     private Pose currentPose;
     private int pathState; //finite state machine variable
     public static double INTAKE_DELAY_TIME = 1.5;
-    public static double SCORE_HEADING_OFFSET = 3; //score heading offset since center of goals are not exactly 45 degrees
-
-    public double scoreHeading = Math.toRadians(135 + SCORE_HEADING_OFFSET);
+    public static double SCORE_HEADING_OFFSET = -3;
+    public static double scoreHeading = Math.toRadians(45 + SCORE_HEADING_OFFSET);
 
     private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop; //define path chains (muliple paths interpolated)
 
-    private final Pose startPose = new Pose(56, 8, Math.toRadians(90)); // Start Pose of our robot
+    private final Pose startPose = new Pose(88, 8, Math.toRadians(90)); // Start Pose of our robot
     private final Pose scorePose = new Pose(72, 84, scoreHeading);
-    private final Pose grabPickupTopPose = new Pose(16, 84, Math.toRadians(180));
-    private final Pose grabPickupTopPoseControlPoint1 = new Pose(60.923, 85.514);
+    private final Pose grabPickupTopPose = new Pose(128, 84, Math.toRadians(0));
+    private final Pose grabPickupTopPoseControlPoint1 = new Pose(83.077, 85.514);
 
 
     //TODO: SET OTHER POSES
@@ -48,7 +47,7 @@ public class leftCloseAuto extends LinearOpMode {
 //                .addPath(new BezierCurve(scorePose, grabPickupTopPoseControlPoint1, grabPickupTopPose))
                 .addPath(new BezierLine(scorePose, grabPickupTopPose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), grabPickupTopPose.getHeading())
-                .addPoseCallback(new Pose(20, 84), intake::closeFlicker, 0.5)
+                .addPoseCallback(new Pose(124, 84), intake::closeFlicker, 0.5)
                 .build();
         scorePickupTop = follower.pathBuilder()
                 .addPath(new BezierLine(grabPickupTopPose, scorePose))

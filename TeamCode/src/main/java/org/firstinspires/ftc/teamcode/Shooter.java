@@ -54,7 +54,7 @@ public class Shooter{
     private boolean wasAboveThreshold = false; //boolean for keeping track of balls shot
     private ElapsedTime pitchUpTimer;
     public double currentPitchUpTime;
-    public static double PITCH_UP_DEBOUNCE_SECONDS = 1.2;
+    public static double PITCH_UP_DEBOUNCE_SECONDS = 1.5;
     private ElapsedTime pitchDownTimer;
     public double currentPitchDownTime;
     public static double PITCH_DOWN_DEBOUNCE_SECONDS = 0.6;
