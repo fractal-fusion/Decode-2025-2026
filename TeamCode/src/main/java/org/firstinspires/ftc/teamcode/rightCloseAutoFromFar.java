@@ -68,10 +68,6 @@ import com.pedropathing.util.Timer;
                     .addPath(new BezierLine(grabPickupMiddlePose, scorePose))
                     .setLinearHeadingInterpolation(grabPickupMiddlePose.getHeading(), scorePose.getHeading())
                     .build();
-//        grabPickupTop = follower.pathBuilder()
-//                .build();
-//        scorePickupTop = follower.pathBuilder()
-//                .build();
         }
 
 

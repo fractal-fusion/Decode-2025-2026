@@ -48,8 +48,9 @@ public class testOpmode extends LinearOpMode {
             }
             if (gamepad1.x){
                 drivetrain.grounder();
+                telemetry.addLine("Grounded");
             }
-
+            telemetry.update();
 //            shooter.controlTestServo(gamepad1);
 //            shooter.testControlRampPosition(gamepad1);
             shooter.testControlPitchPosition(gamepad1);
