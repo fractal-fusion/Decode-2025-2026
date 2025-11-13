@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.pedropathing.geometry.BezierCurve;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.pedropathing.follower.Follower;
@@ -22,7 +23,7 @@ import com.pedropathing.util.Timer;
         private Pose currentPose;
         private int pathState = 0; //finite state machine variable
         private boolean init = true;
-        public static double INTAKE_DELAY_TIME = 3;
+        public static double INTAKE_DELAY_TIME = 0.5;
         public static double SCORE_HEADING_OFFSET = -5; //score heading offset since center of goals are not exactly 45 degrees
 
         public double scoreHeading = Math.toRadians(45 + SCORE_HEADING_OFFSET);
@@ -32,7 +33,7 @@ import com.pedropathing.util.Timer;
         private final Pose startPose = new Pose(88, 8, Math.toRadians(90)); // Start Pose of our robot
         private final Pose scorePose = new Pose(86, 90, scoreHeading); //TODO: change this to not be middle
         private final Pose grabPickupTopPose = new Pose(128, 84, Math.toRadians(0));
-        private final Pose grabPickupTopPoseControlPoint1 = new Pose(83.077, 85.514);
+        private final Pose grabPickupTopPoseControlPoint1 = new Pose(63.138, 78.203);
 
 
         //TODO: SET OTHER POSES
@@ -45,8 +46,8 @@ import com.pedropathing.util.Timer;
                     .setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading())
                     .build();
             grabPickupTop = follower.pathBuilder()
-//                .addPath(new BezierCurve(scorePose, grabPickupTopPoseControlPoint1, grabPickupTopPose))
-                    .addPath(new BezierLine(scorePose, grabPickupTopPose))
+                .addPath(new BezierCurve(scorePose, grabPickupTopPoseControlPoint1, grabPickupTopPose))
+//                    .addPath(new BezierLine(scorePose, grabPickupTopPose))
                     .setLinearHeadingInterpolation(scorePose.getHeading(), grabPickupTopPose.getHeading())
                     .addPoseCallback(new Pose(124, 84), intake::holdFlicker, 0.5)
                     .build();
@@ -151,9 +152,14 @@ import com.pedropathing.util.Timer;
                     break;
                 case 2: // intake top row
                     if (!follower.isBusy()) {
-
-                        follower.followPath(grabPickupTop);
-                        setPathState(3);
+                        if (init){
+                            intake.setFlickerPosition(Intake.FLICKER_OPEN_POSITION);
+                            init = false;
+                        }
+                        else{
+                            follower.followPath(grabPickupTop, true);
+                            setPathState(3);
+                        }
                     }
                     break;
                 case 3: //move to score position for top row
@@ -164,9 +170,8 @@ import com.pedropathing.util.Timer;
                         }
                         else{
                             follower.followPath(scorePickupTop, true);
+                            setPathState(4);
                         }
-
-                        setPathState(4);
                     }
                     break;
                 case 4: //score top row
