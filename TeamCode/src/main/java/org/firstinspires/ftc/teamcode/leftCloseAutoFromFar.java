@@ -28,7 +28,7 @@ public class leftCloseAutoFromFar extends LinearOpMode {
 
     public double scoreHeading = Math.toRadians(135 + SCORE_HEADING_OFFSET);
 
-    private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop; //define path chains (muliple paths interpolated)
+    private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop, goToPark; //define path chains (muliple paths interpolated)
 
     private final Pose startPose = new Pose(56, 8, Math.toRadians(90)); // Start Pose of our robot
     private final Pose scorePose = new Pose(58, 90, scoreHeading); //TODO: change this to not be middle
@@ -36,6 +36,8 @@ public class leftCloseAutoFromFar extends LinearOpMode {
     private final Pose grabPickupTopPoseControlPoint1 = new Pose(76.862, 85.514);
     private final Pose grabPickupMiddlePose = new Pose(14, 58, Math.toRadians(180));
     private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(77.084, 56.713);
+    private final Pose parkPose = new Pose(36,60, Math.toRadians(220));
+
 
 
 
@@ -66,6 +68,10 @@ public class leftCloseAutoFromFar extends LinearOpMode {
         scorePickupMiddle = follower.pathBuilder()
                 .addPath(new BezierLine(grabPickupMiddlePose, scorePose))
                 .setLinearHeadingInterpolation(grabPickupMiddlePose.getHeading(), scorePose.getHeading())
+                .build();
+        goToPark = follower.pathBuilder()
+                .addPath(new BezierLine(scorePose, parkPose))
+                .setLinearHeadingInterpolation(scorePose.getHeading(), parkPose.getHeading())
                 .build();
     }
 

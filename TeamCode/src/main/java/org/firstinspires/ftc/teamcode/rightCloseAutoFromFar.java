@@ -28,7 +28,7 @@ import com.pedropathing.util.Timer;
 
         public double scoreHeading = Math.toRadians(45 + SCORE_HEADING_OFFSET);
 
-        private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop; //define path chains (muliple paths interpolated)
+        private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop, goToPark; //define path chains (muliple paths interpolated)
 
         private final Pose startPose = new Pose(88, 8, Math.toRadians(90)); // Start Pose of our robot
         private final Pose scorePose = new Pose(86, 90, scoreHeading); //TODO: change this to not be middle
@@ -36,6 +36,7 @@ import com.pedropathing.util.Timer;
         private final Pose grabPickupTopPoseControlPoint1 = new Pose(63.138, 78.203);
         private final Pose grabPickupMiddlePose = new Pose(130, 58, Math.toRadians(0));
         private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(62.916, 56.713);
+        private final Pose parkPose = new Pose(108,60, Math.toRadians(320));
 
 
 
@@ -67,6 +68,10 @@ import com.pedropathing.util.Timer;
             scorePickupMiddle = follower.pathBuilder()
                     .addPath(new BezierLine(grabPickupMiddlePose, scorePose))
                     .setLinearHeadingInterpolation(grabPickupMiddlePose.getHeading(), scorePose.getHeading())
+                    .build();
+            goToPark = follower.pathBuilder()
+                    .addPath(new BezierLine(scorePose, parkPose))
+                    .setLinearHeadingInterpolation(scorePose.getHeading(), parkPose.getHeading())
                     .build();
         }
 
