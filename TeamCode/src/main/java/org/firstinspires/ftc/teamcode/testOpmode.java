@@ -46,6 +46,9 @@ public class testOpmode extends LinearOpMode {
             } else if (gamepad1.dpad_left) {
                 intake.setFlickerPosition(0);
             }
+            if (gamepad1.x){
+                drivetrain.grounder();
+            }
 
 //            shooter.controlTestServo(gamepad1);
 //            shooter.testControlRampPosition(gamepad1);

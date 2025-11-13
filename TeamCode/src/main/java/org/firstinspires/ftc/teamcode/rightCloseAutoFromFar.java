@@ -34,6 +34,10 @@ import com.pedropathing.util.Timer;
         private final Pose scorePose = new Pose(86, 90, scoreHeading); //TODO: change this to not be middle
         private final Pose grabPickupTopPose = new Pose(128, 84, Math.toRadians(0));
         private final Pose grabPickupTopPoseControlPoint1 = new Pose(63.138, 78.203);
+        private final Pose grabPickupMiddlePose = new Pose(130, 58, Math.toRadians(0));
+        private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(62.916, 56.713);
+
+
 
 
         //TODO: SET OTHER POSES
@@ -55,10 +59,15 @@ import com.pedropathing.util.Timer;
                     .addPath(new BezierLine(grabPickupTopPose, scorePose))
                     .setLinearHeadingInterpolation(grabPickupTopPose.getHeading(), scorePose.getHeading())
                     .build();
-//        grabPickupMiddle = follower.pathBuilder()
-//                .build();
-//        scorePickupMiddle = follower.pathBuilder()
-//                .build();
+            grabPickupMiddle = follower.pathBuilder()
+                    .addPath(new BezierCurve(scorePose, grabPickupMiddlePoseControlPoint1, grabPickupMiddlePose))
+                    .setLinearHeadingInterpolation(scorePose.getHeading(), grabPickupMiddlePose.getHeading())
+                    .addPoseCallback(new Pose(126, 58), intake::holdFlicker, 0.5)
+                    .build();
+            scorePickupMiddle = follower.pathBuilder()
+                    .addPath(new BezierLine(grabPickupMiddlePose, scorePose))
+                    .setLinearHeadingInterpolation(grabPickupMiddlePose.getHeading(), scorePose.getHeading())
+                    .build();
 //        grabPickupTop = follower.pathBuilder()
 //                .build();
 //        scorePickupTop = follower.pathBuilder()
@@ -190,11 +199,56 @@ import com.pedropathing.util.Timer;
 
                             if (shooter.ballsShot >= 6) {
                                 turnOffShooterAuto();
-                                setPathState(-1); //end
+                                setPathState(5); //end
                             }
                         }
                     }
                     break;
+                case 5: // intake top row
+                    if (!follower.isBusy()) {
+                        if (init){
+                            intake.setFlickerPosition(Intake.FLICKER_OPEN_POSITION);
+                            init = false;
+                        }
+                        else{
+                            follower.followPath(grabPickupMiddle, true);
+                            setPathState(6);
+                        }
+                    }
+                    break;
+                case 6: //move to score position for top row
+                    if (!follower.isBusy()) {
+                        if (init){
+                            intake.turnOffIntake();
+                            init = false;
+                        }
+                        else{
+                            follower.followPath(scorePickupMiddle, true);
+                            setPathState(7);
+                        }
+                    }
+                    break;
+                case 7: //score top row
+                    if (!follower.isBusy()) {
+                        if(init){
+                            intializeBurstClose();
+                            turnOnShooterAuto();
+
+                            init = false;
+                        }
+                        else{
+                            if (pathTimer.getElapsedTimeSeconds() > INTAKE_DELAY_TIME) {
+                                intake.turnOnIntake();
+                                intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
+                            }
+
+                            if (shooter.ballsShot >= 9) {
+                                turnOffShooterAuto();
+                                intake.turnOffIntake();
+                                setPathState(-1); //end
+                            }
+                        }
+                    }
             } //run state machine
         }
 
