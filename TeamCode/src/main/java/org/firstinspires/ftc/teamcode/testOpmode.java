@@ -47,7 +47,7 @@ public class testOpmode extends LinearOpMode {
                 intake.setFlickerPosition(0);
             }
             if (gamepad1.x){
-                drivetrain.grounder();
+//                drivetrain.grounder();
                 telemetry.addLine("Grounded");
             }
             telemetry.update();

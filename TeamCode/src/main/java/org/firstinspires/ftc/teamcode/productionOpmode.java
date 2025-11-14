@@ -62,11 +62,11 @@ public class productionOpmode extends LinearOpMode {
             }
 
             //pedropathing holdpoint control
-            if (drivetrain.grounded) {
+            if (drivetrain.grounded && !follower.isBusy()) {
                 follower.holdPoint(drivetrain.holdPose);
             }
-            else {
-                follower.breakFollowing();
+            else if (follower.isBusy()){
+                    follower.breakFollowing();
             }
 
             //mechanism intake control
