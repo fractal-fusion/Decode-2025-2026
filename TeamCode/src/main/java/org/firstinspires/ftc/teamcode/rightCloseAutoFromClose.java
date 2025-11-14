@@ -246,10 +246,17 @@ public class rightCloseAutoFromClose extends LinearOpMode {
                         if (shooter.ballsShot >= 9) {
                             turnOffShooterAuto();
                             intake.turnOffIntake();
-                            setPathState(-1); //end
+                            setPathState(8); //end
                         }
                     }
                 }
+                break;
+            case 8:
+                if(!follower.isBusy()){
+                    follower.followPath(goToPark);
+                    setPathState(-1);
+                }
+                break;
         } //run state machine
     }
 
