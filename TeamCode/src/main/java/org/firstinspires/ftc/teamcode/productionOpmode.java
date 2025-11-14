@@ -65,7 +65,7 @@ public class productionOpmode extends LinearOpMode {
             if (drivetrain.grounded && !follower.isBusy()) {
                 follower.holdPoint(drivetrain.holdPose);
             }
-            else if (follower.isBusy()){
+            else if (!drivetrain.grounded && follower.isBusy()){
                     follower.breakFollowing();
             }
 
@@ -144,6 +144,9 @@ public class productionOpmode extends LinearOpMode {
             telemetry.addData("pitch down time:", shooter.currentPitchDownTime);
             telemetry.addData("pitch up debounce:", shooter.pitchUpDebounceTimerOver());
             telemetry.addData("pitch down debounce:", shooter.pitchDownDebounceTimerOver());
+
+            //grounded
+            telemetry.addData("grounded: ", drivetrain.grounded);
 
             telemetry.update();
         }
