@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -13,7 +15,12 @@ public class productionOpmode extends LinearOpMode {
         Shooter shooter = new Shooter(this);
         Intake intake = new Intake(this, Intake.FLICKER_OPEN_POSITION);
         Camera camera = new Camera(this, 3);
+        Follower follower;
+
 //        ColorDetector colorDetector = new ColorDetector(this);
+        follower = Constants.createFollower(hardwareMap);
+        follower.setStartingPose(PoseStorage.currentPose == null ? new Pose() : PoseStorage.currentPose); //get pose handed off from auto otherwise just create a new one
+//        follower.update(); TODO: don't think this is needed but possibly maybe so
 
         camera.setExposure(6); //low exposure and high gain to reduce blur for autoalignment
         camera.setGain(250);
@@ -27,6 +34,8 @@ public class productionOpmode extends LinearOpMode {
 
         while (opModeIsActive())
         {
+            //update follower
+            follower.update();
             //update the imu with the rotation of the robot
             drivetrain.updateIMU();
             //update the gamepad2 states of the shooter object for the rising edge detector to work
@@ -41,8 +50,23 @@ public class productionOpmode extends LinearOpMode {
             else if (gamepad1.x) {
                 drivetrain.resetIMU();
             }
+            else if (gamepad1.b){
+                if (!drivetrain.grounded){
+                    drivetrain.holdPose = follower.getPose();
+                }
+                drivetrain.grounded = true;
+            }
             else {
+                drivetrain.grounded = false;
                 drivetrain.drive(gamepad1);
+            }
+
+            //pedropathing holdpoint control
+            if (drivetrain.grounded) {
+                follower.holdPoint(drivetrain.holdPose);
+            }
+            else {
+                follower.breakFollowing();
             }
 
             //mechanism intake control

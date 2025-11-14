@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -26,6 +27,8 @@ public class Drivetrain {
     public static double AUTO_ALIGN_GAIN = 0.02; //converts degrees to power, at a 1:100 ratio (ex: 25 degrees = 0.25 power)
 
     public static double GROUNDING_POWER = 1;
+    public boolean grounded = false;
+    public Pose holdPose = new Pose();
     private OpMode opMode;
 
 
