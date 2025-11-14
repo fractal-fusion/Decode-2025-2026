@@ -28,6 +28,7 @@ public class Drivetrain {
 
     public static double GROUNDING_POWER = 1;
     public boolean grounded = false;
+    public boolean grounding = false; //variable to prevent grounded from being set multile times
     public Pose holdPose = new Pose();
     private OpMode opMode;
 

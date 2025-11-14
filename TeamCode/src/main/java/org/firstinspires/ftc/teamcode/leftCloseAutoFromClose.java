@@ -24,6 +24,7 @@ public class leftCloseAutoFromClose extends LinearOpMode {
     private int pathState = 0; //finite state machine variable
     private boolean init = true;
     public static double INTAKE_DELAY_TIME = 0.5;
+    public static double LEFT_AUTO_Y_OFFSET = -1.5;
     public static double SCORE_HEADING_OFFSET = 5; //score heading offset since center of goals are not exactly 45 degrees
 
     public double scoreHeading = Math.toRadians(135 + SCORE_HEADING_OFFSET);
@@ -31,12 +32,12 @@ public class leftCloseAutoFromClose extends LinearOpMode {
     private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop, goToPark; //define path chains (muliple paths interpolated)
 
     private final Pose startPose = new Pose(26, 132, Math.toRadians(322)); // Start Pose of our robot
-    private final Pose scorePose = new Pose(58, 90, scoreHeading); //TODO: change this to not be middle
-    private final Pose grabPickupTopPose = new Pose(16, 84, Math.toRadians(180));
+    private final Pose scorePose = new Pose(58, 90+LEFT_AUTO_Y_OFFSET, scoreHeading); //TODO: change this to not be middle
+    private final Pose grabPickupTopPose = new Pose(16, 84+LEFT_AUTO_Y_OFFSET, Math.toRadians(180));
     private final Pose grabPickupTopPoseControlPoint1 = new Pose(76.862, 85.514);
-    private final Pose grabPickupMiddlePose = new Pose(14, 58, Math.toRadians(180));
+    private final Pose grabPickupMiddlePose = new Pose(14, 58+LEFT_AUTO_Y_OFFSET, Math.toRadians(180));
     private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(77.084, 56.713);
-    private final Pose parkPose = new Pose(36,60, Math.toRadians(220));
+    private final Pose parkPose = new Pose(36,60+LEFT_AUTO_Y_OFFSET, Math.toRadians(220));
 
 
 

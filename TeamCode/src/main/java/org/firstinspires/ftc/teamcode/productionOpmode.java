@@ -50,14 +50,14 @@ public class productionOpmode extends LinearOpMode {
             else if (gamepad1.x) {
                 drivetrain.resetIMU();
             }
-            else if (gamepad1.b){
-                if (!drivetrain.grounded){
-                    drivetrain.holdPose = follower.getPose();
-                }
-                drivetrain.grounded = true;
-            }
+//            else if (gamepad1.b){
+//                if (!drivetrain.grounded){
+//                    drivetrain.holdPose = follower.getPose();
+//                    drivetrain.grounded = true;
+//                }
+//            }
             else {
-                drivetrain.grounded = false;
+//                drivetrain.grounded = false;
                 drivetrain.drive(gamepad1);
             }
 
@@ -66,7 +66,7 @@ public class productionOpmode extends LinearOpMode {
                 follower.holdPoint(drivetrain.holdPose);
             }
             else if (!drivetrain.grounded && follower.isBusy()){
-                    follower.breakFollowing();
+                follower.breakFollowing();
             }
 
             //mechanism intake control
@@ -147,6 +147,8 @@ public class productionOpmode extends LinearOpMode {
 
             //grounded
             telemetry.addData("grounded: ", drivetrain.grounded);
+            telemetry.addData("follower busy: ", follower.isBusy());
+
 
             telemetry.update();
         }
