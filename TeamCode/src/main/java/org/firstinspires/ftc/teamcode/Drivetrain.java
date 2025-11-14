@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -25,7 +26,9 @@ public class Drivetrain {
     public static double AUTO_ALIGN_MAX_SPEED = 0.4; //auto alignment speed is clipped to minimum negative this and maximum positive this (bilateral tolerance)
     public static double AUTO_ALIGN_GAIN = 0.02; //converts degrees to power, at a 1:100 ratio (ex: 25 degrees = 0.25 power)
 
-    public static double GROUNDING_POWER = 0.5;
+    public static double GROUNDING_POWER = 1;
+    public boolean grounded = false;
+    public Pose holdPose = new Pose();
     private OpMode opMode;
 
 
@@ -114,12 +117,12 @@ public class Drivetrain {
         autoAlignPower = Range.clip(bearing * AUTO_ALIGN_GAIN, -AUTO_ALIGN_MAX_SPEED, AUTO_ALIGN_MAX_SPEED);
         return autoAlignPower;
     }
-    public void grounder(){
-        frontLeft.setPower(GROUNDING_POWER);
-        backLeft.setPower(-GROUNDING_POWER);
-        frontRight.setPower(GROUNDING_POWER);
-        backRight.setPower(-GROUNDING_POWER);
-    }
+//    public void grounder(){
+//        frontLeft.setPower(GROUNDING_POWER);
+//        backLeft.setPower(-GROUNDING_POWER);
+//        frontRight.setPower(GROUNDING_POWER);
+//        backRight.setPower(-GROUNDING_POWER);
+//    }
 //unused and unfinished drivetrain methods
 //    public void forward() {
 //            frontRight.setPower(1);
