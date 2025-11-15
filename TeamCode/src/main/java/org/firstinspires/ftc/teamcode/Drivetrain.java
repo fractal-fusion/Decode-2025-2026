@@ -29,9 +29,10 @@ public class Drivetrain {
 
     public Gamepad currentGamepad = new Gamepad();
     public Gamepad previousGamepad = new Gamepad();
-    private boolean grounded = false;
+    public boolean grounded = false;
+    public boolean isHoldingPose = false; //follower.isbusy doesn't work so this boolean will make sure hold pose is only called once
     public Pose holdPose = new Pose();
-    private Follower follower;
+//    private Follower follower;
 
 //        ColorDetector colorDetector = new ColorDetector(this);
     private OpMode opMode;
@@ -48,8 +49,8 @@ public class Drivetrain {
         imu = opMode.hardwareMap.get(IMU.class, "imu");
 
 
-        follower = Constants.createFollower(opMode.hardwareMap);
-        follower.setStartingPose(PoseStorage.currentPose == null ? new Pose() : PoseStorage.currentPose);
+//        follower = Constants.createFollower(opMode.hardwareMap);
+//        follower.setStartingPose(PoseStorage.currentPose == null ? new Pose() : PoseStorage.currentPose);
 
         // adjust the orientation parameters
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
@@ -127,26 +128,27 @@ public class Drivetrain {
         return autoAlignPower;
     }
 
-    public void toggleGrounded() {
-        if (currentGamepad.b && !previousGamepad.b) {
-            grounded = !grounded;
-        }
+//    public void toggleGrounded() {
+//        if (currentGamepad.b && !previousGamepad.b) {
+//            grounded = !grounded;
+//        }
+//
+//        //control the claw based on the boolean
+//        if (grounded) {
+//            follower.holdPoint(holdPose);
+//        }
+//        else {
+//            holdPose = follower.getPose();
+//            follower.breakFollowing();
+//        }
+//    }
+//
+//    public void updateGamepad(Gamepad gamepad) { //debounce method
+//        previousGamepad.copy(currentGamepad);
+//
+//        currentGamepad.copy(gamepad);
+//    }
 
-        //control the claw based on the boolean
-        if (grounded) {
-            follower.holdPoint(holdPose);
-        }
-        else {
-            holdPose = follower.getPose();
-            follower.breakFollowing();
-        }
-    }
-
-    public void updateGamepad(Gamepad gamepad) { //debounce method
-        previousGamepad.copy(currentGamepad);
-
-        currentGamepad.copy(gamepad);
-    }
 //    public void grounder(){
 //        frontLeft.setPower(GROUNDING_POWER);
 //        backLeft.setPower(-GROUNDING_POWER);

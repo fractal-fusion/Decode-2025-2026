@@ -31,13 +31,14 @@ public class Shooter{
     public static double FAR_RAMP_SCORE_POSITION = 0.23;
     public static double FAR_TARGET_RPM = 4900;
     public static double FAR_AUTO_TARGET_RPM = 4800; //untested
-
+    public static double FAR_PITCH_DEBOUNCE = 3.0; //untested
 
     public static double FAR_TARGET_RPM_TICKS_PER_SECOND = FAR_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
 
     public static double CLOSE_RAMP_SCORE_POSITION = 0.25;
     public static double CLOSE_TARGET_RPM = 4120;
     public static double CLOSE_AUTO_TARGET_RPM = 4120;
+    public static double CLOSE_PITCH_DEBOUNCE = 1.5;
 
     public static double CLOSE_TARGET_RPM_TICKS_PER_SECOND = CLOSE_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
 
@@ -58,14 +59,14 @@ public class Shooter{
     private boolean wasAboveThreshold = false; //boolean for keeping track of balls shot
     private ElapsedTime pitchUpTimer;
     public double currentPitchUpTime;
-    public static double PITCH_UP_DEBOUNCE_SECONDS = 1.5;
+    public double currentPitchUpDebounceSeconds = CLOSE_PITCH_DEBOUNCE; //set to close by default
     private ElapsedTime pitchDownTimer;
     public double currentPitchDownTime;
     public static double PITCH_DOWN_DEBOUNCE_SECONDS = 0.15;
     private ElapsedTime pitchTimeoutTimer; //timer for lowering the pitch when enough time has passed, overriding threshold
     public double currentPitchTimeoutTime;
     public static double PITCH_TIMEOUT_SECONDS = 1.2;
-    private boolean timerDebounce = false; //debounce to prevent timer from resetting when it has already reset
+//    private boolean timerDebounce = false; //debounce to prevent timer from resetting when it has already reset
 
     //test servo variables
     public static String testServo = "rampright";
@@ -169,6 +170,7 @@ public class Shooter{
             resetPitchDownTimer();
 
             setCurrentTargetRPMTicksPerSecond(CLOSE_TARGET_RPM);
+            setCurrentPitchUpDebounceSeconds(CLOSE_PITCH_DEBOUNCE);
 
             on = !on;
         }
@@ -189,6 +191,8 @@ public class Shooter{
             resetPitchDownTimer();
 
             setCurrentTargetRPMTicksPerSecond(FAR_TARGET_RPM);
+            setCurrentPitchUpDebounceSeconds(FAR_PITCH_DEBOUNCE);
+
 
             on = !on;
         }
@@ -230,7 +234,9 @@ public class Shooter{
     public void setCurrentTargetRPMTicksPerSecond(double RPM) {
         currentTargetRPMTicksPerSecond = RPM * RPM_TO_TICKS_PER_SECOND;
     }
-
+    public void setCurrentPitchUpDebounceSeconds(double seconds){
+        currentPitchUpDebounceSeconds = seconds;
+    }
     public void updateGamepad(Gamepad gamepad) { //debounce method
         previousGamepad.copy(currentGamepad);
 
@@ -253,7 +259,7 @@ public class Shooter{
         currentPitchUpTime = pitchUpTimer.time();
     }
     public boolean pitchUpDebounceTimerOver(){
-        return currentPitchUpTime > PITCH_UP_DEBOUNCE_SECONDS;
+        return currentPitchUpTime > currentPitchUpDebounceSeconds;
     }
 
     public void resetPitchTimeoutTimer(){

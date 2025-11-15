@@ -20,7 +20,6 @@ public class productionOpmode extends LinearOpMode {
 //        ColorDetector colorDetector = new ColorDetector(this);
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(PoseStorage.currentPose == null ? new Pose() : PoseStorage.currentPose); //get pose handed off from auto otherwise just create a new one
-//        follower.update(); TODO: don't think this is needed but possibly maybe so
 
         camera.setExposure(6); //low exposure and high gain to reduce blur for autoalignment
         camera.setGain(250);
@@ -50,24 +49,25 @@ public class productionOpmode extends LinearOpMode {
             else if (gamepad1.x) {
                 drivetrain.resetIMU();
             }
-//            else if (gamepad1.b){
-//                if (!drivetrain.grounded){
-//                    drivetrain.holdPose = follower.getPose();
-//                    drivetrain.grounded = true;
-//                }
-//            }
+            else if (gamepad1.b){
+                drivetrain.grounded = true;
+            }
             else {
-//                drivetrain.grounded = false;
+                drivetrain.grounded = false;
+                drivetrain.holdPose = follower.getPose(); //update hold pose when not grounded
+
                 drivetrain.drive(gamepad1);
             }
 
-            //pedropathing holdpoint control
-//            if (drivetrain.grounded && !follower.isBusy()) {
-//                follower.holdPoint(drivetrain.holdPose);
-//            }
-//            else if (!drivetrain.grounded && follower.isBusy()){
-//                follower.breakFollowing();
-//            }
+//            pedropathing holdpoint control
+            if (drivetrain.grounded && !drivetrain.isHoldingPose) {
+                follower.holdPoint(drivetrain.holdPose);
+                drivetrain.isHoldingPose = true;
+            }
+            else if (!drivetrain.grounded && drivetrain.isHoldingPose){
+                follower.breakFollowing();
+                drivetrain.isHoldingPose = false;
+            }
 
             //mechanism intake control
             if(gamepad2.a) {
@@ -146,9 +146,7 @@ public class productionOpmode extends LinearOpMode {
             telemetry.addData("pitch down debounce:", shooter.pitchDownDebounceTimerOver());
 
             //grounded
-//            telemetry.addData("grounded: ", drivetrain.grounded);
-            telemetry.addData("follower busy: ", follower.isBusy());
-
+            telemetry.addData("grounded: ", drivetrain.grounded);
 
             telemetry.update();
         }
