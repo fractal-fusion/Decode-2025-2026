@@ -243,7 +243,7 @@ import com.pedropathing.util.Timer;
                                 intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
                             }
 
-                            if (shooter.ballsShot >= 9) {
+                            if (shooter.ballsShot >= 9 || opmodeTimer.getElapsedTimeSeconds() > 28.5) {
                                 turnOffShooterAuto();
                                 intake.turnOffIntake();
                                 setPathState(8); //end
@@ -261,12 +261,14 @@ import com.pedropathing.util.Timer;
         }
 
         public void intializeBurstClose(){
+            shooter.setCurrentPitchUpDebounceSeconds(Shooter.CLOSE_PITCH_DEBOUNCE);
             shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM);
             shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
             shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
         }
 
         public void initalizeBurstFar(){
+            shooter.setCurrentPitchUpDebounceSeconds(Shooter.FAR_PITCH_DEBOUNCE);
             shooter.setCurrentTargetRPMTicksPerSecond(Shooter.FAR_TARGET_RPM);
             shooter.setRampPosition(Shooter.FAR_RAMP_SCORE_POSITION);
             shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_FAR);

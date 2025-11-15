@@ -24,7 +24,7 @@ public class leftCloseAutoFromClose extends LinearOpMode {
     private int pathState = 0; //finite state machine variable
     private boolean init = true;
     public static double INTAKE_DELAY_TIME = 0.5;
-    public static double LEFT_AUTO_Y_OFFSET = -1.5;
+    public static double LEFT_AUTO_Y_OFFSET = 0;
     public static double SCORE_HEADING_OFFSET = 5; //score heading offset since center of goals are not exactly 45 degrees
 
     public double scoreHeading = Math.toRadians(135 + SCORE_HEADING_OFFSET);
@@ -244,7 +244,7 @@ public class leftCloseAutoFromClose extends LinearOpMode {
                             intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
                         }
 
-                        if (shooter.ballsShot >= 9) {
+                        if (shooter.ballsShot >= 9 || opmodeTimer.getElapsedTimeSeconds() > 28.5) {
                             turnOffShooterAuto();
                             intake.turnOffIntake();
                             setPathState(8); //end
@@ -262,12 +262,14 @@ public class leftCloseAutoFromClose extends LinearOpMode {
     }
 
     public void intializeBurstClose(){
+        shooter.setCurrentPitchUpDebounceSeconds(Shooter.CLOSE_PITCH_DEBOUNCE);
         shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM);
         shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
         shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
     }
 
     public void initalizeBurstFar(){
+        shooter.setCurrentPitchUpDebounceSeconds(Shooter.FAR_PITCH_DEBOUNCE);
         shooter.setCurrentTargetRPMTicksPerSecond(Shooter.FAR_TARGET_RPM);
         shooter.setRampPosition(Shooter.FAR_RAMP_SCORE_POSITION);
         shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_FAR);
