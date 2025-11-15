@@ -37,7 +37,7 @@ public class leftCloseAutoFromFar extends LinearOpMode {
     private final Pose grabPickupTopPoseControlPoint1 = new Pose(76.862, 85.514);
     private final Pose grabPickupMiddlePose = new Pose(14, 58+LEFT_AUTO_Y_OFFSET, Math.toRadians(180));
     private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(77.084, 56.713);
-    private final Pose parkPose = new Pose(36,60+LEFT_AUTO_Y_OFFSET, Math.toRadians(220));
+    private final Pose parkPose = new Pose(58,110+LEFT_AUTO_Y_OFFSET, Math.toRadians(320));
 
 
 

@@ -36,7 +36,7 @@ import com.pedropathing.util.Timer;
         private final Pose grabPickupTopPoseControlPoint1 = new Pose(63.138, 78.203);
         private final Pose grabPickupMiddlePose = new Pose(130, 58, Math.toRadians(0));
         private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(62.916, 56.713);
-        private final Pose parkPose = new Pose(108,60, Math.toRadians(320));
+        private final Pose parkPose = new Pose(86,110, Math.toRadians(220));
 
 
 
