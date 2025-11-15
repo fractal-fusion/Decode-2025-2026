@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -26,10 +27,13 @@ public class Drivetrain {
     public static double AUTO_ALIGN_MAX_SPEED = 0.4; //auto alignment speed is clipped to minimum negative this and maximum positive this (bilateral tolerance)
     public static double AUTO_ALIGN_GAIN = 0.02; //converts degrees to power, at a 1:100 ratio (ex: 25 degrees = 0.25 power)
 
-    public static double GROUNDING_POWER = 1;
-    public boolean grounded = false;
-    public boolean grounding = false; //variable to prevent grounded from being set multile times
+    public Gamepad currentGamepad = new Gamepad();
+    public Gamepad previousGamepad = new Gamepad();
+    private boolean grounded = false;
     public Pose holdPose = new Pose();
+    private Follower follower;
+
+//        ColorDetector colorDetector = new ColorDetector(this);
     private OpMode opMode;
 
 
@@ -42,6 +46,10 @@ public class Drivetrain {
         frontRight = opMode.hardwareMap.get(DcMotor.class, "frontright");
         backRight = opMode.hardwareMap.get(DcMotor.class, "backright");
         imu = opMode.hardwareMap.get(IMU.class, "imu");
+
+
+        follower = Constants.createFollower(opMode.hardwareMap);
+        follower.setStartingPose(PoseStorage.currentPose == null ? new Pose() : PoseStorage.currentPose);
 
         // adjust the orientation parameters
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
@@ -117,6 +125,27 @@ public class Drivetrain {
         double autoAlignPower;
         autoAlignPower = Range.clip(bearing * AUTO_ALIGN_GAIN, -AUTO_ALIGN_MAX_SPEED, AUTO_ALIGN_MAX_SPEED);
         return autoAlignPower;
+    }
+
+    public void toggleGrounded() {
+        if (currentGamepad.b && !previousGamepad.b) {
+            grounded = !grounded;
+        }
+
+        //control the claw based on the boolean
+        if (grounded) {
+            follower.holdPoint(holdPose);
+        }
+        else {
+            holdPose = follower.getPose();
+            follower.breakFollowing();
+        }
+    }
+
+    public void updateGamepad(Gamepad gamepad) { //debounce method
+        previousGamepad.copy(currentGamepad);
+
+        currentGamepad.copy(gamepad);
     }
 //    public void grounder(){
 //        frontLeft.setPower(GROUNDING_POWER);

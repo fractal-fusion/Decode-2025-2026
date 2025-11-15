@@ -62,12 +62,12 @@ public class productionOpmode extends LinearOpMode {
             }
 
             //pedropathing holdpoint control
-            if (drivetrain.grounded && !follower.isBusy()) {
-                follower.holdPoint(drivetrain.holdPose);
-            }
-            else if (!drivetrain.grounded && follower.isBusy()){
-                follower.breakFollowing();
-            }
+//            if (drivetrain.grounded && !follower.isBusy()) {
+//                follower.holdPoint(drivetrain.holdPose);
+//            }
+//            else if (!drivetrain.grounded && follower.isBusy()){
+//                follower.breakFollowing();
+//            }
 
             //mechanism intake control
             if(gamepad2.a) {
@@ -146,7 +146,7 @@ public class productionOpmode extends LinearOpMode {
             telemetry.addData("pitch down debounce:", shooter.pitchDownDebounceTimerOver());
 
             //grounded
-            telemetry.addData("grounded: ", drivetrain.grounded);
+//            telemetry.addData("grounded: ", drivetrain.grounded);
             telemetry.addData("follower busy: ", follower.isBusy());
 
 
