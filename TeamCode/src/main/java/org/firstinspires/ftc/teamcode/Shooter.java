@@ -103,8 +103,12 @@ public class Shooter{
         shooterRampRight.setPosition(0); //zero ramp servoes on initialization
         shooterRampLeft.setPosition(0);
 
+        ((DcMotorEx) shooterLeft).setVelocityPIDFCoefficients(1.17025,0.117025,0,11.7025); //TODO: tune this pidf
+        ((DcMotorEx) shooterRight).setVelocityPIDFCoefficients(1.17025,0.117025,0,11.7025);
+
         setCurrentTargetRPMTicksPerSecond(CLOSE_TARGET_RPM); //default the current target rpm ticks per second to close target rpm
         setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
+
 
     }
 

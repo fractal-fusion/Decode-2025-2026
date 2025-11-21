@@ -32,20 +32,13 @@ public class leftCloseAutoFromFar extends LinearOpMode {
     private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop, goToPark; //define path chains (muliple paths interpolated)
 
     private final Pose startPose = new Pose(56, 8, Math.toRadians(90)); // Start Pose of our robot
-    private final Pose scorePose = new Pose(58, 90+LEFT_AUTO_Y_OFFSET, scoreHeading); //TODO: change this to not be middle
+    private final Pose scorePose = new Pose(58, 90+LEFT_AUTO_Y_OFFSET, scoreHeading);
     private final Pose grabPickupTopPose = new Pose(16, 84+LEFT_AUTO_Y_OFFSET, Math.toRadians(180));
     private final Pose grabPickupTopPoseControlPoint1 = new Pose(76.862, 85.514);
     private final Pose grabPickupMiddlePose = new Pose(14, 58+LEFT_AUTO_Y_OFFSET, Math.toRadians(180));
     private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(77.084, 56.713);
     private final Pose parkPose = new Pose(58,110+LEFT_AUTO_Y_OFFSET, Math.toRadians(320));
 
-
-
-
-    //TODO: SET OTHER POSES
-
-
-    //BUILD PATHS TODO: actually build them using poses from visualizer
     public void buildPaths() {
         scorePreload = follower.pathBuilder()
                 .addPath(new BezierLine(startPose, scorePose))

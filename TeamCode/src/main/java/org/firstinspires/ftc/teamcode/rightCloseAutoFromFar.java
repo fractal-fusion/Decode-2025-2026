@@ -31,20 +31,13 @@ import com.pedropathing.util.Timer;
         private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop, goToPark; //define path chains (muliple paths interpolated)
 
         private final Pose startPose = new Pose(88, 8, Math.toRadians(90)); // Start Pose of our robot
-        private final Pose scorePose = new Pose(86, 90, scoreHeading); //TODO: change this to not be middle
+        private final Pose scorePose = new Pose(86, 90, scoreHeading);
         private final Pose grabPickupTopPose = new Pose(128, 84, Math.toRadians(0));
         private final Pose grabPickupTopPoseControlPoint1 = new Pose(63.138, 78.203);
         private final Pose grabPickupMiddlePose = new Pose(130, 58, Math.toRadians(0));
         private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(62.916, 56.713);
         private final Pose parkPose = new Pose(86,110, Math.toRadians(220));
 
-
-
-
-        //TODO: SET OTHER POSES
-
-
-        //BUILD PATHS TODO: actually build them using poses from visualizer
         public void buildPaths() {
             scorePreload = follower.pathBuilder()
                     .addPath(new BezierLine(startPose, scorePose))
