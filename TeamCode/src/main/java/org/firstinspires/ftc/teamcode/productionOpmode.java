@@ -45,7 +45,7 @@ public class productionOpmode extends LinearOpMode {
 
             //drivetrain controls (field centric drive + autoalignment)
             if (gamepad1.a) {
-                drivetrain.driveAutoAlign(gamepad1.left_stick_x, gamepad1.left_stick_y, drivetrain.calculateAutoAlignPower(-limelight.getBearing()));
+                drivetrain.driveAutoAlign(gamepad1.left_stick_x, gamepad1.left_stick_y, drivetrain.calculateAutoAlignPower(limelight.getBearing()));
             }
             else if (gamepad1.x) {
                 drivetrain.resetIMU();
