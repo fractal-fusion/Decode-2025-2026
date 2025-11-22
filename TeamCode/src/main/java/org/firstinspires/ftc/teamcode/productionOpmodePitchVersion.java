@@ -50,7 +50,7 @@ public class productionOpmodePitchVersion extends LinearOpMode {
             else if (gamepad1.x) {
                 drivetrain.resetIMU();
             }
-            else if (gamepad1.b){
+            else if (gamepad1.right_bumper){
                 drivetrain.grounded = true;
             }
             else {
