@@ -29,19 +29,19 @@ public class Shooter{
     public static double PITCH_INTAKE_POSITION = 0.054;
     public static double PITCH_CYCLE_POSITION = 0.18;
     public static double GATE_OPEN_POSITION = 0;
-    public static double GATE_CLOSED_POSITION = 0.5;
+    public static double GATE_CLOSED_POSITION = 0.27;
     public static double RAMP_CYCLE_POSITION = 0.2;
     public static double FAR_RAMP_SCORE_POSITION = 0.23;
     public static double FAR_TARGET_RPM = 4900;
     public static double FAR_AUTO_TARGET_RPM = 4800; //untested
-    public static double FAR_PITCH_DEBOUNCE = 3.0; //untested
+    public static double FAR_DEBOUNCE = 3.0; //untested
 
     public static double FAR_TARGET_RPM_TICKS_PER_SECOND = FAR_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
 
     public static double CLOSE_RAMP_SCORE_POSITION = 0.25;
     public static double CLOSE_TARGET_RPM = 4120;
     public static double CLOSE_AUTO_TARGET_RPM = 4120;
-    public static double CLOSE_PITCH_DEBOUNCE = 0.4;
+    public static double CLOSE_DEBOUNCE = 0.4;
 
     public static double CLOSE_TARGET_RPM_TICKS_PER_SECOND = CLOSE_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
 
@@ -62,10 +62,12 @@ public class Shooter{
     private boolean wasAboveThreshold = false; //boolean for keeping track of balls shot
     private ElapsedTime shooterClosedTimer;
     public double currentShooterClosedTime;
-    public double currentShooterClosedSeconds = CLOSE_PITCH_DEBOUNCE; //set to close by default
+    public double currentShooterClosedSeconds = CLOSE_DEBOUNCE; //set to close by default
     private ElapsedTime shooterOpenTimer;
     public double currentShooterOpenTime;
-    public static double SHOOTER_OPEN_SECONDS = 0.18;
+    public static double SHOOTER_OPEN_PITCH_SECONDS = 0.18;
+    public static double SHOOTER_OPEN_GATE_SECONDS = 0.3;
+
     private ElapsedTime shooterTimeoutTimer; //timer for lowering the pitch when enough time has passed, overriding threshold
     public double currentShooterTimeoutTime;
     public static double SHOOTER_TIMEOUT_SECONDS = 1.2;
@@ -74,7 +76,7 @@ public class Shooter{
     //test servo variables
     public static String testServo = "gate";
     public Servo TESTSERVO;
-    private double testPosition = 0.5;
+    private double testPosition = 0;
     public Shooter(OpMode linearOpmode) {
         this.opMode = linearOpmode;
 
@@ -183,7 +185,7 @@ public class Shooter{
             resetShooterOpenTimer();
 
             setCurrentTargetRPMTicksPerSecond(CLOSE_TARGET_RPM);
-            setCurrentShooterClosedSeconds(CLOSE_PITCH_DEBOUNCE);
+            setCurrentShooterClosedSeconds(CLOSE_DEBOUNCE);
 
             on = !on;
         }
@@ -204,7 +206,7 @@ public class Shooter{
             resetShooterOpenTimer();
 
             setCurrentTargetRPMTicksPerSecond(FAR_TARGET_RPM);
-            setCurrentShooterClosedSeconds(FAR_PITCH_DEBOUNCE);
+            setCurrentShooterClosedSeconds(FAR_DEBOUNCE);
 
 
             on = !on;
@@ -227,20 +229,19 @@ public class Shooter{
         if ((passedThreshold && !cycling && shooterClosedTimerOver())){
             setPitchPosition(Shooter.PITCH_SCORE_POSITION);
         }
-        else if (!passedThreshold && !cycling && shooterOpenTimerOver()){
+        else if (!passedThreshold && !cycling && shooterOpenPitchTimerOver()){
             setPitchPosition(Shooter.PITCH_INTAKE_POSITION); //automatically raise the pitch when not ready to shoot
         }
     }
 
     public void controlShooterGate(){
-//        opMode.telemetry.addLine("controlling pitch");
-
         //TODO: can change cycling boolean to separate between sorting mode for the gate and normal shooting mode
         if ((passedThreshold && !cycling && shooterClosedTimerOver())){
-            setPitchPosition(Shooter.GATE_OPEN_POSITION);
+            setGatePosition(Shooter.GATE_OPEN_POSITION);
         }
-        else if (!passedThreshold && !cycling && shooterOpenTimerOver()){
-            setPitchPosition(Shooter.GATE_CLOSED_POSITION); //automatically raise the pitch when not ready to shoot
+        else if (!passedThreshold && !cycling && shooterOpenGateTimerOver()){
+            setPitchPosition(PITCH_SCORE_POSITION);
+//            setGatePosition(Shooter.GATE_CLOSED_POSITION); //automatically raise the pitch when not ready to shoot
         }
     }
 
@@ -274,8 +275,11 @@ public class Shooter{
     public void updateShooterOpenTimer(){
         currentShooterOpenTime = shooterOpenTimer.time();
     }
-    public boolean shooterOpenTimerOver(){
-        return currentShooterOpenTime > SHOOTER_OPEN_SECONDS;
+    public boolean shooterOpenPitchTimerOver(){
+        return currentShooterOpenTime > SHOOTER_OPEN_PITCH_SECONDS;
+    }
+    public boolean shooterOpenGateTimerOver(){
+        return currentShooterOpenTime > SHOOTER_OPEN_GATE_SECONDS;
     }
     public void resetShooterClosedTimer(){
         shooterClosedTimer.reset();

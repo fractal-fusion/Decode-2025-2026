@@ -114,7 +114,7 @@ public class leftCloseAutoFromFar extends LinearOpMode {
             telemetry.addData("pitch up time:", shooter.currentShooterClosedTime);
             telemetry.addData("pitch down time:", shooter.currentShooterOpenTime);
             telemetry.addData("pitch up debounce:", shooter.shooterClosedTimerOver());
-            telemetry.addData("pitch down debounce:", shooter.shooterOpenTimerOver());
+            telemetry.addData("pitch down debounce:", shooter.shooterOpenPitchTimerOver());
             telemetry.update();
 
         }
@@ -255,14 +255,14 @@ public class leftCloseAutoFromFar extends LinearOpMode {
     }
 
     public void intializeBurstClose(){
-        shooter.setCurrentShooterClosedSeconds(Shooter.CLOSE_PITCH_DEBOUNCE);
+        shooter.setCurrentShooterClosedSeconds(Shooter.CLOSE_DEBOUNCE);
         shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM);
         shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
         shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
     }
 
     public void initalizeBurstFar(){
-        shooter.setCurrentShooterClosedSeconds(Shooter.FAR_PITCH_DEBOUNCE);
+        shooter.setCurrentShooterClosedSeconds(Shooter.FAR_DEBOUNCE);
         shooter.setCurrentTargetRPMTicksPerSecond(Shooter.FAR_TARGET_RPM);
         shooter.setRampPosition(Shooter.FAR_RAMP_SCORE_POSITION);
         shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_FAR);

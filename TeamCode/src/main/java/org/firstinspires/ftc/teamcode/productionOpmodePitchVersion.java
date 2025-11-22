@@ -144,7 +144,7 @@ public class productionOpmodePitchVersion extends LinearOpMode {
             telemetry.addData("pitch up time:", shooter.currentShooterClosedTime);
             telemetry.addData("pitch down time:", shooter.currentShooterOpenTime);
             telemetry.addData("pitch up debounce:", shooter.shooterClosedTimerOver());
-            telemetry.addData("pitch down debounce:", shooter.shooterOpenTimerOver());
+            telemetry.addData("pitch down debounce:", shooter.shooterOpenPitchTimerOver());
 
             //grounded
             telemetry.addData("grounded: ", drivetrain.grounded);

@@ -74,7 +74,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             if(gamepad2.a) {
                 intake.turnOnIntake();
                 if (!shooter.on) {
-                    shooter.setPitchPosition(Shooter.GATE_CLOSED_POSITION);
+                    shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                 }
             }
             else if (gamepad2.b){
@@ -145,7 +145,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             telemetry.addData("pitch up time:", shooter.currentShooterClosedTime);
             telemetry.addData("pitch down time:", shooter.currentShooterOpenTime);
             telemetry.addData("pitch up debounce:", shooter.shooterClosedTimerOver());
-            telemetry.addData("pitch down debounce:", shooter.shooterOpenTimerOver());
+            telemetry.addData("pitch down debounce:", shooter.shooterOpenPitchTimerOver());
 
             //grounded
             telemetry.addData("grounded: ", drivetrain.grounded);
