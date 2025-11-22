@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 
-@TeleOp(name="productionOpmode", group="Robot")
-public class productionOpmode extends LinearOpMode {
+@TeleOp(name="productionOpmodeGateVersion", group="Robot")
+public class productionOpmodeGateVersion extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -74,7 +74,7 @@ public class productionOpmode extends LinearOpMode {
             if(gamepad2.a) {
                 intake.turnOnIntake();
                 if (!shooter.on) {
-                    shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION);
+                    shooter.setPitchPosition(Shooter.GATE_CLOSED_POSITION);
                 }
             }
             else if (gamepad2.b){
@@ -83,6 +83,7 @@ public class productionOpmode extends LinearOpMode {
             else if (gamepad2.right_bumper){
                 shooter.cycling = true;
                 shooter.setPitchPosition(Shooter.PITCH_CYCLE_POSITION);
+                shooter.setGatePosition(Shooter.GATE_OPEN_POSITION);
 //                shooter.setRampPosition(Shooter.RAMP_CYCLE_POSITION);
                 intake.turnOnIntake();
                 shooter.turnOnShooter(Shooter.CYCLING_RPM);
@@ -113,9 +114,9 @@ public class productionOpmode extends LinearOpMode {
                 shooter.toggleShooterFar();
             }
 
-            //flatten the pitch when scoring so balls can pass to shooter motors
+            //open the gate when scoring so balls can pass to shooter motors
             shooter.update();
-            shooter.controlShooterPitch();
+            shooter.controlShooterGate();
 
             //DYNAMIC FAR AND CLOSE
             if (limelight.isFar) {
@@ -141,10 +142,10 @@ public class productionOpmode extends LinearOpMode {
             telemetry.addData("apriltag bearing:", limelight.getBearing());
             telemetry.addData("drive power:", drivetrain.calculateAutoAlignPower(limelight.getBearing()));
 
-            telemetry.addData("pitch up time:", shooter.currentPitchUpTime);
-            telemetry.addData("pitch down time:", shooter.currentPitchDownTime);
-            telemetry.addData("pitch up debounce:", shooter.pitchUpDebounceTimerOver());
-            telemetry.addData("pitch down debounce:", shooter.pitchDownDebounceTimerOver());
+            telemetry.addData("pitch up time:", shooter.currentShooterClosedTime);
+            telemetry.addData("pitch down time:", shooter.currentShooterOpenTime);
+            telemetry.addData("pitch up debounce:", shooter.shooterClosedTimerOver());
+            telemetry.addData("pitch down debounce:", shooter.shooterOpenTimerOver());
 
             //grounded
             telemetry.addData("grounded: ", drivetrain.grounded);

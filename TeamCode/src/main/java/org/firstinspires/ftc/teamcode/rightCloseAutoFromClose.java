@@ -17,7 +17,7 @@ public class rightCloseAutoFromClose extends LinearOpMode {
     Drivetrain drivetrain;
     Shooter shooter;
     Intake intake;
-    Camera camera;
+//    Camera camera;
     private Follower follower; //initialize the follower object
     private Timer pathTimer, opmodeTimer; //declare the time variables used when checking for path completion
     private Pose currentPose;
@@ -82,7 +82,7 @@ public class rightCloseAutoFromClose extends LinearOpMode {
         drivetrain = new Drivetrain(this);
         shooter = new Shooter(this);
         intake = new Intake(this, Intake.FLICKER_CLOSE_POSITION);
-        camera = new Camera(this, 3);
+//        camera = new Camera(this, 3);
 
         //initialize timers so they can be checked in the state machine
         pathTimer = new Timer();
@@ -117,10 +117,10 @@ public class rightCloseAutoFromClose extends LinearOpMode {
             telemetry.addData("shooter right velocity:", shooter.shooterRightGetVelocity() * Shooter.TICKS_PER_SECOND_TO_RPM);
             telemetry.addData("shooter at velocity:", shooter.shooterAtTargetVelocity());
             telemetry.addData("balls shot:", shooter.ballsShot);
-            telemetry.addData("pitch up time:", shooter.currentPitchUpTime);
-            telemetry.addData("pitch down time:", shooter.currentPitchDownTime);
-            telemetry.addData("pitch up debounce:", shooter.pitchUpDebounceTimerOver());
-            telemetry.addData("pitch down debounce:", shooter.pitchDownDebounceTimerOver());
+            telemetry.addData("pitch up time:", shooter.currentShooterClosedTime);
+            telemetry.addData("pitch down time:", shooter.currentShooterOpenTime);
+            telemetry.addData("pitch up debounce:", shooter.shooterClosedTimerOver());
+            telemetry.addData("pitch down debounce:", shooter.shooterOpenTimerOver());
             telemetry.update();
 
         }
@@ -261,14 +261,14 @@ public class rightCloseAutoFromClose extends LinearOpMode {
     }
 
     public void intializeBurstClose(){
-        shooter.setCurrentPitchUpDebounceSeconds(Shooter.CLOSE_PITCH_DEBOUNCE);
+        shooter.setCurrentShooterClosedSeconds(Shooter.CLOSE_PITCH_DEBOUNCE);
         shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM);
         shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
         shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
     }
 
     public void initalizeBurstFar(){
-        shooter.setCurrentPitchUpDebounceSeconds(Shooter.FAR_PITCH_DEBOUNCE);
+        shooter.setCurrentShooterClosedSeconds(Shooter.FAR_PITCH_DEBOUNCE);
         shooter.setCurrentTargetRPMTicksPerSecond(Shooter.FAR_TARGET_RPM);
         shooter.setRampPosition(Shooter.FAR_RAMP_SCORE_POSITION);
         shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_FAR);
@@ -288,8 +288,8 @@ public class rightCloseAutoFromClose extends LinearOpMode {
         pathState = pState;
         init = true;
         pathTimer.resetTimer();
-        shooter.resetPitchUpTimer();
-        shooter.resetPitchDownTimer();
+        shooter.resetShooterClosedTimer();
+        shooter.resetShooterOpenTimer();
     }
 
 }

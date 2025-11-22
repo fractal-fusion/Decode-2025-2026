@@ -18,6 +18,7 @@ public class Shooter{
     public Servo shooterRampLeft;
     public Servo shooterPitchRight;
     public Servo shooterPitchLeft;
+    public Servo shooterGate;
     private OpMode opMode;
 
     //static variables for shooter
@@ -27,6 +28,8 @@ public class Shooter{
     public static double PITCH_SCORE_POSITION = 0.0; //flatten pitch so balls can pass for scoring
     public static double PITCH_INTAKE_POSITION = 0.054;
     public static double PITCH_CYCLE_POSITION = 0.18;
+    public static double GATE_OPEN_POSITION = 0;
+    public static double GATE_CLOSED_POSITION = 0.5;
     public static double RAMP_CYCLE_POSITION = 0.2;
     public static double FAR_RAMP_SCORE_POSITION = 0.23;
     public static double FAR_TARGET_RPM = 4900;
@@ -54,18 +57,18 @@ public class Shooter{
     public boolean on = false; //boolean for on or off shooter
     public boolean cycling = false; //boolean for cycling or not
     public boolean passedThreshold = false; //boolean for once the shooter reaches velocity
-    public static double LOWER_THRESHOLD_RPM = 3000;
+    public static double LOWER_THRESHOLD_RPM = 3800;
     public int ballsShot = 0;
     private boolean wasAboveThreshold = false; //boolean for keeping track of balls shot
-    private ElapsedTime pitchUpTimer;
-    public double currentPitchUpTime;
-    public double currentPitchUpDebounceSeconds = CLOSE_PITCH_DEBOUNCE; //set to close by default
-    private ElapsedTime pitchDownTimer;
-    public double currentPitchDownTime;
-    public static double PITCH_DOWN_DEBOUNCE_SECONDS = 0.18;
-    private ElapsedTime pitchTimeoutTimer; //timer for lowering the pitch when enough time has passed, overriding threshold
-    public double currentPitchTimeoutTime;
-    public static double PITCH_TIMEOUT_SECONDS = 1.2;
+    private ElapsedTime shooterClosedTimer;
+    public double currentShooterClosedTime;
+    public double currentShooterClosedSeconds = CLOSE_PITCH_DEBOUNCE; //set to close by default
+    private ElapsedTime shooterOpenTimer;
+    public double currentShooterOpenTime;
+    public static double SHOOTER_OPEN_SECONDS = 0.18;
+    private ElapsedTime shooterTimeoutTimer; //timer for lowering the pitch when enough time has passed, overriding threshold
+    public double currentShooterTimeoutTime;
+    public static double SHOOTER_TIMEOUT_SECONDS = 1.2;
 //    private boolean timerDebounce = false; //debounce to prevent timer from resetting when it has already reset
 
     //test servo variables
@@ -75,9 +78,9 @@ public class Shooter{
     public Shooter(OpMode linearOpmode) {
         this.opMode = linearOpmode;
 
-        pitchUpTimer = new ElapsedTime();
-        pitchDownTimer = new ElapsedTime();
-        pitchTimeoutTimer = new ElapsedTime();
+        shooterClosedTimer = new ElapsedTime();
+        shooterOpenTimer = new ElapsedTime();
+        shooterTimeoutTimer = new ElapsedTime();
 
         shooterLeft = opMode.hardwareMap.get(DcMotor.class, "shooterleft");
         shooterRight = opMode.hardwareMap.get(DcMotor.class, "shooterright");
@@ -86,6 +89,8 @@ public class Shooter{
         shooterRampLeft = opMode.hardwareMap.get(Servo.class, "rampleft" );
         shooterPitchRight = opMode.hardwareMap.get(Servo.class, "pitchright" );
         shooterPitchLeft = opMode.hardwareMap.get(Servo.class, "pitchleft" );
+
+        shooterGate = opMode.hardwareMap.get(Servo.class, "gate");
 
         TESTSERVO = opMode.hardwareMap.get(Servo.class, testServo);
 
@@ -146,6 +151,10 @@ public class Shooter{
         shooterPitchLeft.setPosition(position);
     }
 
+    public void setGatePosition(double position){
+        shooterGate.setPosition(position);
+    }
+
     public boolean shooterAtTargetVelocity() {
         return ((DcMotorEx) shooterLeft).getVelocity() >= currentTargetRPMTicksPerSecond - (targetRPMToleranceRPM * RPM_TO_TICKS_PER_SECOND)
                 && ((DcMotorEx) shooterRight).getVelocity() >= currentTargetRPMTicksPerSecond - (targetRPMToleranceRPM * RPM_TO_TICKS_PER_SECOND);
@@ -170,11 +179,11 @@ public class Shooter{
 
     public void toggleShooterClose(){
         if (currentGamepad.x && !previousGamepad.x){
-            resetPitchUpTimer();
-            resetPitchDownTimer();
+            resetShooterClosedTimer();
+            resetShooterOpenTimer();
 
             setCurrentTargetRPMTicksPerSecond(CLOSE_TARGET_RPM);
-            setCurrentPitchUpDebounceSeconds(CLOSE_PITCH_DEBOUNCE);
+            setCurrentShooterClosedSeconds(CLOSE_PITCH_DEBOUNCE);
 
             on = !on;
         }
@@ -191,11 +200,11 @@ public class Shooter{
     public void toggleShooterFar(){
 
         if (currentGamepad.y && !previousGamepad.y){
-            resetPitchUpTimer();
-            resetPitchDownTimer();
+            resetShooterClosedTimer();
+            resetShooterOpenTimer();
 
             setCurrentTargetRPMTicksPerSecond(FAR_TARGET_RPM);
-            setCurrentPitchUpDebounceSeconds(FAR_PITCH_DEBOUNCE);
+            setCurrentShooterClosedSeconds(FAR_PITCH_DEBOUNCE);
 
 
             on = !on;
@@ -215,19 +224,31 @@ public class Shooter{
 //        opMode.telemetry.addLine("controlling pitch");
 
         //TODO: can change cycling boolean to separate between sorting mode for the gate and normal shooting mode
-        if ((passedThreshold && !cycling && pitchUpDebounceTimerOver())){
+        if ((passedThreshold && !cycling && shooterClosedTimerOver())){
             setPitchPosition(Shooter.PITCH_SCORE_POSITION);
         }
-        else if (!passedThreshold && !cycling && pitchDownDebounceTimerOver()){
+        else if (!passedThreshold && !cycling && shooterOpenTimerOver()){
             setPitchPosition(Shooter.PITCH_INTAKE_POSITION); //automatically raise the pitch when not ready to shoot
+        }
+    }
+
+    public void controlShooterGate(){
+//        opMode.telemetry.addLine("controlling pitch");
+
+        //TODO: can change cycling boolean to separate between sorting mode for the gate and normal shooting mode
+        if ((passedThreshold && !cycling && shooterClosedTimerOver())){
+            setPitchPosition(Shooter.GATE_OPEN_POSITION);
+        }
+        else if (!passedThreshold && !cycling && shooterOpenTimerOver()){
+            setPitchPosition(Shooter.GATE_CLOSED_POSITION); //automatically raise the pitch when not ready to shoot
         }
     }
 
     public void update(){
         //update the debounce timers
-        updatePitchDownDebounceTimer();
-        updatePitchUpDebounceTimer();
-        updatePitchTimeoutTimer();
+        updateShooterOpenTimer();
+        updateShooterClosedTimer();
+        updateShooterTimeoutTimer();
 
         //check if shooter is past threshold
         updateShooterThreshold();
@@ -237,42 +258,43 @@ public class Shooter{
     public void setCurrentTargetRPMTicksPerSecond(double RPM) {
         currentTargetRPMTicksPerSecond = RPM * RPM_TO_TICKS_PER_SECOND;
     }
-    public void setCurrentPitchUpDebounceSeconds(double seconds){
-        currentPitchUpDebounceSeconds = seconds;
+    public void setCurrentShooterClosedSeconds(double seconds){
+        currentShooterClosedSeconds = seconds;
     }
+    
     public void updateGamepad(Gamepad gamepad) { //debounce method
         previousGamepad.copy(currentGamepad);
 
         currentGamepad.copy(gamepad);
     }
 
-    public void resetPitchDownTimer(){
-        pitchDownTimer.reset();
+    public void resetShooterOpenTimer(){
+        shooterOpenTimer.reset();
     }
-    public void updatePitchDownDebounceTimer(){
-        currentPitchDownTime = pitchDownTimer.time();
+    public void updateShooterOpenTimer(){
+        currentShooterOpenTime = shooterOpenTimer.time();
     }
-    public boolean pitchDownDebounceTimerOver(){
-        return currentPitchDownTime > PITCH_DOWN_DEBOUNCE_SECONDS;
+    public boolean shooterOpenTimerOver(){
+        return currentShooterOpenTime > SHOOTER_OPEN_SECONDS;
     }
-    public void resetPitchUpTimer(){
-        pitchUpTimer.reset();
+    public void resetShooterClosedTimer(){
+        shooterClosedTimer.reset();
     }
-    public void updatePitchUpDebounceTimer(){
-        currentPitchUpTime = pitchUpTimer.time();
+    public void updateShooterClosedTimer(){
+        currentShooterClosedTime = shooterClosedTimer.time();
     }
-    public boolean pitchUpDebounceTimerOver(){
-        return currentPitchUpTime > currentPitchUpDebounceSeconds;
+    public boolean shooterClosedTimerOver(){
+        return currentShooterClosedTime > currentShooterClosedSeconds;
     }
 
-    public void resetPitchTimeoutTimer(){
-        pitchTimeoutTimer.reset();
+    public void resetShooterTimeoutTimer(){
+        shooterTimeoutTimer.reset();
     }
-    public void updatePitchTimeoutTimer(){
-        currentPitchTimeoutTime = pitchUpTimer.time();
+    public void updateShooterTimeoutTimer(){
+        currentShooterTimeoutTime = shooterClosedTimer.time();
     }
-    public boolean pitchTimeoutTimerOver(){
-        return currentPitchTimeoutTime > PITCH_TIMEOUT_SECONDS;
+    public boolean shooterTimeoutTimerOver(){
+        return currentShooterTimeoutTime > SHOOTER_TIMEOUT_SECONDS;
     }
 
     public void updateShooterThreshold(){
@@ -288,12 +310,12 @@ public class Shooter{
 //        opMode.telemetry.addLine("counting shot balls");
         if (on && passedThreshold) {
             wasAboveThreshold = true;
-            resetPitchDownTimer();
+            resetShooterOpenTimer();
         }
         if (on && wasAboveThreshold && shooterAtLowerThresholdVelocity()) {
             wasAboveThreshold = false;
 
-            resetPitchUpTimer();
+            resetShooterClosedTimer();
             ballsShot += 1;
         }
     }
