@@ -46,14 +46,10 @@ public class testOpmode extends LinearOpMode {
             } else if (gamepad1.dpad_left) {
                 intake.setFlickerPosition(0);
             }
-            if (gamepad1.x){
-//                drivetrain.grounder();
-                telemetry.addLine("Grounded");
-            }
-            telemetry.update();
-//            shooter.controlTestServo(gamepad1);
+
+            shooter.testControlServo(gamepad1);
 //            shooter.testControlRampPosition(gamepad1);
-            shooter.testControlPitchPosition(gamepad1);
+//            shooter.testControlPitchPosition(gamepad1);
 //            colorDetector.telemetryColors();
         }
     }

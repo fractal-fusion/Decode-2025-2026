@@ -14,15 +14,16 @@ public class productionOpmode extends LinearOpMode {
         Drivetrain drivetrain = new Drivetrain(this);
         Shooter shooter = new Shooter(this);
         Intake intake = new Intake(this, Intake.FLICKER_OPEN_POSITION);
-        Camera camera = new Camera(this, 3);
+//         Camera camera = new Camera(this, 3);
+        Limelight limelight = new Limelight(this);
         Follower follower;
 
 //        ColorDetector colorDetector = new ColorDetector(this);
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(PoseStorage.currentPose == null ? new Pose() : PoseStorage.currentPose); //get pose handed off from auto otherwise just create a new one
 
-        camera.setExposure(6); //low exposure and high gain to reduce blur for autoalignment
-        camera.setGain(250);
+//        camera.setExposure(6); //low exposure and high gain to reduce blur for autoalignment not needed
+//        camera.setGain(250);
 
         telemetry.addLine("Robot Ready.");
         telemetry.update();
@@ -44,7 +45,7 @@ public class productionOpmode extends LinearOpMode {
 
             //drivetrain controls (field centric drive + autoalignment)
             if (gamepad1.a) {
-                drivetrain.driveAutoAlign(gamepad1.left_stick_x, gamepad1.left_stick_y, drivetrain.calculateAutoAlignPower(-camera.getBearing()));
+                drivetrain.driveAutoAlign(gamepad1.left_stick_x, gamepad1.left_stick_y, drivetrain.calculateAutoAlignPower(-limelight.getBearing()));
             }
             else if (gamepad1.x) {
                 drivetrain.resetIMU();
@@ -117,16 +118,16 @@ public class productionOpmode extends LinearOpMode {
             shooter.controlShooterPitch();
 
             //DYNAMIC FAR AND CLOSE
-            if (camera.isFar) {
-                camera.setHeadingOffset(Camera.HEADING_OFFSET_FAR);
+            if (limelight.isFar) {
+//                camera.setHeadingOffset(Camera.HEADING_OFFSET_FAR);
                 shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_FAR);
             }
             else {
-                camera.setHeadingOffset(Camera.HEADING_OFFSET_CLOSE);
+//                camera.setHeadingOffset(Camera.HEADING_OFFSET_CLOSE);
                 shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
             }
 
-            camera.updateIsFar();
+            limelight.updateIsFar();
 
 //            telemetry.addData("intake current time:", intake.currentTime);
             telemetry.addData("shooter left velocity:", shooter.shooterLeftGetVelocity() * Shooter.TICKS_PER_SECOND_TO_RPM);
@@ -136,9 +137,9 @@ public class productionOpmode extends LinearOpMode {
 
 
 //            telemetry.addData("shooter at velocity:", shooter.shooterAtTargetVelocity());
-            telemetry.addData("apriltag range:", camera.getRange());
-            telemetry.addData("apriltag bearing:", camera.getBearing());
-            telemetry.addData("drive power:", drivetrain.calculateAutoAlignPower(camera.getBearing()));
+            telemetry.addData("apriltag range:", limelight.getRange());
+            telemetry.addData("apriltag bearing:", limelight.getBearing());
+            telemetry.addData("drive power:", drivetrain.calculateAutoAlignPower(limelight.getBearing()));
 
             telemetry.addData("pitch up time:", shooter.currentPitchUpTime);
             telemetry.addData("pitch down time:", shooter.currentPitchDownTime);

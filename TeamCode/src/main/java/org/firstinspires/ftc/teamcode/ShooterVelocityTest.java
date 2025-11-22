@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-@TeleOp
+@TeleOp(name="shooterVelocityTest", group="Robot")
 @Config
 public class ShooterVelocityTest extends LinearOpMode {
 
@@ -20,10 +20,13 @@ public class ShooterVelocityTest extends LinearOpMode {
     @Override
     public void runOpMode() {
         motor = hardwareMap.get(DcMotorEx.class, hardwareMapName);
+
         waitForStart();
 
 
         while (opModeIsActive()) {
+            motor.setPower(1);
+
             currentVelocity = motor.getVelocity();
 
             if (currentVelocity > maxVelocity) {

@@ -38,7 +38,7 @@ public class Shooter{
     public static double CLOSE_RAMP_SCORE_POSITION = 0.25;
     public static double CLOSE_TARGET_RPM = 4120;
     public static double CLOSE_AUTO_TARGET_RPM = 4120;
-    public static double CLOSE_PITCH_DEBOUNCE = 1.5;
+    public static double CLOSE_PITCH_DEBOUNCE = 0.4;
 
     public static double CLOSE_TARGET_RPM_TICKS_PER_SECOND = CLOSE_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
 
@@ -62,14 +62,14 @@ public class Shooter{
     public double currentPitchUpDebounceSeconds = CLOSE_PITCH_DEBOUNCE; //set to close by default
     private ElapsedTime pitchDownTimer;
     public double currentPitchDownTime;
-    public static double PITCH_DOWN_DEBOUNCE_SECONDS = 0.15;
+    public static double PITCH_DOWN_DEBOUNCE_SECONDS = 0.18;
     private ElapsedTime pitchTimeoutTimer; //timer for lowering the pitch when enough time has passed, overriding threshold
     public double currentPitchTimeoutTime;
     public static double PITCH_TIMEOUT_SECONDS = 1.2;
 //    private boolean timerDebounce = false; //debounce to prevent timer from resetting when it has already reset
 
     //test servo variables
-    public static String testServo = "rampright";
+    public static String testServo = "gate";
     public Servo TESTSERVO;
     private double testPosition = 0.5;
     public Shooter(OpMode linearOpmode) {
@@ -103,8 +103,8 @@ public class Shooter{
         shooterRampRight.setPosition(0); //zero ramp servoes on initialization
         shooterRampLeft.setPosition(0);
 
-        ((DcMotorEx) shooterLeft).setVelocityPIDFCoefficients(1.17025,0.117025,0,11.7025); //TODO: tune this pidf
-        ((DcMotorEx) shooterRight).setVelocityPIDFCoefficients(1.17025,0.117025,0,11.7025);
+        ((DcMotorEx) shooterLeft).setVelocityPIDFCoefficients(1.34290,0.134290,0,13.4290);
+        ((DcMotorEx) shooterRight).setVelocityPIDFCoefficients(1.34290,0.134290,0,13.4290);
 
         setCurrentTargetRPMTicksPerSecond(CLOSE_TARGET_RPM); //default the current target rpm ticks per second to close target rpm
         setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
@@ -214,13 +214,12 @@ public class Shooter{
     public void controlShooterPitch(){
 //        opMode.telemetry.addLine("controlling pitch");
 
+        //TODO: can change cycling boolean to separate between sorting mode for the gate and normal shooting mode
         if ((passedThreshold && !cycling && pitchUpDebounceTimerOver())){
             setPitchPosition(Shooter.PITCH_SCORE_POSITION);
         }
         else if (!passedThreshold && !cycling && pitchDownDebounceTimerOver()){
             setPitchPosition(Shooter.PITCH_INTAKE_POSITION); //automatically raise the pitch when not ready to shoot
-
-//            resetPitchDownTimer();
         }
     }
 
