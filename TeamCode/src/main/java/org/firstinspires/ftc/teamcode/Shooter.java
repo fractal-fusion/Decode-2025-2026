@@ -110,7 +110,7 @@ public class Shooter{
         shooterRampRight.setPosition(0); //zero ramp servoes on initialization
         shooterRampLeft.setPosition(0);
 
-        ((DcMotorEx) shooterLeft).setVelocityPIDFCoefficients(1.34290,0.134290,0,13.4290);
+        ((DcMotorEx) shooterLeft).setVelocityPIDFCoefficients(1.34290,0.134290,0,13.4290); //TODO: change these pidfs to be near max velocity
         ((DcMotorEx) shooterRight).setVelocityPIDFCoefficients(1.34290,0.134290,0,13.4290);
 
         setCurrentTargetRPMTicksPerSecond(CLOSE_TARGET_RPM); //default the current target rpm ticks per second to close target rpm
@@ -224,8 +224,6 @@ public class Shooter{
 
     public void controlShooterPitch(){
 //        opMode.telemetry.addLine("controlling pitch");
-
-        //TODO: can change cycling boolean to separate between sorting mode for the gate and normal shooting mode
         if ((passedThreshold && !cycling && shooterClosedTimerOver())){
             setPitchPosition(Shooter.PITCH_SCORE_POSITION);
         }

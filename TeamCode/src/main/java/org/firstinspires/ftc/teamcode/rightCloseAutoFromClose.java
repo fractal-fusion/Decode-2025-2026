@@ -31,7 +31,7 @@ public class rightCloseAutoFromClose extends LinearOpMode {
     private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop, goToPark; //define path chains (muliple paths interpolated)
 
     private final Pose startPose = new Pose(118, 131.5, Math.toRadians(218)); // Start Pose of our robot
-    private final Pose scorePose = new Pose(86, 90, scoreHeading); //TODO: change this to not be middle
+    private final Pose scorePose = new Pose(86, 90, scoreHeading);
     private final Pose grabPickupTopPose = new Pose(128, 84, Math.toRadians(0));
     private final Pose grabPickupTopPoseControlPoint1 = new Pose(63.138, 78.203);
     private final Pose grabPickupMiddlePose = new Pose(130, 58, Math.toRadians(0));
