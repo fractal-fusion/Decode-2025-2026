@@ -25,7 +25,7 @@ public class Drivetrain {
 
     //constants used for tuning auto alignment
     public static double AUTO_ALIGN_MAX_SPEED = 0.4; //auto alignment speed is clipped to minimum negative this and maximum positive this (bilateral tolerance)
-    public static double AUTO_ALIGN_GAIN = 0.02; //converts degrees to power, at a 1:100 ratio (ex: 25 degrees = 0.25 power)
+    public static double AUTO_ALIGN_GAIN = 0.012; //converts tx from limelight to power
 
     public Gamepad currentGamepad = new Gamepad();
     public Gamepad previousGamepad = new Gamepad();

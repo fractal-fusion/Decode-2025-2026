@@ -25,6 +25,8 @@ public class productionOpmodeGateVersion extends LinearOpMode {
 //        camera.setExposure(6); //low exposure and high gain to reduce blur for autoalignment not needed
 //        camera.setGain(250);
 
+        shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
+
         telemetry.addLine("Robot Ready.");
         telemetry.update();
 

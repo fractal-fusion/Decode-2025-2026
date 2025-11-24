@@ -24,7 +24,7 @@ import com.pedropathing.util.Timer;
         private int pathState = 0; //finite state machine variable
         private boolean init = true;
         public static double INTAKE_DELAY_TIME = 0.5;
-        public static double RELEASE_BALLS_WAIT_TIME = 1.5; //time to wait at the chamber
+        public static double RELEASE_BALLS_WAIT_TIME = 0.15; //time to wait at the chamber
         public static double SCORE_HEADING_OFFSET = -5; //score heading offset since center of goals are not exactly 45 degrees
 
         //variables to keep track of how long each score took in order to implement failsafes based on the opmode timer
@@ -37,16 +37,17 @@ import com.pedropathing.util.Timer;
 
         private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop, goToReleaseBalls, goToPark; //define path chains (muliple paths interpolated)
 
-        private final Pose startPose = new Pose(88, 8, Math.toRadians(90)); // Start Pose of our robot
-        private final Pose scorePose = new Pose(86, 90, scoreHeading);
+        private final Pose startPose = new Pose(89.5, 8, Math.toRadians(90)); // Start Pose of our robot
+        private final Pose scorePose = new Pose(98, 100, scoreHeading);
         private final Pose grabPickupTopPose = new Pose(128, 84, Math.toRadians(0));
-        private final Pose grabPickupTopPoseControlPoint1 = new Pose(63.138, 78.203);
-        private final Pose releaseBallsPose = new Pose(130, 73, Math.toRadians(0));
-        private final Pose releaseBallsPoseControlPoint1 = new Pose(103.236, 80.418);
-        private final Pose grabPickupMiddlePose = new Pose(131, 60, Math.toRadians(0));
-        private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(62.916, 56.713);
-        private final Pose grabPickupBottomPose = new Pose(131, 36, Math.toRadians(0));
-        private final Pose grabPickupBottomPoseControlPoint1 = new Pose(58.043, 29.243);
+        private final Pose grabPickupTopPoseControlPoint1 = new Pose(42.978, 82.633);
+        private final Pose releaseBallsPose = new Pose(130, 69, Math.toRadians(0));
+        private final Pose releaseBallsPoseControlPoint1 = new Pose(94.818, 69.784);
+        private final Pose grabPickupMiddlePose = new Pose(132, 60, Math.toRadians(0));
+        private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(33.452, 55.606);
+        private final Pose scorePickupMiddlePoseControlPoint1= new Pose(102.793, 69.341);
+        private final Pose grabPickupBottomPose = new Pose(132, 36, Math.toRadians(0));
+        private final Pose grabPickupBottomPoseControlPoint1 = new Pose(27.470, 28.356);
         private final Pose parkPose = new Pose(86,110, Math.toRadians(220));
 
         public void buildPaths() {
@@ -74,7 +75,7 @@ import com.pedropathing.util.Timer;
                     .addPoseCallback(new Pose(126, 58), intake::holdFlicker, 0.5)
                     .build();
             scorePickupMiddle = follower.pathBuilder()
-                    .addPath(new BezierLine(grabPickupMiddlePose, scorePose))
+                    .addPath(new BezierCurve(grabPickupMiddlePose, scorePickupMiddlePoseControlPoint1, scorePose))
                     .setLinearHeadingInterpolation(grabPickupMiddlePose.getHeading(), scorePose.getHeading())
                     .build();
             grabPickupBottom = follower.pathBuilder()
@@ -109,7 +110,7 @@ import com.pedropathing.util.Timer;
             follower.setStartingPose(startPose);
             follower.setMaxPower(0.8); //decrease max power to prevent overshoot
 
-            shooter.setPitchPosition(Shooter.PITCH_INTAKE_POSITION); //set pitch to intake position on initialize
+            shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION); //set gate to closed position on initialize
 
             buildPaths(); //build all paths
 
@@ -159,14 +160,17 @@ import com.pedropathing.util.Timer;
                     }
                     else{ //move to scoring position
                         follower.followPath(scorePreload, true);
+                        intializeBurstClose(); //prestart shooter
+                        turnOnShooterAuto();
                         setPathState(1);
                     }
                     break;
                 case 1: //score preloads
                     if (!follower.isBusy()) {
                         if(init){
-                            intializeBurstClose();
-                            turnOnShooterAuto();
+//                            intializeBurstClose();
+//                            turnOnShooterAuto();
+                            shooter.setGatePosition(Shooter.GATE_OPEN_POSITION);
 
                             init = false;
                         }
@@ -179,6 +183,7 @@ import com.pedropathing.util.Timer;
                             if (shooter.ballsShot >= 3) {
                                 scorePreloadTime = opmodeTimer.getElapsedTimeSeconds();
 
+                                shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                                 turnOffShooterAuto();
                                 setPathState(2); //end
                             }
@@ -214,14 +219,17 @@ import com.pedropathing.util.Timer;
                 case 4: //move to score position for top row
                     if (!follower.isBusy()) {
                         follower.followPath(scorePickupTop, true);
+                        intializeBurstClose(); //prestart shooter
+                        turnOnShooterAuto();
                         setPathState(5);
                     }
                     break;
                 case 5: //score top row
                     if (!follower.isBusy()) {
                         if(init){
-                            intializeBurstClose();
-                            turnOnShooterAuto();
+//                            intializeBurstClose();
+//                            turnOnShooterAuto();
+                            shooter.setGatePosition(Shooter.GATE_OPEN_POSITION);
 
                             init = false;
                         }
@@ -234,6 +242,7 @@ import com.pedropathing.util.Timer;
                             if (shooter.ballsShot >= 6) {
                                 scorePickupTopTime = opmodeTimer.getElapsedTimeSeconds();
 
+                                shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                                 turnOffShooterAuto();
                                 setPathState(6);
                             }
@@ -260,6 +269,8 @@ import com.pedropathing.util.Timer;
                         }
                         else{
                             follower.followPath(scorePickupMiddle, true);
+                            intializeBurstClose(); //prestart shooter
+                            turnOnShooterAuto();
                             setPathState(8);
                         }
                     }
@@ -267,8 +278,9 @@ import com.pedropathing.util.Timer;
                 case 8: //score middle row
                     if (!follower.isBusy()) {
                         if(init){
-                            intializeBurstClose();
-                            turnOnShooterAuto();
+//                            intializeBurstClose();
+//                            turnOnShooterAuto();
+                            shooter.setGatePosition(Shooter.GATE_OPEN_POSITION);
 
                             init = false;
                         }
@@ -281,8 +293,8 @@ import com.pedropathing.util.Timer;
                             if (shooter.ballsShot >= 9) {
                                 scorePickupMiddleTime = opmodeTimer.getElapsedTimeSeconds();
 
+                                shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                                 turnOffShooterAuto();
-                                intake.turnOffIntake();
                                 setPathState(9);
                             }
                         }
@@ -308,6 +320,8 @@ import com.pedropathing.util.Timer;
                         }
                         else{
                             follower.followPath(scorePickupBottom, true);
+                            intializeBurstClose(); //prestart shooter
+                            turnOnShooterAuto();
                             setPathState(11);
                         }
                     }
@@ -315,8 +329,9 @@ import com.pedropathing.util.Timer;
                 case 11: //score bottom row
                     if (!follower.isBusy()) {
                         if(init){
-                            intializeBurstClose();
-                            turnOnShooterAuto();
+//                            intializeBurstClose();
+//                            turnOnShooterAuto();
+                            shooter.setGatePosition(Shooter.GATE_OPEN_POSITION);
 
                             init = false;
                         }
@@ -329,6 +344,7 @@ import com.pedropathing.util.Timer;
                             if (shooter.ballsShot >= 12) {
                                 scorePickupBottomTime = opmodeTimer.getElapsedTimeSeconds();
 
+                                shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                                 turnOffShooterAuto();
                                 intake.turnOffIntake();
                                 setPathState(12);
