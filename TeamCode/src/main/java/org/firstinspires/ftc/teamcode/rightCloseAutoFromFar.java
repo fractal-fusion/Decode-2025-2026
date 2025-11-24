@@ -180,7 +180,7 @@ import com.pedropathing.util.Timer;
                                 intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
                             }
 
-                            if (shooter.ballsShot >= 3) {
+                            if (shooter.ballsShot >= 3 || opmodeTimer.getElapsedTimeSeconds() > 4) {
                                 scorePreloadTime = opmodeTimer.getElapsedTimeSeconds();
 
                                 shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
@@ -239,7 +239,7 @@ import com.pedropathing.util.Timer;
                                 intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
                             }
 
-                            if (shooter.ballsShot >= 6) {
+                            if (shooter.ballsShot >= 6 || opmodeTimer.getElapsedTimeSeconds() > 13) {
                                 scorePickupTopTime = opmodeTimer.getElapsedTimeSeconds();
 
                                 shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
@@ -290,7 +290,7 @@ import com.pedropathing.util.Timer;
                                 intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
                             }
 
-                            if (shooter.ballsShot >= 9) {
+                            if (shooter.ballsShot >= 9 || opmodeTimer.getElapsedTimeSeconds() > 19) {
                                 scorePickupMiddleTime = opmodeTimer.getElapsedTimeSeconds();
 
                                 shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
@@ -341,7 +341,7 @@ import com.pedropathing.util.Timer;
                                 intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
                             }
 
-                            if (shooter.ballsShot >= 12) {
+                            if (shooter.ballsShot >= 12 || opmodeTimer.getElapsedTimeSeconds() > 26) {
                                 scorePickupBottomTime = opmodeTimer.getElapsedTimeSeconds();
 
                                 shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
