@@ -27,8 +27,8 @@ public class rightCloseAutoFromFar extends LinearOpMode {
     public static double RELEASE_BALLS_WAIT_TIME = 0.15; //time to wait at the chamber
     public static double HEADING_INTERPOLATION_END_PERCENTAGE = 0.65;
     public static double AUTO_Y_OFFSET = 0;
-
     public static double SCORE_HEADING_OFFSET = -5; //score heading offset since center of goals are not exactly 45 degrees
+    public static double MAX_POWER = 0.9;
 
     //variables to keep track of how long each score took in order to implement failsafes based on the opmode timer
     private double scorePreloadTime = 0.0;
@@ -111,7 +111,7 @@ public class rightCloseAutoFromFar extends LinearOpMode {
 
         follower = Constants.createFollower(hardwareMap); //create pedropathing follower
         follower.setStartingPose(startPose);
-        follower.setMaxPower(0.8); //decrease max power to prevent overshoot
+        follower.setMaxPower(MAX_POWER);
 
         shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION); //set gate to closed position on initialize
 
@@ -186,6 +186,7 @@ public class rightCloseAutoFromFar extends LinearOpMode {
                         if (shooter.ballsShot >= 3 || opmodeTimer.getElapsedTimeSeconds() > 4) {
                             scorePreloadTime = opmodeTimer.getElapsedTimeSeconds();
 
+                            shooter.ballsShot = 3;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                             turnOffShooterAuto();
                             setPathState(2); //end
@@ -245,6 +246,7 @@ public class rightCloseAutoFromFar extends LinearOpMode {
                         if (shooter.ballsShot >= 6 || opmodeTimer.getElapsedTimeSeconds() > 13) {
                             scorePickupTopTime = opmodeTimer.getElapsedTimeSeconds();
 
+                            shooter.ballsShot = 6;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                             turnOffShooterAuto();
                             setPathState(6);
@@ -296,6 +298,7 @@ public class rightCloseAutoFromFar extends LinearOpMode {
                         if (shooter.ballsShot >= 9 || opmodeTimer.getElapsedTimeSeconds() > 19) {
                             scorePickupMiddleTime = opmodeTimer.getElapsedTimeSeconds();
 
+                            shooter.ballsShot = 9;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                             turnOffShooterAuto();
                             setPathState(9);
@@ -347,6 +350,7 @@ public class rightCloseAutoFromFar extends LinearOpMode {
                         if (shooter.ballsShot >= 12 || opmodeTimer.getElapsedTimeSeconds() > 26) {
                             scorePickupBottomTime = opmodeTimer.getElapsedTimeSeconds();
 
+                            shooter.ballsShot = 12;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                             turnOffShooterAuto();
                             intake.turnOffIntake();
