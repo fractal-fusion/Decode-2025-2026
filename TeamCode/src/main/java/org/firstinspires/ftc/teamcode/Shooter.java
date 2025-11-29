@@ -76,7 +76,7 @@ public class Shooter{
     public static double I = 0.128498;
     public static double D = 0;
     public static double F = 12.849804;
-    public static double SHOOTER_RIGHT_PID_OFFSET = 9.002; //right motor is always slower
+    public static double PID_OFFSET = 9.002; //right motor is always slower
 
     //test servo variables
     public static String testServo = "gate";
@@ -115,8 +115,8 @@ public class Shooter{
         shooterRampRight.setPosition(0); //zero ramp servoes on initialization
         shooterRampLeft.setPosition(0);
 
-        ((DcMotorEx) shooterLeft).setVelocityPIDFCoefficients(P, I, D, F); //TODO: change these pidfs to be near max velocity
-        ((DcMotorEx) shooterRight).setVelocityPIDFCoefficients(P + SHOOTER_RIGHT_PID_OFFSET * 0.01, I + SHOOTER_RIGHT_PID_OFFSET * 0.001, D, F + SHOOTER_RIGHT_PID_OFFSET * 0.1);
+        ((DcMotorEx) shooterLeft).setVelocityPIDFCoefficients(P + PID_OFFSET * 0.01, I + PID_OFFSET * 0.001, D, F + PID_OFFSET * 0.1); //TODO: change these pidfs to be near max velocity
+        ((DcMotorEx) shooterRight).setVelocityPIDFCoefficients(P + PID_OFFSET * 0.01, I + PID_OFFSET * 0.001, D, F + PID_OFFSET * 0.1);
 
         setCurrentTargetRPMTicksPerSecond(CLOSE_TARGET_RPM); //default the current target rpm ticks per second to close target rpm
         setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
