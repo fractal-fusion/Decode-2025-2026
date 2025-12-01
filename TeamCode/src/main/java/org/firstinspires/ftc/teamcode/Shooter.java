@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -71,6 +72,8 @@ public class Shooter{
     private ElapsedTime shooterTimeoutTimer; //timer for lowering the pitch when enough time has passed, overriding threshold
     public double currentShooterTimeoutTime;
     public static double SHOOTER_TIMEOUT_SECONDS = 1.2;
+    private Timer atVelocityTimer = new Timer();
+    public double atVelocityTime;
 //    private boolean timerDebounce = false; //debounce to prevent timer from resetting when it has already reset
     public static double P = 1.28498;
     public static double I = 0.128498;
@@ -88,6 +91,7 @@ public class Shooter{
         shooterClosedTimer = new ElapsedTime();
         shooterOpenTimer = new ElapsedTime();
         shooterTimeoutTimer = new ElapsedTime();
+//        atVelocityTimer = new ElapsedTime();
 
         shooterLeft = opMode.hardwareMap.get(DcMotor.class, "shooterleft");
         shooterRight = opMode.hardwareMap.get(DcMotor.class, "shooterright");
@@ -120,8 +124,6 @@ public class Shooter{
 
         setCurrentTargetRPMTicksPerSecond(CLOSE_TARGET_RPM); //default the current target rpm ticks per second to close target rpm
         setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
-
-
     }
 
     public void turnOnShooter(){
@@ -188,6 +190,7 @@ public class Shooter{
         if (currentGamepad.x && !previousGamepad.x){
             resetShooterClosedTimer();
             resetShooterOpenTimer();
+            atVelocityTimer.resetTimer();
 
             setCurrentTargetRPMTicksPerSecond(CLOSE_TARGET_RPM);
             setCurrentShooterClosedSeconds(CLOSE_DEBOUNCE);
@@ -209,6 +212,7 @@ public class Shooter{
         if (currentGamepad.y && !previousGamepad.y){
             resetShooterClosedTimer();
             resetShooterOpenTimer();
+            atVelocityTimer.resetTimer();
 
             setCurrentTargetRPMTicksPerSecond(FAR_TARGET_RPM);
             setCurrentShooterClosedSeconds(FAR_DEBOUNCE);
@@ -240,6 +244,7 @@ public class Shooter{
     public void controlShooterGate(){
         //TODO: can change cycling boolean to separate between sorting mode for the gate and normal shooting mode
         if ((passedThreshold && !cycling && shooterClosedTimerOver())){
+            atVelocityTime = atVelocityTimer.getElapsedTimeSeconds();
             setGatePosition(Shooter.GATE_OPEN_POSITION);
         }
         else if (!passedThreshold && !cycling && shooterOpenGateTimerOver()){

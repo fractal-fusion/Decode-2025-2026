@@ -2,11 +2,13 @@ package org.firstinspires.ftc.teamcode;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 
 @TeleOp(name="productionOpmodePitchVersion", group="Robot")
+@Disabled
 public class productionOpmodePitchVersion extends LinearOpMode {
 
     @Override
@@ -133,6 +135,7 @@ public class productionOpmodePitchVersion extends LinearOpMode {
             telemetry.addData("shooter left velocity:", shooter.shooterLeftGetVelocity() * Shooter.TICKS_PER_SECOND_TO_RPM);
             telemetry.addData("shooter right velocity:", shooter.shooterRightGetVelocity() * Shooter.TICKS_PER_SECOND_TO_RPM);
             telemetry.addData("shooter at velocity:", shooter.shooterAtTargetVelocity());
+            telemetry.addData("shooter at velocity time:", shooter.atVelocityTime);
             telemetry.addData("balls shot:", shooter.ballsShot);
 
 

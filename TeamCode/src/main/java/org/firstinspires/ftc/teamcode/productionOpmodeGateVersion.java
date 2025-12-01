@@ -149,6 +149,9 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             telemetry.addData("pitch up debounce:", shooter.shooterClosedTimerOver());
             telemetry.addData("pitch down debounce:", shooter.shooterOpenPitchTimerOver());
 
+            //shooter at velocity time
+//            telemetry.addData("shooter at velocity time:", shooter.atVelocityTime);
+
             //grounded
             telemetry.addData("grounded: ", drivetrain.grounded);
 
