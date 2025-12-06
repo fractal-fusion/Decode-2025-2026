@@ -27,6 +27,7 @@ public class leftCloseAutoFromFar extends LinearOpMode {
     public static double RELEASE_BALLS_WAIT_TIME = 0.15; //time to wait at the chamber
     public static double HEADING_INTERPOLATION_END_PERCENTAGE = 0.65;
     public static double AUTO_Y_OFFSET = 0;
+    public static double RELEASE_BALLS_Y = 71.5;
     public static double SCORE_HEADING_OFFSET = 5; //score heading offset since center of goals are not exactly 45 degrees
     public double scoreHeading = Math.toRadians(135 + SCORE_HEADING_OFFSET);
     public static double MAX_POWER = 0.9;
@@ -42,12 +43,12 @@ public class leftCloseAutoFromFar extends LinearOpMode {
     private final Pose scorePose = new Pose(46, 100, scoreHeading);
     private final Pose grabPickupTopPose = new Pose(16, 84, Math.toRadians(180));
     private final Pose grabPickupTopPoseControlPoint1 = new Pose(84.407, 79.089);
-    private final Pose releaseBallsPose = new Pose(14, 69, Math.toRadians(180));
+    private final Pose releaseBallsPose = new Pose(14, RELEASE_BALLS_Y, Math.toRadians(180));
     private final Pose releaseBallsPoseControlPoint1 = new Pose(49.182, 69.784);
     private final Pose grabPickupMiddlePose = new Pose(12, 60, Math.toRadians(180));
     private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(88.394, 51.175);
     private final Pose scorePickupMiddlePoseControlPoint1 = new Pose(41.207, 69.341);
-    private final Pose grabPickupBottomPose = new Pose(12, 36, Math.toRadians(180));
+    private final Pose grabPickupBottomPose = new Pose(11.5, 36, Math.toRadians(180));
     private final Pose grabPickupBottomPoseControlPoint1 = new Pose(83.52, 24.812);
     private final Pose parkPose = new Pose(58,110, Math.toRadians(180));
 
@@ -60,7 +61,7 @@ public class leftCloseAutoFromFar extends LinearOpMode {
                 .addPath(new BezierCurve(scorePose, grabPickupTopPoseControlPoint1, grabPickupTopPose))
 //                    .addPath(new BezierLine(scorePose, grabPickupTopPose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), grabPickupTopPose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
-                .addPoseCallback(new Pose(20, 84), intake::holdFlicker, 0.5)
+                .addPoseCallback(new Pose(18, 84), intake::holdFlicker, 0.5)
                 .build();
         goToReleaseBalls = follower.pathBuilder()
                 .addPath(new BezierCurve(grabPickupTopPose, releaseBallsPoseControlPoint1, releaseBallsPose))
@@ -73,7 +74,7 @@ public class leftCloseAutoFromFar extends LinearOpMode {
         grabPickupMiddle = follower.pathBuilder()
                 .addPath(new BezierCurve(scorePose, grabPickupMiddlePoseControlPoint1, grabPickupMiddlePose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), grabPickupMiddlePose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
-                .addPoseCallback(new Pose(18, 58), intake::holdFlicker, 0.5)
+                .addPoseCallback(new Pose(14, 58), intake::holdFlicker, 0.5)
                 .build();
         scorePickupMiddle = follower.pathBuilder()
                 .addPath(new BezierCurve(grabPickupMiddlePose, scorePickupMiddlePoseControlPoint1, scorePose))
@@ -82,7 +83,7 @@ public class leftCloseAutoFromFar extends LinearOpMode {
         grabPickupBottom = follower.pathBuilder()
                 .addPath(new BezierCurve(scorePose, grabPickupBottomPoseControlPoint1, grabPickupBottomPose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), grabPickupBottomPose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
-                .addPoseCallback(new Pose(18, 36), intake::holdFlicker, 0.5)
+                .addPoseCallback(new Pose(14, 36), intake::holdFlicker, 0.5)
                 .build();
         scorePickupBottom = follower.pathBuilder()
                 .addPath(new BezierLine(grabPickupBottomPose, scorePose))
@@ -241,7 +242,7 @@ public class leftCloseAutoFromFar extends LinearOpMode {
                             intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
                         }
 
-                        if (shooter.ballsShot >= 6 || opmodeTimer.getElapsedTimeSeconds() > 13) {
+                        if (shooter.ballsShot >= 6 || opmodeTimer.getElapsedTimeSeconds() > 14) {
                             scorePickupTopTime = opmodeTimer.getElapsedTimeSeconds();
 
                             shooter.ballsShot = 6;
@@ -345,7 +346,7 @@ public class leftCloseAutoFromFar extends LinearOpMode {
                             intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
                         }
 
-                        if (shooter.ballsShot >= 12 || opmodeTimer.getElapsedTimeSeconds() > 26) {
+                        if (shooter.ballsShot >= 12 || opmodeTimer.getElapsedTimeSeconds() > 29.5) {
                             scorePickupBottomTime = opmodeTimer.getElapsedTimeSeconds();
 
                             shooter.ballsShot = 12;
