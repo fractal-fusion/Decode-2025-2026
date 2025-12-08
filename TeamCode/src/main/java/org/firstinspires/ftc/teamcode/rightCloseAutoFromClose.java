@@ -44,9 +44,9 @@ public class rightCloseAutoFromClose extends LinearOpMode {
 
     private final Pose startPose = new Pose(129, 115+AUTO_Y_OFFSET, Math.toRadians(180)); // Start Pose of our robot
     private final Pose scorePose = new Pose(98, 100, scoreHeading);
-    private final Pose grabPickupTopPose = new Pose(128, 84, Math.toRadians(0));
+    private final Pose grabPickupTopPose = new Pose(127.5, 84, Math.toRadians(0));
     private final Pose grabPickupTopPoseControlPoint1 = new Pose(59.593, 79.089);
-    private final Pose releaseBallsPose = new Pose(130, RELEASE_BALLS_Y, Math.toRadians(0));
+    private final Pose releaseBallsPose = new Pose(129.5, RELEASE_BALLS_Y, Math.toRadians(0));
     private final Pose releaseBallsPoseControlPoint1 = new Pose(94.818, 69.784);
     private final Pose grabPickupMiddlePose = new Pose(132, 60, Math.toRadians(0));
     private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(55.606, 51.175);
@@ -97,6 +97,7 @@ public class rightCloseAutoFromClose extends LinearOpMode {
         goToWallHumanPlayer = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, goToWallHumanPlayerPose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), goToWallHumanPlayerPose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
+                .setNoDeceleration()
                 .build();
         grabPickupHumanPlayer = follower.pathBuilder()
                 .addPath(new BezierLine(goToWallHumanPlayerPose, grabPickupHumanPlayerPose))
