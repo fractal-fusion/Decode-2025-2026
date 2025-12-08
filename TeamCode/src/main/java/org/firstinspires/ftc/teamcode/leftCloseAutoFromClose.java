@@ -177,7 +177,7 @@ public class leftCloseAutoFromClose extends LinearOpMode {
                         init = false;
                     }
                     else{
-                        if (pathTimer.getElapsedTimeSeconds() > INTAKE_DELAY_TIME) {
+                        if (pathTimer.getElapsedTimeSeconds() > 0.6) { //additional time to compensate for short path distance, not giving enough time for pid to adjust accordingly
                             intake.turnOnIntake();
                             intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
                         }
@@ -358,6 +358,7 @@ public class leftCloseAutoFromClose extends LinearOpMode {
                     }
                 }
                 break;
+            
             case 12:
                 if(!follower.isBusy()){
                     follower.followPath(goToPark);
