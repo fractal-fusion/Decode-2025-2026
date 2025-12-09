@@ -372,7 +372,7 @@ public class rightCloseAutoFromClose extends LinearOpMode {
                             intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
                         }
 
-                        if (shooter.ballsShot >= 12 || opmodeTimer.getElapsedTimeSeconds() > 24) {
+                        if (shooter.ballsShot >= 12 || opmodeTimer.getElapsedTimeSeconds() > 29) {
                             scorePickupBottomTime = opmodeTimer.getElapsedTimeSeconds();
 
                             shooter.ballsShot = 12;
