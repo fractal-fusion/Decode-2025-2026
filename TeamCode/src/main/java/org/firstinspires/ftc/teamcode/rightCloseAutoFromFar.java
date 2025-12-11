@@ -27,7 +27,7 @@ public class rightCloseAutoFromFar extends LinearOpMode {
     public static double RELEASE_BALLS_WAIT_TIME = 0.15; //time to wait at the chamber
     public static double HEADING_INTERPOLATION_END_PERCENTAGE = 0.65;
     public static double AUTO_Y_OFFSET = 0;
-    public static double RELEASE_BALLS_Y = 71.5;
+    public static double RELEASE_BALLS_Y = 74.5;
     public static double SCORE_HEADING_OFFSET = -5; //score heading offset since center of goals are not exactly 45 degrees
     public static double MAX_POWER = 0.9;
 
@@ -36,6 +36,10 @@ public class rightCloseAutoFromFar extends LinearOpMode {
     private double scorePickupTopTime = 0.0;
     private double scorePickupMiddleTime = 0.0;
     private double scorePickupBottomTime = 0.0;
+    public static double OVERRIDE_PRELOAD_TIME = 5;
+    public static double OVERRIDE_TOP_ROW_TIME = 12;
+    public static double OVERRIDE_MIDDLE_ROW_TIME = 19;
+    public static double OVERRIDE_BOTTOM_ROW_TIME = 25;
 
     public double scoreHeading = Math.toRadians(45 + SCORE_HEADING_OFFSET);
 
@@ -45,14 +49,14 @@ public class rightCloseAutoFromFar extends LinearOpMode {
     private final Pose scorePose = new Pose(98, 100, scoreHeading);
     private final Pose grabPickupTopPose = new Pose(128, 84, Math.toRadians(0));
     private final Pose grabPickupTopPoseControlPoint1 = new Pose(59.593, 79.089);
-    private final Pose releaseBallsPose = new Pose(130, RELEASE_BALLS_Y, Math.toRadians(0));
-    private final Pose releaseBallsPoseControlPoint1 = new Pose(94.818, 69.784);
+    private final Pose releaseBallsPose = new Pose(128.5, RELEASE_BALLS_Y, Math.toRadians(0));
+    private final Pose releaseBallsPoseControlPoint1 = new Pose(119.852, 75.323);
     private final Pose grabPickupMiddlePose = new Pose(132, 60, Math.toRadians(0));
     private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(55.606, 51.175);
     private final Pose scorePickupMiddlePoseControlPoint1 = new Pose(102.793, 69.341);
     private final Pose grabPickupBottomPose = new Pose(132.5, 36, Math.toRadians(0));
     private final Pose grabPickupBottomPoseControlPoint1 = new Pose(60.48, 24.812);
-    private final Pose parkPose = new Pose(86,110, Math.toRadians(0));
+    private final Pose parkPose = new Pose(100,70, Math.toRadians(0));
 
     public void buildPaths() {
         scorePreload = follower.pathBuilder()
@@ -184,7 +188,7 @@ public class rightCloseAutoFromFar extends LinearOpMode {
                             intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
                         }
 
-                        if (shooter.ballsShot >= 3 || opmodeTimer.getElapsedTimeSeconds() > 4) {
+                        if (shooter.ballsShot >= 3 || opmodeTimer.getElapsedTimeSeconds() > OVERRIDE_PRELOAD_TIME) {
                             scorePreloadTime = opmodeTimer.getElapsedTimeSeconds();
 
                             shooter.ballsShot = 3;
@@ -244,7 +248,7 @@ public class rightCloseAutoFromFar extends LinearOpMode {
                             intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
                         }
 
-                        if (shooter.ballsShot >= 6 || opmodeTimer.getElapsedTimeSeconds() > 14) {
+                        if (shooter.ballsShot >= 6 || opmodeTimer.getElapsedTimeSeconds() > OVERRIDE_TOP_ROW_TIME) {
                             scorePickupTopTime = opmodeTimer.getElapsedTimeSeconds();
 
                             shooter.ballsShot = 6;
@@ -296,7 +300,7 @@ public class rightCloseAutoFromFar extends LinearOpMode {
                             intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
                         }
 
-                        if (shooter.ballsShot >= 9 || opmodeTimer.getElapsedTimeSeconds() > 19) {
+                        if (shooter.ballsShot >= 9 || opmodeTimer.getElapsedTimeSeconds() > OVERRIDE_MIDDLE_ROW_TIME) {
                             scorePickupMiddleTime = opmodeTimer.getElapsedTimeSeconds();
 
                             shooter.ballsShot = 9;
@@ -348,7 +352,7 @@ public class rightCloseAutoFromFar extends LinearOpMode {
                             intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
                         }
 
-                        if (shooter.ballsShot >= 12 || opmodeTimer.getElapsedTimeSeconds() > 29.5) {
+                        if (shooter.ballsShot >= 12 || opmodeTimer.getElapsedTimeSeconds() > OVERRIDE_BOTTOM_ROW_TIME) {
                             scorePickupBottomTime = opmodeTimer.getElapsedTimeSeconds();
 
                             shooter.ballsShot = 12;
