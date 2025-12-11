@@ -24,10 +24,11 @@ public class rightCloseAutoFromFar extends LinearOpMode {
     private int pathState = 0; //finite state machine variable
     private boolean init = true;
     public static double INTAKE_DELAY_TIME = 0.5;
+    public static double SHOOTER_ON_DELAY_PRELOAD = 0.6; //prevent motors from revving up too much when shooting preloads
     public static double RELEASE_BALLS_WAIT_TIME = 0.15; //time to wait at the chamber
     public static double HEADING_INTERPOLATION_END_PERCENTAGE = 0.65;
     public static double AUTO_Y_OFFSET = 0;
-    public static double RELEASE_BALLS_Y = 74.5;
+    public static double RELEASE_BALLS_Y = 74;
     public static double SCORE_HEADING_OFFSET = -5; //score heading offset since center of goals are not exactly 45 degrees
     public static double MAX_POWER = 0.9;
 
@@ -61,6 +62,8 @@ public class rightCloseAutoFromFar extends LinearOpMode {
     public void buildPaths() {
         scorePreload = follower.pathBuilder()
                 .addPath(new BezierLine(startPose, scorePose))
+                .addTemporalCallback(SHOOTER_ON_DELAY_PRELOAD, this::intializeBurstClose)
+                .addTemporalCallback(SHOOTER_ON_DELAY_PRELOAD, this::turnOnShooterAuto)
                 .setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading())
                 .build();
         grabPickupTop = follower.pathBuilder()
@@ -168,8 +171,8 @@ public class rightCloseAutoFromFar extends LinearOpMode {
                 }
                 else{ //move to scoring position
                     follower.followPath(scorePreload, true);
-                    intializeBurstClose(); //prestart shooter
-                    turnOnShooterAuto();
+//                    intializeBurstClose(); //prestart shooter
+//                    turnOnShooterAuto();
                     setPathState(1);
                 }
                 break;
