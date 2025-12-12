@@ -29,6 +29,7 @@ public class rightCloseAutoFromFar extends LinearOpMode {
     public static double HEADING_INTERPOLATION_END_PERCENTAGE = 0.65;
     public static double AUTO_Y_OFFSET = 0;
     public static double RELEASE_BALLS_Y = 74;
+    public static double INTAKE_X_OFFSET = 0;
     public static double SCORE_HEADING_OFFSET = -5; //score heading offset since center of goals are not exactly 45 degrees
     public static double MAX_POWER = 0.9;
 
@@ -48,14 +49,14 @@ public class rightCloseAutoFromFar extends LinearOpMode {
 
     private final Pose startPose = new Pose(89.5, 8+AUTO_Y_OFFSET, Math.toRadians(90)); // Start Pose of our robot
     private final Pose scorePose = new Pose(97, 100, scoreHeading);
-    private final Pose grabPickupTopPose = new Pose(128, 84, Math.toRadians(0));
+    private final Pose grabPickupTopPose = new Pose(128 + INTAKE_X_OFFSET, 84, Math.toRadians(0));
     private final Pose grabPickupTopPoseControlPoint1 = new Pose(59.593, 79.089);
     private final Pose releaseBallsPose = new Pose(128.5, RELEASE_BALLS_Y, Math.toRadians(0));
     private final Pose releaseBallsPoseControlPoint1 = new Pose(119.852, 75.323);
-    private final Pose grabPickupMiddlePose = new Pose(132, 60, Math.toRadians(0));
+    private final Pose grabPickupMiddlePose = new Pose(132 + INTAKE_X_OFFSET, 60, Math.toRadians(0));
     private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(55.606, 51.175);
     private final Pose scorePickupMiddlePoseControlPoint1 = new Pose(102.793, 69.341);
-    private final Pose grabPickupBottomPose = new Pose(132.5, 36, Math.toRadians(0));
+    private final Pose grabPickupBottomPose = new Pose(132.5 + INTAKE_X_OFFSET, 36, Math.toRadians(0));
     private final Pose grabPickupBottomPoseControlPoint1 = new Pose(60.48, 24.812);
     private final Pose parkPose = new Pose(100,70, Math.toRadians(0));
 

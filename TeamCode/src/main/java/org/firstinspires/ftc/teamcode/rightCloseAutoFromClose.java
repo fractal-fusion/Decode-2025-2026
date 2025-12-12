@@ -31,6 +31,7 @@ public class rightCloseAutoFromClose extends LinearOpMode {
     public static double RELEASE_BALLS_WAIT_TIME = 0.05; //time to wait at the chamber
     public static double HEADING_INTERPOLATION_END_PERCENTAGE = 0.65;
     public static double AUTO_Y_OFFSET = 0;
+    public static double INTAKE_X_OFFSET = 0;
     public static double RELEASE_BALLS_Y = 74;
     public static double SCORE_HEADING_OFFSET = -5; //score heading offset since center of goals are not exactly 45 degrees
     public static double MAX_POWER = 0.9;
@@ -52,14 +53,14 @@ public class rightCloseAutoFromClose extends LinearOpMode {
 
     private final Pose startPose = new Pose(129, 115+AUTO_Y_OFFSET, Math.toRadians(180)); // Start Pose of our robot
     private final Pose scorePose = new Pose(98, 100, scoreHeading);
-    private final Pose grabPickupTopPose = new Pose(127.25, 84, Math.toRadians(0));
+    private final Pose grabPickupTopPose = new Pose(127.25 + INTAKE_X_OFFSET, 84, Math.toRadians(0));
     private final Pose grabPickupTopPoseControlPoint1 = new Pose(59.593, 79.089);
     private final Pose releaseBallsPose = new Pose(128.5, RELEASE_BALLS_Y, Math.toRadians(0));
     private final Pose releaseBallsPoseControlPoint1 = new Pose(119.852, 75.323);
-    private final Pose grabPickupMiddlePose = new Pose(132, 60, Math.toRadians(0));
+    private final Pose grabPickupMiddlePose = new Pose(132 + INTAKE_X_OFFSET, 60, Math.toRadians(0));
     private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(55.606, 51.175);
     private final Pose scorePickupMiddlePoseControlPoint1 = new Pose(102.793, 69.341);
-    private final Pose grabPickupBottomPose = new Pose(132.5, 36, Math.toRadians(0));
+    private final Pose grabPickupBottomPose = new Pose(132.5 + INTAKE_X_OFFSET, 36, Math.toRadians(0));
     private final Pose grabPickupBottomPoseControlPoint1 = new Pose(60.48, 24.812);
 //    private final Pose goToWallHumanPlayerPose = new Pose(136, 45, Math.toRadians(270));
 //    private final Pose grabPickupHumanPlayerPose = new Pose(INTAKE_HUMAN_PLAYER_X, 12, Math.toRadians(270));
