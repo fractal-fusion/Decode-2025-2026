@@ -40,14 +40,14 @@ public class rightCloseAutoFromFar extends LinearOpMode {
     public static double OVERRIDE_PRELOAD_TIME = 5;
     public static double OVERRIDE_TOP_ROW_TIME = 12;
     public static double OVERRIDE_MIDDLE_ROW_TIME = 19;
-    public static double OVERRIDE_BOTTOM_ROW_TIME = 25;
+    public static double OVERRIDE_BOTTOM_ROW_TIME = 27;
 
     public double scoreHeading = Math.toRadians(45 + SCORE_HEADING_OFFSET);
 
     private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop, goToReleaseBalls, goToPark; //define path chains (muliple paths interpolated)
 
     private final Pose startPose = new Pose(89.5, 8+AUTO_Y_OFFSET, Math.toRadians(90)); // Start Pose of our robot
-    private final Pose scorePose = new Pose(98, 100, scoreHeading);
+    private final Pose scorePose = new Pose(97, 100, scoreHeading);
     private final Pose grabPickupTopPose = new Pose(128, 84, Math.toRadians(0));
     private final Pose grabPickupTopPoseControlPoint1 = new Pose(59.593, 79.089);
     private final Pose releaseBallsPose = new Pose(128.5, RELEASE_BALLS_Y, Math.toRadians(0));

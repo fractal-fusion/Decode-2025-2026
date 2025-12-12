@@ -41,7 +41,7 @@ public class leftCloseAutoFromClose extends LinearOpMode {
     public static double OVERRIDE_PRELOAD_TIME = 5;
     public static double OVERRIDE_TOP_ROW_TIME = 12;
     public static double OVERRIDE_MIDDLE_ROW_TIME = 18;
-    public static double OVERRIDE_BOTTOM_ROW_TIME = 25;
+    public static double OVERRIDE_BOTTOM_ROW_TIME = 27;
     private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop, goToReleaseBalls, goToPark; //define path chains (muliple paths interpolated)
 
     private final Pose startPose = new Pose(15, 115+AUTO_Y_OFFSET, Math.toRadians(0)); // Start Pose of our robot

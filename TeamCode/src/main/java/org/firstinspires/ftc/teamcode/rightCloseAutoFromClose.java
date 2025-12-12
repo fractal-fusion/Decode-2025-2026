@@ -44,7 +44,7 @@ public class rightCloseAutoFromClose extends LinearOpMode {
     public static double OVERRIDE_PRELOAD_TIME = 5;
     public static double OVERRIDE_TOP_ROW_TIME = 12;
     public static double OVERRIDE_MIDDLE_ROW_TIME = 18;
-    public static double OVERRIDE_BOTTOM_ROW_TIME = 25;
+    public static double OVERRIDE_BOTTOM_ROW_TIME = 27;
 
     public double scoreHeading = Math.toRadians(45 + SCORE_HEADING_OFFSET);
 
@@ -383,7 +383,7 @@ public class rightCloseAutoFromClose extends LinearOpMode {
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                             turnOffShooterAuto();
                             intake.turnOffIntake();
-                            setPathState(13);
+                            setPathState(12);
                         }
                     }
                 }
@@ -446,15 +446,18 @@ public class rightCloseAutoFromClose extends LinearOpMode {
 //                    }
 //                }
 //                break;
-            case 13:
+            case 12:
                 if(!follower.isBusy()){
-                    if (init){
-                        intake.turnOffIntake();
-                    }
-                    else{
-                        follower.followPath(goToPark);
-                        setPathState(-1);
-                    }
+                    follower.followPath(goToPark);
+                    setPathState(-1);
+//                    if (init){
+//                        intake.turnOffIntake();
+//                        init = false;
+//                    }
+//                    else{
+//                        follower.followPath(goToPark);
+//                        setPathState(-1);
+//                    }
                 }
                 break;
         } //run state machine
