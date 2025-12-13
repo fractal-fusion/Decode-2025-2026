@@ -47,7 +47,7 @@ public class leftCloseAutoFromClose extends LinearOpMode {
 
     private final Pose startPose = new Pose(15, 115+AUTO_Y_OFFSET, Math.toRadians(0)); // Start Pose of our robot
     private final Pose scorePose = new Pose(46, 100, scoreHeading);
-    private final Pose grabPickupTopPose = new Pose(16.75 - INTAKE_X_OFFSET, 84, Math.toRadians(180));
+    private final Pose grabPickupTopPose = new Pose(16 - INTAKE_X_OFFSET, 84, Math.toRadians(180));
     private final Pose grabPickupTopPoseControlPoint1 = new Pose(84.407, 79.089);
     private final Pose releaseBallsPose = new Pose(15.5, RELEASE_BALLS_Y, Math.toRadians(180));
     private final Pose releaseBallsPoseControlPoint1 = new Pose(26.142, 75.323);
@@ -184,7 +184,7 @@ public class leftCloseAutoFromClose extends LinearOpMode {
                     }
                     else{
                         if (pathTimer.getElapsedTimeSeconds() > INTAKE_DELAY_TIME_PRELOAD) { //additional time to compensate for short path distance, not giving enough time for pid to adjust accordingly
-                            intake.turnOnIntake();
+                            intake.turnOnIntakeAuto();
                             intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
                         }
 
@@ -244,7 +244,7 @@ public class leftCloseAutoFromClose extends LinearOpMode {
                     }
                     else{
                         if (pathTimer.getElapsedTimeSeconds() > INTAKE_DELAY_TIME) {
-                            intake.turnOnIntake();
+                            intake.turnOnIntakeAuto();
                             intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
                         }
 
@@ -296,7 +296,7 @@ public class leftCloseAutoFromClose extends LinearOpMode {
                     }
                     else{
                         if (pathTimer.getElapsedTimeSeconds() > INTAKE_DELAY_TIME) {
-                            intake.turnOnIntake();
+                            intake.turnOnIntakeAuto();
                             intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
                         }
 
@@ -348,7 +348,7 @@ public class leftCloseAutoFromClose extends LinearOpMode {
                     }
                     else{
                         if (pathTimer.getElapsedTimeSeconds() > INTAKE_DELAY_TIME) {
-                            intake.turnOnIntake();
+                            intake.turnOnIntakeAuto();
                             intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
                         }
 

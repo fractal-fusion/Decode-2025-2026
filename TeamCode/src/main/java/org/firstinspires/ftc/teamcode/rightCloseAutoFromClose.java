@@ -53,7 +53,7 @@ public class rightCloseAutoFromClose extends LinearOpMode {
 
     private final Pose startPose = new Pose(129, 115+AUTO_Y_OFFSET, Math.toRadians(180)); // Start Pose of our robot
     private final Pose scorePose = new Pose(98, 100, scoreHeading);
-    private final Pose grabPickupTopPose = new Pose(127.25 + INTAKE_X_OFFSET, 84, Math.toRadians(0));
+    private final Pose grabPickupTopPose = new Pose(128 + INTAKE_X_OFFSET, 84, Math.toRadians(0));
     private final Pose grabPickupTopPoseControlPoint1 = new Pose(59.593, 79.089);
     private final Pose releaseBallsPose = new Pose(128.5, RELEASE_BALLS_Y, Math.toRadians(0));
     private final Pose releaseBallsPoseControlPoint1 = new Pose(117.858, 75.323);
@@ -209,7 +209,7 @@ public class rightCloseAutoFromClose extends LinearOpMode {
                     }
                     else{
                         if (pathTimer.getElapsedTimeSeconds() > INTAKE_DELAY_TIME_PRELOAD) { //additional time to compensate for short path distance, not giving enough time for pid to adjust accordingly
-                            intake.turnOnIntake();
+                            intake.turnOnIntakeAuto();
                             intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
                         }
 
@@ -269,7 +269,7 @@ public class rightCloseAutoFromClose extends LinearOpMode {
                     }
                     else{
                         if (pathTimer.getElapsedTimeSeconds() > INTAKE_DELAY_TIME) {
-                            intake.turnOnIntake();
+                            intake.turnOnIntakeAuto();
                             intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
                         }
 
@@ -321,7 +321,7 @@ public class rightCloseAutoFromClose extends LinearOpMode {
                     }
                     else{
                         if (pathTimer.getElapsedTimeSeconds() > INTAKE_DELAY_TIME) {
-                            intake.turnOnIntake();
+                            intake.turnOnIntakeAuto();
                             intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
                         }
 
@@ -373,7 +373,7 @@ public class rightCloseAutoFromClose extends LinearOpMode {
                     }
                     else{
                         if (pathTimer.getElapsedTimeSeconds() > INTAKE_DELAY_TIME) {
-                            intake.turnOnIntake();
+                            intake.turnOnIntakeAuto();
                             intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
                         }
 
@@ -433,7 +433,7 @@ public class rightCloseAutoFromClose extends LinearOpMode {
 //                    }
 //                    else{
 //                        if (pathTimer.getElapsedTimeSeconds() > INTAKE_DELAY_TIME - 0.4) {
-//                            intake.turnOnIntake();
+//                            intake.turnOnIntakeAuto();
 //                            intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
 //                        }
 //
