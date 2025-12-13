@@ -32,7 +32,7 @@ public class leftCloseAutoFromFar extends LinearOpMode {
     public static double RELEASE_BALLS_Y = 74;
     public static double SCORE_HEADING_OFFSET = 5; //score heading offset since center of goals are not exactly 45 degrees
     public double scoreHeading = Math.toRadians(135 + SCORE_HEADING_OFFSET);
-    public static double MAX_POWER = 0.9;
+    public static double MAX_POWER = 0.8;
 
     //variables to keep track of how long each score took in order to implement failsafes based on the opmode timer
     private double scorePreloadTime = 0.0;

@@ -40,16 +40,15 @@ public class Shooter{
     public static double FAR_TARGET_RPM_TICKS_PER_SECOND = FAR_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
 
     public static double CLOSE_RAMP_SCORE_POSITION = 0.25;
-    public static double CLOSE_TARGET_RPM = 4130;
-    public static double CLOSE_AUTO_TARGET_RPM = 4115;
+    public static double CLOSE_TARGET_RPM = 4190;
+    public static double CLOSE_AUTO_TARGET_RPM = 4200;
     public static double CLOSE_DEBOUNCE = 0.4;
 
     public static double CLOSE_TARGET_RPM_TICKS_PER_SECOND = CLOSE_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
 
     public double currentRampScorePosition;
     public double currentTargetRPMTicksPerSecond;
-
-    public static double TARGET_RPM_TOLERANCE_RPM_CLOSE = 100;
+    public static double TARGET_RPM_TOLERANCE_RPM_CLOSE = 300;
     public static double TARGET_RPM_TOLERANCE_RPM_FAR = 30;
     public double targetRPMToleranceRPM = TARGET_RPM_TOLERANCE_RPM_CLOSE; //initially set to the tolerance for close
     public double testShootPower = 0;
@@ -75,11 +74,11 @@ public class Shooter{
     private Timer atVelocityTimer = new Timer();
     public double atVelocityTime;
 //    private boolean timerDebounce = false; //debounce to prevent timer from resetting when it has already reset
-    public static double P = 1.28498;
-    public static double I = 0.128498;
-    public static double D = 0;
-    public static double F = 12.849804;
     public static double PID_OFFSET = 9.002; //right motor is always slower
+    public static double P = 1.47025;
+    public static double I = 0.117025;
+    public static double D = 0;
+    public static double F = 12.7025;
 
     //test servo variables
     public static String testServo = "gate";
@@ -119,8 +118,8 @@ public class Shooter{
         shooterRampRight.setPosition(0); //zero ramp servoes on initialization
         shooterRampLeft.setPosition(0);
 
-        ((DcMotorEx) shooterLeft).setVelocityPIDFCoefficients(P + PID_OFFSET * 0.01, I + PID_OFFSET * 0.001, D, F + PID_OFFSET * 0.1); //TODO: change these pidfs to be near max velocity
-        ((DcMotorEx) shooterRight).setVelocityPIDFCoefficients(P + PID_OFFSET * 0.01, I + PID_OFFSET * 0.001, D, F + PID_OFFSET * 0.1);
+        ((DcMotorEx) shooterLeft).setVelocityPIDFCoefficients(P, I, D, F); //TODO: change these pidfs to be near max velocity
+        ((DcMotorEx) shooterRight).setVelocityPIDFCoefficients(P, I, D, F);
 
         setCurrentTargetRPMTicksPerSecond(CLOSE_TARGET_RPM); //default the current target rpm ticks per second to close target rpm
         setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
