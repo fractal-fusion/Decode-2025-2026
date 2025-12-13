@@ -28,7 +28,7 @@ public class rightCloseAutoFromFar extends LinearOpMode {
     public static double RELEASE_BALLS_WAIT_TIME = 0.15; //time to wait at the chamber
     public static double HEADING_INTERPOLATION_END_PERCENTAGE = 0.65;
     public static double AUTO_Y_OFFSET = 0;
-    public static double RELEASE_BALLS_Y = 74;
+    public static double RELEASE_BALLS_Y = 73.5;
     public static double INTAKE_X_OFFSET = 0;
     public static double SCORE_HEADING_OFFSET = -5; //score heading offset since center of goals are not exactly 45 degrees
     public static double MAX_POWER = 0.8;
