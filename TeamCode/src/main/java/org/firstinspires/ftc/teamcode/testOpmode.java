@@ -15,7 +15,7 @@ public class testOpmode extends LinearOpMode {
         Drivetrain drivetrain = new Drivetrain(this);
 //        ColorDetector colorDetector = new ColorDetector(this);
         shooter.setPitchPosition(0);
-        intake.setFlickerPosition(0);
+//        intake.setFlickerPosition(0);
 
         telemetry.addLine("Robot Ready.");
         telemetry.update();
@@ -41,10 +41,10 @@ public class testOpmode extends LinearOpMode {
                 intake.driver.setPower(0);
             }
             if (gamepad1.dpad_right) {
-                intake.setFlickerPosition(.6);
+//                intake.setFlickerPosition(.6);
 
             } else if (gamepad1.dpad_left) {
-                intake.setFlickerPosition(0);
+//                intake.setFlickerPosition(0);
             }
 
             shooter.testControlServo(gamepad1);

@@ -101,13 +101,13 @@ public class productionOpmodeGateVersion extends LinearOpMode {
                 }
             }
             //mechanism intake flicker control
-            if(gamepad2.dpad_left) {
-                intake.toggleFlicker();
-                intake.resetFlickerOpenTimer();
-            }
+//            if(gamepad2.dpad_left) {
+//                intake.toggleFlicker();
+//                intake.resetFlickerOpenTimer();
+//            }
 
-            intake.updateFlickerOpenTimer(); //update the timer with the current time
-            intake.checkFlickerOpenTimer(gamepad2); //automatically open flicker after a second if its closed, unless the gamepad button is held down
+//            intake.updateFlickerOpenTimer(); //update the timer with the current time
+//            intake.checkFlickerOpenTimer(gamepad2); //automatically open flicker after a second if its closed, unless the gamepad button is held down
 
             //mechanism shooter control
             if (gamepad2.x) {

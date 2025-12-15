@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class Intake {
     public DcMotor driver;
     public DcMotor intake;
-    public Servo flicker;
+//    public Servo flicker;
     private OpMode opMode;
 
     //static variables for positions of the flicker servo
@@ -27,7 +27,7 @@ public class Intake {
     //gamepads for rising edge detector
     public Gamepad currentGamepad = new Gamepad();
     public Gamepad previousGamepad = new Gamepad();
-    private boolean flickerIsOpen = true;
+//    private boolean flickerIsOpen = true;
 
     //variables for setting flicker time
     private ElapsedTime timer;
@@ -39,14 +39,14 @@ public class Intake {
 
         driver = opMode.hardwareMap.get(DcMotor.class, "driver");
         intake = opMode.hardwareMap.get(DcMotor.class, "intake");
-        flicker = opMode.hardwareMap.get(Servo.class, "flicker");
+//        flicker = opMode.hardwareMap.get(Servo.class, "flicker");
 
         //intake.setDirection(DcMotor.Direction.REVERSE); // reverse direction so positive is intake, negative is outtake
         intake.setDirection(DcMotor.Direction.FORWARD);
         driver.setDirection(DcMotor.Direction.REVERSE);
 
-        flicker.setDirection(Servo.Direction.REVERSE); //reverse flicker servo so increasing to position 1 is flick inside
-        flicker.setPosition(initPosition); //open flicker on initialization
+//        flicker.setDirection(Servo.Direction.REVERSE); //reverse flicker servo so increasing to position 1 is flick inside
+//        flicker.setPosition(initPosition); //open flicker on initialization
     }
 
     public void turnOnIntake(){
@@ -72,56 +72,56 @@ public class Intake {
         driver.setPower(0);
     }
 
-    public void resetFlickerOpenTimer(){ //turn on flicker and turn it off after a certain amount of time
-        timer.reset();
-    }
+//    public void resetFlickerOpenTimer(){ //turn on flicker and turn it off after a certain amount of time
+//        timer.reset();
+//    }
 
-    public void updateFlickerOpenTimer(){
-        currentFlickerTime = timer.time();
-    }
+//    public void updateFlickerOpenTimer(){
+//        currentFlickerTime = timer.time();
+//    }
 
-    public void checkFlickerOpenTimer(Gamepad gamepad) {
-        if (currentFlickerTime > 1 && !gamepad.dpad_left) { //after a second open the flicker
-            flicker.setPosition(FLICKER_OPEN_POSITION);
-            flickerIsOpen = true;
-        }
-    }
+//    public void checkFlickerOpenTimer(Gamepad gamepad) {
+//        if (currentFlickerTime > 1 && !gamepad.dpad_left) { //after a second open the flicker
+//            flicker.setPosition(FLICKER_OPEN_POSITION);
+//            flickerIsOpen = true;
+//        }
+//    }
 
-    public void toggleFlicker() {
-        if (currentGamepad.dpad_left && !previousGamepad.dpad_left) {
-            flickerIsOpen = !flickerIsOpen;
-        }
-
-        //control the claw based on the boolean
-        if (flickerIsOpen) {
-            flicker.setPosition(FLICKER_OPEN_POSITION);
-        }
-        else {
-            flicker.setPosition(FLICKER_CLOSE_POSITION);
-        }
-    }
+//    public void toggleFlicker() {
+//        if (currentGamepad.dpad_left && !previousGamepad.dpad_left) {
+//            flickerIsOpen = !flickerIsOpen;
+//        }
+//
+//        //control the claw based on the boolean
+//        if (flickerIsOpen) {
+//            flicker.setPosition(FLICKER_OPEN_POSITION);
+//        }
+//        else {
+//            flicker.setPosition(FLICKER_CLOSE_POSITION);
+//        }
+//    }
     public void updateGamepad(Gamepad gamepad) { //debounce method
         previousGamepad.copy(currentGamepad);
 
         currentGamepad.copy(gamepad);
     }
 
-    public void setFlickerPosition(double position){
-        flicker.setPosition(position);
-    }
+//    public void setFlickerPosition(double position){
+//        flicker.setPosition(position);
+//    }
 
     //runnables for auto
 
-    public void closeFlicker(){
-        flicker.setPosition(FLICKER_CLOSE_POSITION);
-    }
-
-    public void openFlicker(){
-        flicker.setPosition(FLICKER_OPEN_POSITION);
-    }
-    public void holdFlicker(){
-        flicker.setPosition(FLICKER_HOLD_POSITION);
-    }
+//    public void closeFlicker(){
+//        flicker.setPosition(FLICKER_CLOSE_POSITION);
+//    }
+//
+//    public void openFlicker(){
+//        flicker.setPosition(FLICKER_OPEN_POSITION);
+//    }
+//    public void holdFlicker(){
+//        flicker.setPosition(FLICKER_HOLD_POSITION);
+//    }
 
 
 }

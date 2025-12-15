@@ -67,7 +67,7 @@ public class leftCloseAutoFromClose extends LinearOpMode {
                 .addPath(new BezierCurve(scorePose, grabPickupTopPoseControlPoint1, grabPickupTopPose))
 //                    .addPath(new BezierLine(scorePose, grabPickupTopPose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), grabPickupTopPose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
-                .addPoseCallback(new Pose(18, 84), intake::holdFlicker, 0.5)
+//                .addPoseCallback(new Pose(18, 84), intake::holdFlicker, 0.5)
                 .build();
         goToReleaseBalls = follower.pathBuilder()
                 .addPath(new BezierCurve(grabPickupTopPose, releaseBallsPoseControlPoint1, releaseBallsPose))
@@ -80,7 +80,7 @@ public class leftCloseAutoFromClose extends LinearOpMode {
         grabPickupMiddle = follower.pathBuilder()
                 .addPath(new BezierCurve(scorePose, grabPickupMiddlePoseControlPoint1, grabPickupMiddlePose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), grabPickupMiddlePose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
-                .addPoseCallback(new Pose(14, 58), intake::holdFlicker, 0.5)
+//                .addPoseCallback(new Pose(14, 58), intake::holdFlicker, 0.5)
                 .build();
         scorePickupMiddle = follower.pathBuilder()
                 .addPath(new BezierCurve(grabPickupMiddlePose, scorePickupMiddlePoseControlPoint1, scorePose))
@@ -89,7 +89,7 @@ public class leftCloseAutoFromClose extends LinearOpMode {
         grabPickupBottom = follower.pathBuilder()
                 .addPath(new BezierCurve(scorePose, grabPickupBottomPoseControlPoint1, grabPickupBottomPose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), grabPickupBottomPose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
-                .addPoseCallback(new Pose(14, 36), intake::holdFlicker, 0.5)
+//                .addPoseCallback(new Pose(14, 36), intake::holdFlicker, 0.5)
                 .build();
         scorePickupBottom = follower.pathBuilder()
                 .addPath(new BezierLine(grabPickupBottomPose, scorePose))
@@ -163,7 +163,7 @@ public class leftCloseAutoFromClose extends LinearOpMode {
             case 0: //move to score position for preload
                 //hold the flicker in
                 if (init){
-                    intake.setFlickerPosition(Intake.FLICKER_HOLD_POSITION);
+//                    intake.setFlickerPosition(Intake.FLICKER_HOLD_POSITION);
                     init = false;
                 }
                 else{ //move to scoring position
@@ -185,7 +185,7 @@ public class leftCloseAutoFromClose extends LinearOpMode {
                     else{
                         if (pathTimer.getElapsedTimeSeconds() > INTAKE_DELAY_TIME_PRELOAD) { //additional time to compensate for short path distance, not giving enough time for pid to adjust accordingly
                             intake.turnOnIntakeAuto();
-                            intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
+//                            intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
                         }
 
                         if (shooter.ballsShot >= 3 || opmodeTimer.getElapsedTimeSeconds() > OVERRIDE_PRELOAD_TIME) {
@@ -202,7 +202,7 @@ public class leftCloseAutoFromClose extends LinearOpMode {
             case 2: // intake top row
                 if (!follower.isBusy()) {
                     if (init){
-                        intake.setFlickerPosition(Intake.FLICKER_OPEN_POSITION);
+//                        intake.setFlickerPosition(Intake.FLICKER_OPEN_POSITION);
                         init = false;
                     }
                     else{
@@ -247,7 +247,7 @@ public class leftCloseAutoFromClose extends LinearOpMode {
                     else{
                         if (pathTimer.getElapsedTimeSeconds() > INTAKE_DELAY_TIME) {
                             intake.turnOnIntakeAuto();
-                            intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
+//                            intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
                         }
 
                         if (shooter.ballsShot >= 6 || opmodeTimer.getElapsedTimeSeconds() > OVERRIDE_TOP_ROW_TIME) {
@@ -264,7 +264,7 @@ public class leftCloseAutoFromClose extends LinearOpMode {
             case 6: // intake middle row
                 if (!follower.isBusy()) {
                     if (init){
-                        intake.setFlickerPosition(Intake.FLICKER_OPEN_POSITION);
+//                        intake.setFlickerPosition(Intake.FLICKER_OPEN_POSITION);
                         init = false;
                     }
                     else{
@@ -301,7 +301,7 @@ public class leftCloseAutoFromClose extends LinearOpMode {
                     else{
                         if (pathTimer.getElapsedTimeSeconds() > INTAKE_DELAY_TIME) {
                             intake.turnOnIntakeAuto();
-                            intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
+//                            intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
                         }
 
                         if (shooter.ballsShot >= 9 || opmodeTimer.getElapsedTimeSeconds() > OVERRIDE_MIDDLE_ROW_TIME) {
@@ -318,7 +318,7 @@ public class leftCloseAutoFromClose extends LinearOpMode {
             case 9: // intake bottom row
                 if (!follower.isBusy()) {
                     if (init){
-                        intake.setFlickerPosition(Intake.FLICKER_OPEN_POSITION);
+//                        intake.setFlickerPosition(Intake.FLICKER_OPEN_POSITION);
                         init = false;
                     }
                     else{
@@ -355,7 +355,7 @@ public class leftCloseAutoFromClose extends LinearOpMode {
                     else{
                         if (pathTimer.getElapsedTimeSeconds() > INTAKE_DELAY_TIME) {
                             intake.turnOnIntakeAuto();
-                            intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
+//                            intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
                         }
 
                         if (shooter.ballsShot >= 12 || opmodeTimer.getElapsedTimeSeconds() > OVERRIDE_BOTTOM_ROW_TIME) {
