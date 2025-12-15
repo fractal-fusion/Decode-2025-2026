@@ -32,17 +32,17 @@ public class leftCloseAutoFromClose extends LinearOpMode {
     public static double RELEASE_BALLS_Y = 73.5;
     public static double SCORE_HEADING_OFFSET = 5; //score heading offset since center of goals are not exactly 45 degrees
     public double scoreHeading = Math.toRadians(135 + SCORE_HEADING_OFFSET);
-    public static double MAX_POWER = 0.8;
+    public static double MAX_POWER = 0.9;
 
     //variables to keep track of how long each score took in order to implement failsafes based on the opmode timer
     private double scorePreloadTime = 0.0;
     private double scorePickupTopTime = 0.0;
     private double scorePickupMiddleTime = 0.0;
     private double scorePickupBottomTime = 0.0;
-    public static double OVERRIDE_PRELOAD_TIME = 5;
-    public static double OVERRIDE_TOP_ROW_TIME = 12;
-    public static double OVERRIDE_MIDDLE_ROW_TIME = 18;
-    public static double OVERRIDE_BOTTOM_ROW_TIME = 27;
+    public static double OVERRIDE_PRELOAD_TIME = 4;
+    public static double OVERRIDE_TOP_ROW_TIME = 13;
+    public static double OVERRIDE_MIDDLE_ROW_TIME = 22;
+    public static double OVERRIDE_BOTTOM_ROW_TIME = 28;
     private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop, goToReleaseBalls, goToPark; //define path chains (muliple paths interpolated)
 
     private final Pose startPose = new Pose(15, 115+AUTO_Y_OFFSET, Math.toRadians(0)); // Start Pose of our robot
@@ -236,6 +236,8 @@ public class leftCloseAutoFromClose extends LinearOpMode {
             case 5: //score top row
                 if (!follower.isBusy()) {
                     if(init){
+                        shooter.ballsShot = 3;
+
 //                            intializeBurstClose();
 //                            turnOnShooterAuto();
                         shooter.setGatePosition(Shooter.GATE_OPEN_POSITION);
@@ -288,6 +290,8 @@ public class leftCloseAutoFromClose extends LinearOpMode {
             case 8: //score middle row
                 if (!follower.isBusy()) {
                     if(init){
+                        shooter.ballsShot = 6;
+
 //                            intializeBurstClose();
 //                            turnOnShooterAuto();
                         shooter.setGatePosition(Shooter.GATE_OPEN_POSITION);
@@ -340,6 +344,8 @@ public class leftCloseAutoFromClose extends LinearOpMode {
             case 11: //score bottom row
                 if (!follower.isBusy()) {
                     if(init){
+                        shooter.ballsShot = 9;
+
 //                            intializeBurstClose();
 //                            turnOnShooterAuto();
                         shooter.setGatePosition(Shooter.GATE_OPEN_POSITION);

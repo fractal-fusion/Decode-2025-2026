@@ -24,24 +24,24 @@ public class rightCloseAutoFromFar extends LinearOpMode {
     private int pathState = 0; //finite state machine variable
     private boolean init = true;
     public static double INTAKE_DELAY_TIME = 0.5;
-    public static double SHOOTER_ON_DELAY_PRELOAD = 0.6; //prevent motors from revving up too much when shooting preloads
+    public static double SHOOTER_ON_DELAY_PRELOAD = 0.9; //prevent motors from revving up too much when shooting preloads
     public static double RELEASE_BALLS_WAIT_TIME = 0.15; //time to wait at the chamber
     public static double HEADING_INTERPOLATION_END_PERCENTAGE = 0.65;
     public static double AUTO_Y_OFFSET = 0;
     public static double RELEASE_BALLS_Y = 73.5;
-    public static double INTAKE_X_OFFSET = 0;
+    public static double INTAKE_X_OFFSET = 0.5;
     public static double SCORE_HEADING_OFFSET = -5; //score heading offset since center of goals are not exactly 45 degrees
-    public static double MAX_POWER = 0.8;
+    public static double MAX_POWER = 0.9;
 
     //variables to keep track of how long each score took in order to implement failsafes based on the opmode timer
     private double scorePreloadTime = 0.0;
     private double scorePickupTopTime = 0.0;
     private double scorePickupMiddleTime = 0.0;
     private double scorePickupBottomTime = 0.0;
-    public static double OVERRIDE_PRELOAD_TIME = 5;
-    public static double OVERRIDE_TOP_ROW_TIME = 12;
-    public static double OVERRIDE_MIDDLE_ROW_TIME = 19;
-    public static double OVERRIDE_BOTTOM_ROW_TIME = 27;
+    public static double OVERRIDE_PRELOAD_TIME = 4;
+    public static double OVERRIDE_TOP_ROW_TIME = 13;
+    public static double OVERRIDE_MIDDLE_ROW_TIME = 22;
+    public static double OVERRIDE_BOTTOM_ROW_TIME = 28;
 
     public double scoreHeading = Math.toRadians(45 + SCORE_HEADING_OFFSET);
 
@@ -71,7 +71,7 @@ public class rightCloseAutoFromFar extends LinearOpMode {
                 .addPath(new BezierCurve(scorePose, grabPickupTopPoseControlPoint1, grabPickupTopPose))
 //                    .addPath(new BezierLine(scorePose, grabPickupTopPose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), grabPickupTopPose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
-                .addPoseCallback(new Pose(126, 84), intake::holdFlicker, 0.5)
+                .addPoseCallback(new Pose(127, 84), intake::holdFlicker, 0.5)
                 .build();
         goToReleaseBalls = follower.pathBuilder()
                 .addPath(new BezierCurve(grabPickupTopPose, releaseBallsPoseControlPoint1, releaseBallsPose))
@@ -84,7 +84,7 @@ public class rightCloseAutoFromFar extends LinearOpMode {
         grabPickupMiddle = follower.pathBuilder()
                 .addPath(new BezierCurve(scorePose, grabPickupMiddlePoseControlPoint1, grabPickupMiddlePose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), grabPickupMiddlePose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
-                .addPoseCallback(new Pose(130, 58), intake::holdFlicker, 0.5)
+                .addPoseCallback(new Pose(131, 58), intake::holdFlicker, 0.5)
                 .build();
         scorePickupMiddle = follower.pathBuilder()
                 .addPath(new BezierCurve(grabPickupMiddlePose, scorePickupMiddlePoseControlPoint1, scorePose))
@@ -93,7 +93,7 @@ public class rightCloseAutoFromFar extends LinearOpMode {
         grabPickupBottom = follower.pathBuilder()
                 .addPath(new BezierCurve(scorePose, grabPickupBottomPoseControlPoint1, grabPickupBottomPose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), grabPickupBottomPose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
-                .addPoseCallback(new Pose(130, 36), intake::holdFlicker, 0.5)
+                .addPoseCallback(new Pose(131, 36), intake::holdFlicker, 0.5)
                 .build();
         scorePickupBottom = follower.pathBuilder()
                 .addPath(new BezierLine(grabPickupBottomPose, scorePose))
@@ -240,6 +240,8 @@ public class rightCloseAutoFromFar extends LinearOpMode {
             case 5: //score top row
                 if (!follower.isBusy()) {
                     if(init){
+                        shooter.ballsShot = 3;
+
 //                            intializeBurstClose();
 //                            turnOnShooterAuto();
                         shooter.setGatePosition(Shooter.GATE_OPEN_POSITION);
@@ -292,6 +294,8 @@ public class rightCloseAutoFromFar extends LinearOpMode {
             case 8: //score middle row
                 if (!follower.isBusy()) {
                     if(init){
+                        shooter.ballsShot = 6;
+
 //                            intializeBurstClose();
 //                            turnOnShooterAuto();
                         shooter.setGatePosition(Shooter.GATE_OPEN_POSITION);
@@ -344,6 +348,8 @@ public class rightCloseAutoFromFar extends LinearOpMode {
             case 11: //score bottom row
                 if (!follower.isBusy()) {
                     if(init){
+                        shooter.ballsShot = 9;
+
 //                            intializeBurstClose();
 //                            turnOnShooterAuto();
                         shooter.setGatePosition(Shooter.GATE_OPEN_POSITION);

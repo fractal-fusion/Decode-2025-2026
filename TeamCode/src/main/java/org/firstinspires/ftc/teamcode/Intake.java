@@ -21,7 +21,7 @@ public class Intake {
     public static final double FLICKER_CLOSE_POSITION = 0.6;
     public static final double FLICKER_HOLD_POSITION = 0.4;
     public static double DRIVER_POWER = 0.8;
-    public static double AUTO_DRIVER_POWER = 0.7;
+    public static double AUTO_DRIVER_POWER = 0.8;
 //    public static final double FLICKER_CYCLE_POSITION = 0.25;
 
     //gamepads for rising edge detector
