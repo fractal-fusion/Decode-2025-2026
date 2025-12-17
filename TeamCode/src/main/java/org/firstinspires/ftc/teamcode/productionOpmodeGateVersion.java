@@ -77,6 +77,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             if(gamepad2.a) {
                 intake.turnOnIntake();
                 if (!shooter.on) {
+                    intake.setDriverPower(Intake.DRIVER_INTAKE_POWER);
                     shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                 }
             }
@@ -85,7 +86,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             }
             else if (gamepad2.right_bumper){
                 shooter.cycling = true;
-                shooter.setPitchPosition(Shooter.PITCH_CYCLE_POSITION);
+//                shooter.setPitchPosition(Shooter.PITCH_CYCLE_POSITION); //no more cycle, just a gate override
                 shooter.setGatePosition(Shooter.GATE_OPEN_POSITION);
 //                shooter.setRampPosition(Shooter.RAMP_CYCLE_POSITION);
                 intake.turnOnIntake();
@@ -111,9 +112,11 @@ public class productionOpmodeGateVersion extends LinearOpMode {
 
             //mechanism shooter control
             if (gamepad2.x) {
+                intake.setDriverPower(Intake.DRIVER_SHOOTING_POWER);
                 shooter.toggleShooterClose();
             }
             else if (gamepad2.y){
+                intake.setDriverPower(Intake.DRIVER_SHOOTING_POWER);
                 shooter.toggleShooterFar();
             }
 
@@ -155,6 +158,10 @@ public class productionOpmodeGateVersion extends LinearOpMode {
 
             //grounded
             telemetry.addData("grounded: ", drivetrain.grounded);
+
+            //driver power
+            telemetry.addData("driver power: ", intake.driverPower);
+
 
             telemetry.update();
         }

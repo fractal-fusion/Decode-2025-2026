@@ -4,9 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Config
@@ -20,7 +18,9 @@ public class Intake {
     public static final double FLICKER_OPEN_POSITION = 0;
     public static final double FLICKER_CLOSE_POSITION = 0.6;
     public static final double FLICKER_HOLD_POSITION = 0.4;
-    public static double DRIVER_POWER = 0.8;
+    public static double DRIVER_INTAKE_POWER = 1;
+    public static double DRIVER_SHOOTING_POWER = 0.8;
+    public double driverPower = 1;
     public static double AUTO_DRIVER_POWER = 0.8;
 //    public static final double FLICKER_CYCLE_POSITION = 0.25;
 
@@ -51,7 +51,11 @@ public class Intake {
 
     public void turnOnIntake(){
         intake.setPower(1);
-        driver.setPower(DRIVER_POWER);
+        driver.setPower(DRIVER_INTAKE_POWER);
+    }
+
+    public void setDriverPower(double power){
+        driverPower = power;
     }
     public void turnOnIntakeAuto(){
         intake.setPower(1);
