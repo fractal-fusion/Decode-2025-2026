@@ -51,7 +51,7 @@ public class Intake {
 
     public void turnOnIntake(){
         intake.setPower(1);
-        driver.setPower(DRIVER_INTAKE_POWER);
+        driver.setPower(driverPower);
     }
 
     public void setDriverPower(double power){
