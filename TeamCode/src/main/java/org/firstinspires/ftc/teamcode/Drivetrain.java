@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -26,6 +25,7 @@ public class Drivetrain {
     //constants used for tuning auto alignment
     public static double AUTO_ALIGN_MAX_SPEED = 0.4; //auto alignment speed is clipped to minimum negative this and maximum positive this (bilateral tolerance)
     public static double AUTO_ALIGN_GAIN = 0.012; //converts tx from limelight to power
+    public static double AUTO_ALIGN_DRIVE_POWER_MULTIPLIER_MIDPOINT = 0.45; //half of max power
 
     public Gamepad currentGamepad = new Gamepad();
     public Gamepad previousGamepad = new Gamepad();
@@ -101,11 +101,16 @@ public class Drivetrain {
         frontRight.setPower(frontRightPower * maxSpeedMultiplier);
         backRight.setPower(backRightPower * maxSpeedMultiplier);
     }
-    public void driveAutoAlign(double x, double y, double rotation)
+    public void driveAutoAlign(Gamepad gamepad, double rotation)
     {
+
+        double maxSpeed = AUTO_ALIGN_DRIVE_POWER_MULTIPLIER_MIDPOINT;
+        double maxSpeedMultiplier;
+        maxSpeedMultiplier = maxSpeed + ((-gamepad.right_trigger * (maxSpeed * 0.5)) + (gamepad.left_trigger * maxSpeed));
+
         //get gamepad inputs
-        double ypower = -y * 0.25; // lower the power when auto aligning
-        double xpower = x * 0.26; //multiplied by an extra 0.1 to counter imperfect strafing
+        double ypower = -gamepad.left_stick_y * maxSpeedMultiplier; // lower the power when auto aligning
+        double xpower = gamepad.left_stick_x * (maxSpeedMultiplier + 0.01); //multiplied by an extra 0.1 to counter imperfect strafing
         double rotationpower = rotation;
 
         //solve for power

@@ -50,7 +50,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
                 drivetrain.grounded = true;
             }
             else if (gamepad1.a) {
-                drivetrain.driveAutoAlign(gamepad1.left_stick_x, gamepad1.left_stick_y, drivetrain.calculateAutoAlignPower(limelight.getBearing()));
+                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPower(limelight.getBearing()));
                 drivetrain.holdPose = follower.getPose();
             }
             else if (gamepad1.x) {
