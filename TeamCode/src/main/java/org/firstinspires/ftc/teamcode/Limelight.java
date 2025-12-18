@@ -81,7 +81,7 @@ public class Limelight {
     public double getBearing() {
         LLResult result = limelight.getLatestResult();
         if (result != null && result.isValid()) {
-            return result.getTx();
+            return result.getTy();
         }
         return 0.0;
     }

@@ -30,7 +30,7 @@ public class Shooter{
     public static double PITCH_INTAKE_POSITION = 0.054;
     public static double PITCH_CYCLE_POSITION = 0.18;
     public static double GATE_OPEN_POSITION = 0;
-    public static double GATE_CLOSED_POSITION = 0.27;
+    public static double GATE_CLOSED_POSITION = 0.14;
     public static double RAMP_CYCLE_POSITION = 0.2;
     public static double FAR_RAMP_SCORE_POSITION = 0.23;
     public static double FAR_TARGET_RPM = 4900;
@@ -114,6 +114,8 @@ public class Shooter{
 
         shooterPitchRight.setDirection(Servo.Direction.REVERSE);
         shooterRampRight.setDirection(Servo.Direction.REVERSE); //reverse servos used for rotation so positive is rotate up
+
+        shooterGate.setDirection(Servo.Direction.REVERSE); //reverse gate servo so open position is zero and positive closes inwards
 
         shooterRampRight.setPosition(0); //zero ramp servoes on initialization
         shooterRampLeft.setPosition(0);
