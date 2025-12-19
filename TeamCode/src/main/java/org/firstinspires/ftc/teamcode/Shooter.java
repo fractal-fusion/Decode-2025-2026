@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 @Config
 public class Shooter{
@@ -187,8 +188,8 @@ public class Shooter{
         return (((DcMotorEx) shooterRight).getVelocity());
     }
 
-    public double calculateShooterVelocityTicksPerSecond(double ta){
-        return 0.0;
+    public double calculateShooterVelocityRPM(double ta){
+        return Range.clip(37.16124*Math.pow(ta, 4) - 209.76646*Math.pow(ta, 3) + 642.36058*Math.pow(ta, 2) - 1499.8308*ta + 5474.91132, 3920, 4740);
     }
 
     public void toggleShooterClose(){
@@ -197,8 +198,8 @@ public class Shooter{
             resetShooterOpenTimer();
             atVelocityTimer.resetTimer();
 
-            setCurrentTargetRPMTicksPerSecond(CLOSE_TARGET_RPM);
-            setCurrentShooterClosedSeconds(CLOSE_DEBOUNCE);
+//            setCurrentTargetRPMTicksPerSecond(CLOSE_TARGET_RPM); TODO: make this toggleble for far auto
+//            setCurrentShooterClosedSeconds(CLOSE_DEBOUNCE);
 
             on = !on;
         }
@@ -219,8 +220,8 @@ public class Shooter{
             resetShooterOpenTimer();
             atVelocityTimer.resetTimer();
 
-            setCurrentTargetRPMTicksPerSecond(FAR_TARGET_RPM);
-            setCurrentShooterClosedSeconds(FAR_DEBOUNCE);
+//            setCurrentTargetRPMTicksPerSecond(FAR_TARGET_RPM);
+//            setCurrentShooterClosedSeconds(FAR_DEBOUNCE);
 
 
             on = !on;
