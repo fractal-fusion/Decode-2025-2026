@@ -8,13 +8,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @TeleOp(name="shooterVelocityTuner", group="Robot")
 @Config
 public class ShooterVelocityTuner extends LinearOpMode {
-
-    public static String hardwareMapName = "shooterright";
-    DcMotorEx motor;
+    DcMotorEx shooterRight;
+    DcMotorEx shooterLeft;
     double currentVelocity;
     public static double PID_OFFSET = 9.002; //right motor is always slower
     public static double P = 1.375;
@@ -29,18 +29,23 @@ public class ShooterVelocityTuner extends LinearOpMode {
         FtcDashboard dashboard = FtcDashboard.getInstance();
         telemetry = dashboard.getTelemetry();
 
-        motor = hardwareMap.get(DcMotorEx.class, hardwareMapName);
-        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //reset encoders on initialization
-        motor.setVelocityPIDFCoefficients(P, I, D, F);
+        shooterRight = hardwareMap.get(DcMotorEx.class, "shooterright");
+        shooterRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //reset encoders on initialization
+        shooterRight.setVelocityPIDFCoefficients(P, I, D, F);
 
+        shooterLeft = hardwareMap.get(DcMotorEx.class, "shooterleft");
+        shooterLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //reset encoders on initialization
+        shooterLeft.setVelocityPIDFCoefficients(P, I, D, F);
+
+        shooterRight.setDirection(DcMotor.Direction.REVERSE);
 
         waitForStart();
 
-
         while (opModeIsActive()) {
-            motor.setVelocity(TARGET_RPM * Shooter.RPM_TO_TICKS_PER_SECOND);
+            shooterRight.setVelocity(TARGET_RPM * Shooter.RPM_TO_TICKS_PER_SECOND);
+            shooterLeft.setVelocity(TARGET_RPM * Shooter.RPM_TO_TICKS_PER_SECOND);
 
-            currentVelocity = motor.getVelocity();
+            currentVelocity = shooterRight.getVelocity();
 
             telemetry.addData("current velocity", currentVelocity * Shooter.TICKS_PER_SECOND_TO_RPM);
             telemetry.addData("target velocity", TARGET_RPM);

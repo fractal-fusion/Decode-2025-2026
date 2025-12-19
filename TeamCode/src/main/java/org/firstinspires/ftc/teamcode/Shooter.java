@@ -75,10 +75,10 @@ public class Shooter{
     public double atVelocityTime;
 //    private boolean timerDebounce = false; //debounce to prevent timer from resetting when it has already reset
     public static double PID_OFFSET = 9.002; //right motor is always slower
-    public static double P = 1.375;
+    public static double P = 1.575;
     public static double I = 0.1375;
     public static double D = 0;
-    public static double F = 13.750004;
+    public static double F = 14.750004;
 
     //test servo variables
     public static String testServo = "gate";
@@ -185,6 +185,10 @@ public class Shooter{
 
     public double shooterRightGetVelocity() {
         return (((DcMotorEx) shooterRight).getVelocity());
+    }
+
+    public double calculateShooterVelocityTicksPerSecond(double ta){
+        return 0.0;
     }
 
     public void toggleShooterClose(){
