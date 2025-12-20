@@ -198,8 +198,8 @@ public class Shooter{
             resetShooterOpenTimer();
             atVelocityTimer.resetTimer();
 
-//            setCurrentTargetRPMTicksPerSecond(CLOSE_TARGET_RPM); TODO: make this toggleble for far auto
-//            setCurrentShooterClosedSeconds(CLOSE_DEBOUNCE);
+            setCurrentTargetRPMTicksPerSecond(CLOSE_TARGET_RPM);
+//            setCurrentShooterClosedSeconds(CLOSE_DEBOUNCE); TODO: ^ make this toggleble for far auto
 
             on = !on;
         }
@@ -220,7 +220,7 @@ public class Shooter{
             resetShooterOpenTimer();
             atVelocityTimer.resetTimer();
 
-//            setCurrentTargetRPMTicksPerSecond(FAR_TARGET_RPM);
+            setCurrentTargetRPMTicksPerSecond(FAR_TARGET_RPM);
 //            setCurrentShooterClosedSeconds(FAR_DEBOUNCE);
 
 
