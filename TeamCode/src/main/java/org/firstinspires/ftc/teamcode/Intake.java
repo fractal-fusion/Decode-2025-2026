@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 @Config
 public class Intake {
@@ -56,6 +57,10 @@ public class Intake {
 
     public void setDriverPower(double power){
         driverPower = power;
+    }
+
+    public double calculateDriverPower(double ta) {
+        return Range.clip(0.1 * ta + 0.4, 0.5, 0.7);
     }
     public void turnOnIntakeAuto(){
         intake.setPower(1);

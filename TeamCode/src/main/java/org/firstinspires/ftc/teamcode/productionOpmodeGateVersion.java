@@ -113,6 +113,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             //mechanism shooter control
             if (gamepad2.x) {
                 intake.setDriverPower(Intake.DRIVER_SHOOTING_POWER);
+//                intake.setDriverPower(intake.calculateDriverPower(limelight.getRange())); TODO: reimplement driver regression
                 shooter.toggleShooterClose();
             }
             else if (gamepad2.y){
@@ -134,7 +135,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
                 shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
             }
 
-            shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPM(limelight.getRange()));
+//            shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPM(limelight.getRange())); TODO: reimplement shooter regression
 //            limelight.updateIsFar();
 
 //            telemetry.addData("intake current time:", intake.currentTime);
