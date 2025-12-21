@@ -189,7 +189,7 @@ public class Shooter{
     }
 
     public double calculateShooterVelocityRPM(double ta){
-        return Range.clip(37.16124*Math.pow(ta, 4) - 209.76646*Math.pow(ta, 3) + 642.36058*Math.pow(ta, 2) - 1499.8308*ta + 5474.91132, 3920, 4740);
+        return Range.clip(94.97007*Math.pow(ta, 4) - 913.82549*Math.pow(ta, 3) + 3324.27197*Math.pow(ta, 2) - 5508.49822*ta + 7442.54335, 3850, 5175);
     }
 
     public void toggleShooterClose(){
@@ -198,7 +198,7 @@ public class Shooter{
             resetShooterOpenTimer();
             atVelocityTimer.resetTimer();
 
-            setCurrentTargetRPMTicksPerSecond(CLOSE_TARGET_RPM);
+//            setCurrentTargetRPMTicksPerSecond(CLOSE_TARGET_RPM);
 //            setCurrentShooterClosedSeconds(CLOSE_DEBOUNCE); TODO: ^ make this toggleble for far auto
 
             on = !on;
@@ -220,7 +220,7 @@ public class Shooter{
             resetShooterOpenTimer();
             atVelocityTimer.resetTimer();
 
-            setCurrentTargetRPMTicksPerSecond(FAR_TARGET_RPM);
+//            setCurrentTargetRPMTicksPerSecond(FAR_TARGET_RPM);
 //            setCurrentShooterClosedSeconds(FAR_DEBOUNCE);
 
 
