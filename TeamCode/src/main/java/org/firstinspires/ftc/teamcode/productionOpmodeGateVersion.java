@@ -134,7 +134,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
                 shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
             }
 
-//            shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPM(limelight.getRange()));
+            shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPM(limelight.getRange()));
 //            limelight.updateIsFar();
 
 //            telemetry.addData("intake current time:", intake.currentTime);
