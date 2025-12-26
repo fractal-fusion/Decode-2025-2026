@@ -62,7 +62,7 @@ public class Intake {
     }
 
     public double calculateDriverPower(double ta) {
-        return Range.clip(0.1 * ta + 0.4, 0.5, 0.7);
+        return Range.clip(0.1 * ta + 0.7, 0.8, 1);
     }
     public void turnOnIntakeAuto(){
         intake.setPower(1);

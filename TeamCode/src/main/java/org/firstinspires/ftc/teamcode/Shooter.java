@@ -34,7 +34,7 @@ public class Shooter{
     public static double GATE_CLOSED_POSITION = 0.14;
     public static double RAMP_CYCLE_POSITION = 0.2;
     public static double FAR_RAMP_SCORE_POSITION = 0.23;
-    public static double FAR_TARGET_RPM = 4900;
+    public static double FAR_TARGET_RPM = 5100;
     public static double FAR_AUTO_TARGET_RPM = 4800; //untested
     public static double FAR_DEBOUNCE = 3.0; //untested
 
@@ -189,7 +189,7 @@ public class Shooter{
     }
 
     public double calculateShooterVelocityRPM(double ta){
-        return Range.clip(94.97007*Math.pow(ta, 4) - 913.82549*Math.pow(ta, 3) + 3324.27197*Math.pow(ta, 2) - 5508.49822*ta + 7442.54335, 3850, 5175);} //TODO: retune regression
+        return Range.clip(371.23356*Math.pow(ta, 4) - 2961.5358*Math.pow(ta, 3) + 8551.77871*Math.pow(ta, 2) - 10843.7563*ta + 8745.69016, 3350, 4100);} //TODO: retune regression
 
     public void toggleShooterClose(){
         if (currentGamepad.x && !previousGamepad.x){

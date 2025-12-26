@@ -80,6 +80,9 @@ public class productionOpmodeGateVersion extends LinearOpMode {
                     intake.setDriverPower(Intake.DRIVER_INTAKE_POWER);
                     shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                 }
+//                else{ todo: implement this aswell
+//                    intake.setDriverPower(intake.calculateDriverPower(limelight.getRange()));
+//                }
             }
             else if (gamepad2.b){
                 intake.turnOnOuttake();
@@ -134,8 +137,8 @@ public class productionOpmodeGateVersion extends LinearOpMode {
                 shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
             }
 
-//            shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPM(limelight.getRange())); TODO: reimplement shooter regression
-//            limelight.updateIsFar();
+//            shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPM(limelight.getRange()));
+            limelight.updateIsFar();
 
 //            telemetry.addData("intake current time:", intake.currentTime);
             telemetry.addData("shooter target velocity: ", shooter.calculateShooterVelocityRPM(limelight.getRange()));
