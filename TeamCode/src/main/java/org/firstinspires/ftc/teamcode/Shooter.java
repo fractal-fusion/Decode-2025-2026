@@ -41,8 +41,8 @@ public class Shooter{
     public static double FAR_TARGET_RPM_TICKS_PER_SECOND = FAR_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
 
     public static double CLOSE_RAMP_SCORE_POSITION = 0.25;
-    public static double CLOSE_TARGET_RPM = 3850;
-    public static double CLOSE_AUTO_TARGET_RPM = 3850;
+    public static double CLOSE_TARGET_RPM = 3550;
+    public static double CLOSE_AUTO_TARGET_RPM = 3550;
     public static double CLOSE_DEBOUNCE = 0.4;
 
     public static double CLOSE_TARGET_RPM_TICKS_PER_SECOND = CLOSE_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
@@ -76,10 +76,10 @@ public class Shooter{
     public double atVelocityTime;
 //    private boolean timerDebounce = false; //debounce to prevent timer from resetting when it has already reset
     public static double PID_OFFSET = 9.002; //right motor is always slower
-    public static double P = 1.575;
-    public static double I = 0.1375;
+    public static double P = 12;
+    public static double I = 0.21;
     public static double D = 0;
-    public static double F = 14.750004;
+    public static double F = 11.80004;
 
     //test servo variables
     public static String testServo = "gate";
@@ -189,8 +189,7 @@ public class Shooter{
     }
 
     public double calculateShooterVelocityRPM(double ta){
-        return Range.clip(94.97007*Math.pow(ta, 4) - 913.82549*Math.pow(ta, 3) + 3324.27197*Math.pow(ta, 2) - 5508.49822*ta + 7442.54335, 3850, 5175);
-    }
+        return Range.clip(94.97007*Math.pow(ta, 4) - 913.82549*Math.pow(ta, 3) + 3324.27197*Math.pow(ta, 2) - 5508.49822*ta + 7442.54335, 3850, 5175);} //TODO: retune regression
 
     public void toggleShooterClose(){
         if (currentGamepad.x && !previousGamepad.x){

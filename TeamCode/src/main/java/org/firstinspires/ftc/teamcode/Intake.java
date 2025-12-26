@@ -20,8 +20,10 @@ public class Intake {
     public static final double FLICKER_CLOSE_POSITION = 0.6;
     public static final double FLICKER_HOLD_POSITION = 0.4;
     public static double DRIVER_INTAKE_POWER = 1;
-    public static double DRIVER_SHOOTING_POWER = 0.7;
-    public double driverPower = 0.7;
+    public static double DRIVER_CLOSE_SHOOTING_POWER = 1;
+    public static double DRIVER_FAR_SHOOTING_POWER = 0.5;
+
+    public double driverPower = DRIVER_CLOSE_SHOOTING_POWER;
     public static double AUTO_DRIVER_POWER = 0.55;
 //    public static final double FLICKER_CYCLE_POSITION = 0.25;
 

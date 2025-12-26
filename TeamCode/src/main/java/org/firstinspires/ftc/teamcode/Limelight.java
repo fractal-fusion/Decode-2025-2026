@@ -25,7 +25,7 @@ public class Limelight {
     private final int PGP_id = 22;
     private final int PPG_id = 23;
 
-    public static double HEADING_FAR_RANGE_THRESHOLD = 0.1; //TODO: need to retune this
+    public static double HEADING_FAR_RANGE_THRESHOLD = 0.61; //TODO: need to retune this
     public static double HEADING_OFFSET_CLOSE = 2.5; //offset for autoalign
     public static double HEADING_OFFSET_FAR = 0.5;
 

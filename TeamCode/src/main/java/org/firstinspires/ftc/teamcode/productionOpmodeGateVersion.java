@@ -112,12 +112,11 @@ public class productionOpmodeGateVersion extends LinearOpMode {
 
             //mechanism shooter control
             if (gamepad2.x) {
-                intake.setDriverPower(Intake.DRIVER_SHOOTING_POWER);
-//                intake.setDriverPower(intake.calculateDriverPower(limelight.getRange())); TODO: reimplement driver regression
+                intake.setDriverPower(Intake.DRIVER_CLOSE_SHOOTING_POWER);
                 shooter.toggleShooterClose();
             }
             else if (gamepad2.y){
-                intake.setDriverPower(Intake.DRIVER_SHOOTING_POWER);
+                intake.setDriverPower(Intake.DRIVER_FAR_SHOOTING_POWER);
                 shooter.toggleShooterFar();
             }
 
