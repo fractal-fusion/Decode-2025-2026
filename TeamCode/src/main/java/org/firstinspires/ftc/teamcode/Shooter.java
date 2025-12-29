@@ -41,8 +41,8 @@ public class Shooter{
     public static double FAR_TARGET_RPM_TICKS_PER_SECOND = FAR_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
 
     public static double CLOSE_RAMP_SCORE_POSITION = 0.25;
-    public static double CLOSE_TARGET_RPM = 3550;
-    public static double CLOSE_AUTO_TARGET_RPM = 3550;
+    public static double CLOSE_TARGET_RPM = 3350;
+    public static double CLOSE_AUTO_TARGET_RPM = 3350;
     public static double CLOSE_DEBOUNCE = 0.4;
 
     public static double CLOSE_TARGET_RPM_TICKS_PER_SECOND = CLOSE_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
@@ -58,7 +58,7 @@ public class Shooter{
     public boolean on = false; //boolean for on or off shooter
     public boolean cycling = false; //boolean for cycling or not
     public boolean passedThreshold = false; //boolean for once the shooter reaches velocity
-    public static double LOWER_THRESHOLD_RPM = 3800;
+    public static double LOWER_THRESHOLD_RPM_OFFSET = 100;
     public int ballsShot = 0;
     private boolean wasAboveThreshold = false; //boolean for keeping track of balls shot
     private ElapsedTime shooterClosedTimer;
@@ -76,10 +76,10 @@ public class Shooter{
     public double atVelocityTime;
 //    private boolean timerDebounce = false; //debounce to prevent timer from resetting when it has already reset
     public static double PID_OFFSET = 9.002; //right motor is always slower
-    public static double P = 12;
+    public static double P = 50;
     public static double I = 0.21;
     public static double D = 0;
-    public static double F = 11.80004;
+    public static double F = 12.80004;
 
     //test servo variables
     public static String testServo = "gate";
@@ -143,7 +143,10 @@ public class Shooter{
         ((DcMotorEx) shooterRight).setVelocity(RPM * RPM_TO_TICKS_PER_SECOND);
         ((DcMotorEx) shooterLeft).setVelocity(RPM * RPM_TO_TICKS_PER_SECOND);
     }
-
+    public void updateShooterVelocity(){
+        ((DcMotorEx) shooterRight).setVelocity(currentTargetRPMTicksPerSecond);
+        ((DcMotorEx) shooterLeft).setVelocity(currentTargetRPMTicksPerSecond);
+    }
     public void turnOffShooter(){
         shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -172,8 +175,8 @@ public class Shooter{
     }
 
     public boolean shooterAtLowerThresholdVelocity() {
-        return ((DcMotorEx) shooterLeft).getVelocity() <= (LOWER_THRESHOLD_RPM * RPM_TO_TICKS_PER_SECOND)
-                && ((DcMotorEx) shooterRight).getVelocity() <= (LOWER_THRESHOLD_RPM * RPM_TO_TICKS_PER_SECOND);
+        return ((DcMotorEx) shooterLeft).getVelocity() <= (currentTargetRPMTicksPerSecond - (LOWER_THRESHOLD_RPM_OFFSET * RPM_TO_TICKS_PER_SECOND))
+                && ((DcMotorEx) shooterRight).getVelocity() <= (currentTargetRPMTicksPerSecond - (LOWER_THRESHOLD_RPM_OFFSET * RPM_TO_TICKS_PER_SECOND));
     }
 
     public void setTargetRPMToleranceRPM(double RPM) {

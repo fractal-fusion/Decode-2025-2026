@@ -210,7 +210,7 @@ public class rightCloseAutoFromClose extends LinearOpMode {
 
                         }
 
-                        if (shooter.ballsShot >= 3 || opmodeTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_PRELOAD_TIME) {
+                        if (shooter.ballsShot >= 3 || pathTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_PRELOAD_TIME) {
                             scorePreloadTime = opmodeTimer.getElapsedTimeSeconds();
 
                             shooter.ballsShot = 3;
@@ -273,7 +273,7 @@ public class rightCloseAutoFromClose extends LinearOpMode {
 
                         }
 
-                        if (shooter.ballsShot >= 6 || opmodeTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_TOP_ROW_TIME) {
+                        if (shooter.ballsShot >= 6 || pathTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_TOP_ROW_TIME) {
                             scorePickupTopTime = opmodeTimer.getElapsedTimeSeconds();
 
                             shooter.ballsShot = 6;
@@ -328,7 +328,7 @@ public class rightCloseAutoFromClose extends LinearOpMode {
 
                         }
 
-                        if (shooter.ballsShot >= 9 || opmodeTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_MIDDLE_ROW_TIME) {
+                        if (shooter.ballsShot >= 9 || pathTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_MIDDLE_ROW_TIME) {
                             scorePickupMiddleTime = opmodeTimer.getElapsedTimeSeconds();
 
                             shooter.ballsShot = 9;
@@ -384,7 +384,7 @@ public class rightCloseAutoFromClose extends LinearOpMode {
 
                         }
 
-                        if (shooter.ballsShot >= 12 || opmodeTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_BOTTOM_ROW_TIME) {
+                        if (shooter.ballsShot >= 12 || pathTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_BOTTOM_ROW_TIME) {
                             scorePickupBottomTime = opmodeTimer.getElapsedTimeSeconds();
 
                             shooter.ballsShot = 12;
