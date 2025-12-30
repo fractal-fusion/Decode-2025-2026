@@ -79,7 +79,7 @@ public class Shooter{
     public static double P = 50;
     public static double I = 0.21;
     public static double D = 0;
-    public static double F = 12.80004;
+    public static double F = 12.00004;
 
     //test servo variables
     public static String testServo = "gate";

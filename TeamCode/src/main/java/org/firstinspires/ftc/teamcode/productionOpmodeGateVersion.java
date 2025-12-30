@@ -123,8 +123,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
                 shooter.toggleShooterFar();
             }
 
-            //constantly update shooter velocity for regression
-            shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPM(limelight.getRange()));
+            //constantly update shooter velocity for close regression
             if(shooter.on){
                 shooter.updateShooterVelocity();
             }
@@ -140,6 +139,8 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             }
             else {
 //                camera.setHeadingOffset(Camera.HEADING_OFFSET_CLOSE);
+                //update regression only for close
+                shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPM(limelight.getRange()));
                 shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
             }
 
