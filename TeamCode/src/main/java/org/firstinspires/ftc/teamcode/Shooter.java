@@ -192,7 +192,7 @@ public class Shooter{
     }
 
     public double calculateShooterVelocityRPM(double ta){
-        return Range.clip(371.23356*Math.pow(ta, 4) - 2961.5358*Math.pow(ta, 3) + 8551.77871*Math.pow(ta, 2) - 10843.7563*ta + 8745.69016, 3350, 4100);} //TODO: retune regression
+        return Range.clip(125.23417*Math.pow(ta, 4) - 1260.29173*Math.pow(ta, 3) + 4582.66579*Math.pow(ta, 2) - 7187.38628*ta + 7431.15091, 3250, 4450);} //TODO: retune regression
 
     public void toggleShooterClose(){
         if (currentGamepad.x && !previousGamepad.x){
