@@ -52,6 +52,7 @@ public class Shooter{
     public static double TARGET_RPM_TOLERANCE_RPM_CLOSE = 100;
     public static double TARGET_RPM_TOLERANCE_RPM_FAR = 30;
     public static double REGRESSION_RPM_OFFSET = -25;
+    public static double REGRESSION_RESTING_RPM = 2000;
     public double targetRPMToleranceRPM = TARGET_RPM_TOLERANCE_RPM_CLOSE; //initially set to the tolerance for close
     public double testShootPower = 0;
     public double testRampPosition = 0;
@@ -122,7 +123,7 @@ public class Shooter{
         shooterRampRight.setPosition(0); //zero ramp servoes on initialization
         shooterRampLeft.setPosition(0);
 
-        ((DcMotorEx) shooterLeft).setVelocityPIDFCoefficients(P, I, D, F); //TODO: change these pidfs to be near max velocity
+        ((DcMotorEx) shooterLeft).setVelocityPIDFCoefficients(P, I, D, F);
         ((DcMotorEx) shooterRight).setVelocityPIDFCoefficients(P, I, D, F);
 
         setCurrentTargetRPMTicksPerSecond(CLOSE_TARGET_RPM); //default the current target rpm ticks per second to close target rpm
@@ -193,7 +194,12 @@ public class Shooter{
     }
 
     public double calculateShooterVelocityRPM(double ta){
-        return (Range.clip(125.23417*Math.pow(ta, 4) - 1260.29173*Math.pow(ta, 3) + 4582.66579*Math.pow(ta, 2) - 7187.38628*ta + 7431.15091, 3250, 4450)) + REGRESSION_RPM_OFFSET;
+        if (ta != 0.0){
+            return (Range.clip(125.23417*Math.pow(ta, 4) - 1260.29173*Math.pow(ta, 3) + 4582.66579*Math.pow(ta, 2) - 7187.38628*ta + 7431.15091, 3250, 4450)) + REGRESSION_RPM_OFFSET;
+        }
+        else{
+            return REGRESSION_RESTING_RPM;
+        }
     }
 
     public void toggleShooterClose(){
@@ -203,7 +209,7 @@ public class Shooter{
             atVelocityTimer.resetTimer();
 
             setCurrentTargetRPMTicksPerSecond(CLOSE_TARGET_RPM);
-//            setCurrentShooterClosedSeconds(CLOSE_DEBOUNCE); TODO: ^ make this toggleble for far auto
+//            setCurrentShooterClosedSeconds(CLOSE_DEBOUNCE);
 
             on = !on;
         }
@@ -252,7 +258,6 @@ public class Shooter{
     }
 
     public void controlShooterGate(){
-        //TODO: can change cycling boolean to separate between sorting mode for the gate and normal shooting mode
         if ((passedThreshold && !cycling && shooterClosedTimerOver())){
             atVelocityTime = atVelocityTimer.getElapsedTimeSeconds();
             setGatePosition(Shooter.GATE_OPEN_POSITION);
