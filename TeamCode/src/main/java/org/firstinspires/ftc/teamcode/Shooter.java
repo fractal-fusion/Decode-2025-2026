@@ -48,11 +48,11 @@ public class Shooter{
     public static double CLOSE_TARGET_RPM_TICKS_PER_SECOND = CLOSE_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
 
     public double currentRampScorePosition;
-    public double currentTargetRPMTicksPerSecond;
+    public double currentTargetRPMTicksPerSecond = REGRESSION_RESTING_RPM * RPM_TO_TICKS_PER_SECOND;
     public static double TARGET_RPM_TOLERANCE_RPM_CLOSE = 100;
     public static double TARGET_RPM_TOLERANCE_RPM_FAR = 30;
-    public static double REGRESSION_RPM_OFFSET = -25;
-    public static double REGRESSION_RESTING_RPM = 2000;
+    public static double REGRESSION_RPM_OFFSET = -15;
+    public static double REGRESSION_RESTING_RPM = 3000;
     public double targetRPMToleranceRPM = TARGET_RPM_TOLERANCE_RPM_CLOSE; //initially set to the tolerance for close
     public double testShootPower = 0;
     public double testRampPosition = 0;
@@ -78,10 +78,10 @@ public class Shooter{
     public double atVelocityTime;
 //    private boolean timerDebounce = false; //debounce to prevent timer from resetting when it has already reset
     public static double PID_OFFSET = 9.002; //right motor is always slower
-    public static double P = 50;
+    public static double P = 100;
     public static double I = 0.21;
     public static double D = 0;
-    public static double F = 12.00004;
+    public static double F = 12.20004;
 
     //test servo variables
     public static String testServo = "gate";

@@ -28,6 +28,7 @@ public class Limelight {
     public static double HEADING_FAR_RANGE_THRESHOLD = 0.61; //TODO: need to retune this
     public static double HEADING_OFFSET_CLOSE = 2.5; //offset for autoalign
     public static double HEADING_OFFSET_FAR = 0.5;
+    public static double HEADING_VALID_RANGE = 5; //valid heading range for regression and shooting to be 100% accurate
 
     public boolean isFar;
 

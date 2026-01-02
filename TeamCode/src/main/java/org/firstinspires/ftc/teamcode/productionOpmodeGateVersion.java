@@ -16,6 +16,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
         Intake intake = new Intake(this, Intake.FLICKER_OPEN_POSITION);
 //         Camera camera = new Camera(this, 3);
         Limelight limelight = new Limelight(this);
+        IndicatorLight indicatorLight = new IndicatorLight(this);
         Follower follower;
 
 //        ColorDetector colorDetector = new ColorDetector(this);
@@ -145,6 +146,14 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             }
 
             limelight.updateIsFar();
+
+            //indicator light control
+            if (limelight.getBearing() >= -Limelight.HEADING_VALID_RANGE && limelight.getBearing() <= Limelight.HEADING_VALID_RANGE && limelight.getBearing() != 0.0){
+                indicatorLight.setIndicatorLight(IndicatorLight.INDICATOR_LIGHT_GREEN);
+            }
+            else {
+                indicatorLight.setIndicatorLight(IndicatorLight.INDICATOR_LIGHT_RED);
+            }
 
 //            telemetry.addData("intake current time:", intake.currentTime);
             telemetry.addData("shooter target velocity: ", shooter.calculateShooterVelocityRPM(limelight.getRange()));

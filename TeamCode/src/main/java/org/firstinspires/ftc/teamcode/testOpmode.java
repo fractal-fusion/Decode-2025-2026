@@ -13,6 +13,7 @@ public class testOpmode extends LinearOpMode {
         Shooter shooter = new Shooter(this);
         Intake intake = new Intake(this, Intake.FLICKER_OPEN_POSITION);
         Drivetrain drivetrain = new Drivetrain(this);
+        IndicatorLight indicatorLight = new IndicatorLight(this);
 //        ColorDetector colorDetector = new ColorDetector(this);
         shooter.setPitchPosition(0);
 //        intake.setFlickerPosition(0);
@@ -28,6 +29,9 @@ public class testOpmode extends LinearOpMode {
             drivetrain.drive(gamepad1);
 
             shooter.testShoot(gamepad1);
+
+            indicatorLight.setRGB();
+
             telemetry.addData("shooter power:", shooter.on);
 
             if (gamepad1.a) {
