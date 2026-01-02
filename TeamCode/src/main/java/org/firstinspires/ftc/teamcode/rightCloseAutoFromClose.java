@@ -23,10 +23,10 @@ public class rightCloseAutoFromClose extends LinearOpMode {
     private Pose currentPose;
     private int pathState = 0; //finite state machine variable
     private boolean init = true;
-    public static double INTAKE_DELAY_TIME = 0.25;
+    public static double INTAKE_DELAY_TIME = 0.05;
     public static double INTAKE_DELAY_TIME_PRELOAD = 0.1;
-    public static double WALL_HUMAN_PLAYER_X = 131;
-    public static double INTAKE_HUMAN_PLAYER_X = 133.5;
+    public static double WALL_HUMAN_PLAYER_X = 134.5;
+    public static double INTAKE_HUMAN_PLAYER_X = 136.25;
 //    public static double INTAKE_HUMAN_PLAYER_FLICKER_TIME = 3;
 
     public static double RELEASE_BALLS_WAIT_TIME = 0.05; //time to wait at the chamber
@@ -52,12 +52,12 @@ public class rightCloseAutoFromClose extends LinearOpMode {
     private final Pose startPose = new Pose(129, 115+AUTO_Y_OFFSET, Math.toRadians(180)); // Start Pose of our robot
     private final Pose scorePose = new Pose(90, 94, scoreHeading);
     private final Pose scorePreloadPose = new Pose(90, 94, Math.toRadians(SCORE_HEADING_PRELOAD));
-    private final Pose grabPickupTopPose = new Pose(128 + INTAKE_X_OFFSET, 84, Math.toRadians(0));
-    private final Pose grabPickupTopPoseControlPoint1 = new Pose(59.593, 79.089);
+    private final Pose grabPickupTopPose = new Pose(127 + INTAKE_X_OFFSET, 84, Math.toRadians(0));
+    private final Pose grabPickupTopPoseControlPoint1 = new Pose(62.593, 79.089);
     private final Pose releaseBallsPose = new Pose(128.5, RELEASE_BALLS_Y, Math.toRadians(0));
     private final Pose releaseBallsPoseControlPoint1 = new Pose(98.141, 66.904);
     private final Pose grabPickupMiddlePose = new Pose(132 + INTAKE_X_OFFSET, 60, Math.toRadians(0));
-    private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(55.606, 51.175);
+    private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(59.606, 51.175);
     private final Pose scorePickupMiddlePoseControlPoint1 = new Pose(102.793, 69.341);
     private final Pose grabPickupBottomPose = new Pose(132.5 + INTAKE_X_OFFSET, 36, Math.toRadians(0));
     private final Pose grabPickupBottomPoseControlPoint1 = new Pose(60.48, 24.812);
@@ -287,17 +287,19 @@ public class rightCloseAutoFromClose extends LinearOpMode {
                     }
                 }
                 break;
-            case 6: //release preload balls
+            case 6: //release preload and top row balls
                 if (!follower.isBusy()){
                     if (init){
                         intake.turnOffIntake();
+                        intializeBurstClose(); //prestart shooter
+                        turnOnShooterAuto();
                         init = false;
                     }
                     else{
                         follower.followPath(goToReleaseBalls);
                         if (pathTimer.getElapsedTimeSeconds() > RELEASE_BALLS_WAIT_TIME) {
                             setPathState(7);
-                    }
+                        }
                     }
                 }
                 break;
@@ -310,8 +312,6 @@ public class rightCloseAutoFromClose extends LinearOpMode {
                     }
                     else{
                         follower.followPath(scorePickupMiddle, true);
-                        intializeBurstClose(); //prestart shooter
-                        turnOnShooterAuto();
                         setPathState(8);
                     }
                 }
@@ -422,7 +422,7 @@ public class rightCloseAutoFromClose extends LinearOpMode {
                         init = false;
                     }
                     else{
-                        follower.followPath(grabPickupHumanPlayer, false);
+                        follower.followPath(grabPickupHumanPlayer, 0.6, false);
                         setPathState(14);
                     }
                 }
@@ -430,7 +430,6 @@ public class rightCloseAutoFromClose extends LinearOpMode {
             case 14: //move to score position for human player
                 if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_HUMAN_PLAYER_PICKUP_TIME) {
                     if (init){
-                        intake.turnOffIntake();
                         init = false;
                     }
                     else{
