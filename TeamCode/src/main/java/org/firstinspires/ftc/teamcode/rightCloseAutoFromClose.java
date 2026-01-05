@@ -25,7 +25,7 @@ public class rightCloseAutoFromClose extends LinearOpMode {
     private boolean init = true;
     public static double INTAKE_DELAY_TIME = 0.05;
     public static double INTAKE_DELAY_TIME_PRELOAD = 0.1;
-    public static double WALL_HUMAN_PLAYER_X = 134.5;
+    public static double WALL_HUMAN_PLAYER_X = 136.25;
     public static double INTAKE_HUMAN_PLAYER_X = 136.25;
 //    public static double INTAKE_HUMAN_PLAYER_FLICKER_TIME = 3;
 
