@@ -10,6 +10,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import java.util.concurrent.TimeUnit;
+
 @Config
 public class Shooter{
     public Gamepad currentGamepad = new Gamepad(); //gamepads for rising edge detector
@@ -75,6 +77,9 @@ public class Shooter{
 
     private ElapsedTime shooterTimeoutTimer; //timer for lowering the pitch when enough time has passed, overriding threshold
     public double currentShooterTimeoutTime;
+    public ElapsedTime regressionDebounceTimer;
+    public static double REGRESSION_DEBOUNCE_SECONDS = 0.05;
+    public double lastRegressionValue = REGRESSION_RESTING_RPM;
     public static double SHOOTER_TIMEOUT_SECONDS = 1.2;
     private Timer atVelocityTimer = new Timer();
     public double atVelocityTime;
@@ -95,6 +100,7 @@ public class Shooter{
         shooterClosedTimer = new ElapsedTime();
         shooterOpenTimer = new ElapsedTime();
         shooterTimeoutTimer = new ElapsedTime();
+        regressionDebounceTimer = new ElapsedTime();
 //        atVelocityTimer = new ElapsedTime();
 
         shooterLeft = opMode.hardwareMap.get(DcMotor.class, "shooterleft");
@@ -197,10 +203,15 @@ public class Shooter{
 
     public double calculateShooterVelocityRPM(double ta){
         if (ta != 0.0){
+            regressionDebounceTimer.reset();
+            lastRegressionValue = (Range.clip(125.23417*Math.pow(ta, 4) - 1260.29173*Math.pow(ta, 3) + 4582.66579*Math.pow(ta, 2) - 7187.38628*ta + 7431.15091, 3250, 4450)) + REGRESSION_RPM_OFFSET;
             return (Range.clip(125.23417*Math.pow(ta, 4) - 1260.29173*Math.pow(ta, 3) + 4582.66579*Math.pow(ta, 2) - 7187.38628*ta + 7431.15091, 3250, 4450)) + REGRESSION_RPM_OFFSET;
         }
-        else{
+        else if (regressionDebounceTimer.time() > REGRESSION_DEBOUNCE_SECONDS){
             return REGRESSION_RESTING_RPM;
+        }
+        else { //return last regression valjue if regression debounce timer isn't over
+            return lastRegressionValue;
         }
     }
 

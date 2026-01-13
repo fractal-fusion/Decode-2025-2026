@@ -177,6 +177,10 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             //shooter at velocity time
 //            telemetry.addData("shooter at velocity time:", shooter.atVelocityTime);
 
+            //regression zero debounce
+            telemetry.addData("current regression zero time: ", shooter.regressionDebounceTimer.time());
+            telemetry.addData("last regression value: ", shooter.lastRegressionValue);
+
             //grounded
             telemetry.addData("grounded: ", drivetrain.grounded);
 
