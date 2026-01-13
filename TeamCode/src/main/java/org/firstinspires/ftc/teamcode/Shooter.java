@@ -43,6 +43,8 @@ public class Shooter{
     public static double CLOSE_RAMP_SCORE_POSITION = 0.25;
     public static double CLOSE_TARGET_RPM = 3350;
     public static double CLOSE_AUTO_TARGET_RPM = 3280;
+    public static double CLOSE_AUTO_TARGET_RPM_PRELOAD = 3250;
+
     public static double CLOSE_DEBOUNCE = 0.4;
 
     public static double CLOSE_TARGET_RPM_TICKS_PER_SECOND = CLOSE_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
@@ -78,7 +80,7 @@ public class Shooter{
     public double atVelocityTime;
 //    private boolean timerDebounce = false; //debounce to prevent timer from resetting when it has already reset
     public static double PID_OFFSET = 9.002; //right motor is always slower
-    public static double P = 100;
+    public static double P = 200;
     public static double I = 0.21;
     public static double D = 0;
     public static double F = 12.20004;

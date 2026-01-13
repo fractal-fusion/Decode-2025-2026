@@ -194,7 +194,7 @@ public class leftCloseAutoFromClose extends LinearOpMode {
                 }
                 else{ //move to scoring position
                     follower.followPath(scorePreload, true);
-                    intializeBurstClose(); //prestart shooter
+                    intializeBurstClosePreload(); //prestart shooter
                     turnOnShooterAuto();
                     setPathState(1);
                 }
@@ -486,6 +486,13 @@ public class leftCloseAutoFromClose extends LinearOpMode {
     public void intializeBurstClose(){
         shooter.setCurrentShooterClosedSeconds(Shooter.CLOSE_DEBOUNCE);
         shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM);
+        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
+        shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
+    }
+
+    public void intializeBurstClosePreload(){
+        shooter.setCurrentShooterClosedSeconds(Shooter.CLOSE_DEBOUNCE);
+        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM_PRELOAD);
         shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
         shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
     }
