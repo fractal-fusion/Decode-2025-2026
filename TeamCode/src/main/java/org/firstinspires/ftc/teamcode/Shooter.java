@@ -78,7 +78,7 @@ public class Shooter{
     private ElapsedTime shooterTimeoutTimer; //timer for lowering the pitch when enough time has passed, overriding threshold
     public double currentShooterTimeoutTime;
     public ElapsedTime regressionDebounceTimer;
-    public static double REGRESSION_DEBOUNCE_SECONDS = 0.05;
+    public static double REGRESSION_DEBOUNCE_SECONDS = 0.5;
     public double lastRegressionValue = REGRESSION_RESTING_RPM;
     public static double SHOOTER_TIMEOUT_SECONDS = 1.2;
     private Timer atVelocityTimer = new Timer();
