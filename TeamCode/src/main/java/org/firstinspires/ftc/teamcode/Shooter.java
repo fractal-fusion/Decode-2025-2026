@@ -85,7 +85,7 @@ public class Shooter{
     public double atVelocityTime;
 //    private boolean timerDebounce = false; //debounce to prevent timer from resetting when it has already reset
     public static double PID_OFFSET = 9.002; //right motor is always slower
-    public static double P = 200;
+    public static double P = 100;
     public static double I = 0.21;
     public static double D = 0;
     public static double F = 12.20004;
