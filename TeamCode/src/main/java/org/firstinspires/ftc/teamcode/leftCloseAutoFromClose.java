@@ -32,7 +32,7 @@ public class leftCloseAutoFromClose extends LinearOpMode {
     public static double RELEASE_BALLS_WAIT_TIME = 0.05; //time to wait at the chamber
     public static double HEADING_INTERPOLATION_END_PERCENTAGE = 0.65;
     public static double AUTO_Y_OFFSET = 0;
-    public static double INTAKE_X_OFFSET = -1;
+    public static double INTAKE_X_OFFSET = 0;
     public static double RELEASE_BALLS_Y = 74.2;
     public static double SCORE_HEADING_OFFSET = 5; //score heading offset since center of goals are not exactly 45 degrees
     public static double SCORE_HEADING_PRELOAD_TOLERANCE = 0.1;
