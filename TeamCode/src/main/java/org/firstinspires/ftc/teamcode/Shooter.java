@@ -44,8 +44,8 @@ public class Shooter{
 
     public static double CLOSE_RAMP_SCORE_POSITION = 0.25;
     public static double CLOSE_TARGET_RPM = 3350;
-    public static double CLOSE_AUTO_TARGET_RPM = 3280;
-    public static double CLOSE_AUTO_TARGET_RPM_PRELOAD = 3250;
+    public static double CLOSE_AUTO_TARGET_RPM = 3280; //TODO: tune this
+    public static double CLOSE_AUTO_TARGET_RPM_PRELOAD = 3250; //TODO: tune this
 
     public static double CLOSE_DEBOUNCE = 0.4;
 
@@ -55,7 +55,7 @@ public class Shooter{
     public double currentTargetRPMTicksPerSecond = REGRESSION_RESTING_RPM * RPM_TO_TICKS_PER_SECOND;
     public static double TARGET_RPM_TOLERANCE_RPM_CLOSE = 100;
     public static double TARGET_RPM_TOLERANCE_RPM_FAR = 30;
-    public static double REGRESSION_RPM_OFFSET = -15;
+    public static double REGRESSION_RPM_OFFSET = 25;
     public static double REGRESSION_RESTING_RPM = 3000;
     public double targetRPMToleranceRPM = TARGET_RPM_TOLERANCE_RPM_CLOSE; //initially set to the tolerance for close
     public double testShootPower = 0;
@@ -85,7 +85,7 @@ public class Shooter{
     public double atVelocityTime;
 //    private boolean timerDebounce = false; //debounce to prevent timer from resetting when it has already reset
     public static double PID_OFFSET = 9.002; //right motor is always slower
-    public static double P = 100;
+    public static double P = 220;
     public static double I = 0.21;
     public static double D = 0;
     public static double F = 12.20004;
@@ -204,8 +204,8 @@ public class Shooter{
     public double calculateShooterVelocityRPM(double ta){
         if (ta != 0.0){
             regressionDebounceTimer.reset();
-            lastRegressionValue = (Range.clip(125.23417*Math.pow(ta, 4) - 1260.29173*Math.pow(ta, 3) + 4582.66579*Math.pow(ta, 2) - 7187.38628*ta + 7431.15091, 3250, 4450)) + REGRESSION_RPM_OFFSET;
-            return (Range.clip(125.23417*Math.pow(ta, 4) - 1260.29173*Math.pow(ta, 3) + 4582.66579*Math.pow(ta, 2) - 7187.38628*ta + 7431.15091, 3250, 4450)) + REGRESSION_RPM_OFFSET;
+            lastRegressionValue = (Range.clip(56.46904*Math.pow(ta, 4) - 600.82962*Math.pow(ta, 3) + 2341.80033*Math.pow(ta, 2) - 4123.28016*ta + 5585.99233, 2600, 4450)) + REGRESSION_RPM_OFFSET;
+            return lastRegressionValue;
         }
         else if (regressionDebounceTimer.time() > REGRESSION_DEBOUNCE_SECONDS){
             return REGRESSION_RESTING_RPM;

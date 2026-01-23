@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 
 @TeleOp(name="productionOpmodeGateVersion", group="Robot")
@@ -11,6 +14,9 @@ public class productionOpmodeGateVersion extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        Telemetry telemetry = dashboard.getTelemetry();
+
         Drivetrain drivetrain = new Drivetrain(this);
         Shooter shooter = new Shooter(this);
         Intake intake = new Intake(this, Intake.FLICKER_OPEN_POSITION);
@@ -53,6 +59,13 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             else if (gamepad1.a) {
                 drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPower(limelight.getBearing()));
                 drivetrain.holdPose = follower.getPose();
+
+                if (!limelight.getRobotPose().equals(new Pose())){ //recalibrate pose using limelight
+                    follower.setPose(limelight.getRobotPose());
+                }
+            }
+            else if (gamepad1.b){
+                //TODO: implement auto drive
             }
             else if (gamepad1.x) {
                 drivetrain.resetIMU();
