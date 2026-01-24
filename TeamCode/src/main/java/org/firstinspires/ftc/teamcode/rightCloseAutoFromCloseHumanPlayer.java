@@ -1,21 +1,19 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Config
-@Disabled
-@Autonomous(name="Red Close Auto From Close Lines", group="Robot")
+@Autonomous(name="Red Close Auto From Close HP", group="Robot")
 @SuppressWarnings("FieldCanBeLocal")
-public class rightCloseAutoFromCloseLines extends LinearOpMode {
+public class rightCloseAutoFromCloseHumanPlayer extends LinearOpMode {
     Drivetrain drivetrain;
     Shooter shooter;
     Intake intake;
@@ -55,16 +53,13 @@ public class rightCloseAutoFromCloseLines extends LinearOpMode {
     private final Pose startPose = new Pose(129, 115+AUTO_Y_OFFSET, Math.toRadians(180)); // Start Pose of our robot
     private final Pose scorePose = new Pose(90, 94, scoreHeading);
     private final Pose scorePreloadPose = new Pose(90, 94, Math.toRadians(SCORE_HEADING_PRELOAD));
-    private final Pose goToGrabPickupTopPose = new Pose(99, 84, Math.toRadians(0));
     private final Pose grabPickupTopPose = new Pose(127 + INTAKE_X_OFFSET, 84, Math.toRadians(0));
     private final Pose grabPickupTopPoseControlPoint1 = new Pose(92, 81);
     private final Pose releaseBallsPose = new Pose(128.5, RELEASE_BALLS_Y, Math.toRadians(0));
     private final Pose releaseBallsPoseControlPoint1 = new Pose(98.141, 66.904);
-    private final Pose goToGrabPickupMiddlePose = new Pose(99, 59.5, Math.toRadians(0));
     private final Pose grabPickupMiddlePose = new Pose(132 + INTAKE_X_OFFSET, 59.5, Math.toRadians(0));
     private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(89, 54);
     private final Pose scorePickupMiddlePoseControlPoint1 = new Pose(102.793, 69.341);
-    private final Pose goToGrabPickupBottomPose = new Pose(99, 36, Math.toRadians(0));
     private final Pose grabPickupBottomPose = new Pose(132.5 + INTAKE_X_OFFSET, 36, Math.toRadians(0));
     private final Pose grabPickupBottomPoseControlPoint1 = new Pose(86, 24);
     private final Pose goToWallHumanPlayerPose = new Pose(WALL_HUMAN_PLAYER_X, 45, Math.toRadians(315));
@@ -78,11 +73,10 @@ public class rightCloseAutoFromCloseLines extends LinearOpMode {
                 .setHeadingConstraint(SCORE_HEADING_PRELOAD_TOLERANCE)
                 .build();
         grabPickupTop = follower.pathBuilder()
-                .addPath(new BezierLine(scorePose, goToGrabPickupTopPose))
-                .setLinearHeadingInterpolation(scorePose.getHeading(), goToGrabPickupBottomPose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
-
-                .addPath(new BezierLine(goToGrabPickupTopPose, grabPickupTopPose))
-                .setLinearHeadingInterpolation(goToGrabPickupTopPose.getHeading(), grabPickupTopPose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
+                .addPath(new BezierCurve(scorePose, grabPickupTopPoseControlPoint1, grabPickupTopPose))
+//                    .addPath(new BezierLine(scorePose, grabPickupTopPose))
+                .setLinearHeadingInterpolation(scorePose.getHeading(), grabPickupTopPose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
+//                .addPoseCallback(new Pose(126, 84), intake::holdFlicker, 0.5)
                 .build();
         goToReleaseBalls = follower.pathBuilder()
                 .addPath(new BezierCurve(grabPickupMiddlePose, releaseBallsPoseControlPoint1, releaseBallsPose))
@@ -94,22 +88,18 @@ public class rightCloseAutoFromCloseLines extends LinearOpMode {
                 .setLinearHeadingInterpolation(grabPickupTopPose.getHeading(), scorePose.getHeading())
                 .build();
         grabPickupMiddle = follower.pathBuilder()
-                .addPath(new BezierLine(scorePose, goToGrabPickupMiddlePose))
-                .setLinearHeadingInterpolation(scorePose.getHeading(), goToGrabPickupMiddlePose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
-
-                .addPath(new BezierLine(goToGrabPickupMiddlePose, grabPickupMiddlePose))
-                .setLinearHeadingInterpolation(goToGrabPickupMiddlePose.getHeading(), grabPickupMiddlePose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
+                .addPath(new BezierCurve(scorePose, grabPickupMiddlePoseControlPoint1, grabPickupMiddlePose))
+                .setLinearHeadingInterpolation(scorePose.getHeading(), grabPickupMiddlePose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
+//                .addPoseCallback(new Pose(130, 58), intake::holdFlicker, 0.5)
                 .build();
         scorePickupMiddle = follower.pathBuilder()
-                .addPath(new BezierLine(grabPickupMiddlePose, scorePose))
+                .addPath(new BezierCurve(grabPickupMiddlePose, scorePickupMiddlePoseControlPoint1, scorePose))
                 .setLinearHeadingInterpolation(grabPickupMiddlePose.getHeading(), scorePose.getHeading())
                 .build();
         grabPickupBottom = follower.pathBuilder()
-                .addPath(new BezierLine(scorePose, goToGrabPickupBottomPose))
-                .setLinearHeadingInterpolation(scorePose.getHeading(), goToGrabPickupBottomPose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
-
-                .addPath(new BezierLine(goToGrabPickupBottomPose, grabPickupBottomPose))
-                .setLinearHeadingInterpolation(goToGrabPickupBottomPose.getHeading(), grabPickupBottomPose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
+                .addPath(new BezierCurve(scorePose, grabPickupBottomPoseControlPoint1, grabPickupBottomPose))
+                .setLinearHeadingInterpolation(scorePose.getHeading(), grabPickupBottomPose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
+//                .addPoseCallback(new Pose(130, 36), intake::holdFlicker, 0.5)
                 .build();
         scorePickupBottom = follower.pathBuilder()
                 .addPath(new BezierLine(grabPickupBottomPose, scorePose))
