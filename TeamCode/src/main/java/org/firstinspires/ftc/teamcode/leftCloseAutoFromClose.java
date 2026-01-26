@@ -25,8 +25,8 @@ public class leftCloseAutoFromClose extends LinearOpMode {
     private boolean init = true;
     public static double INTAKE_DELAY_TIME = 0.05;
     public static double INTAKE_DELAY_TIME_PRELOAD = 0.1;
-    public static double WALL_HUMAN_PLAYER_X = 7.57;
-    public static double INTAKE_HUMAN_PLAYER_X = 7.57;
+    public static double WALL_HUMAN_PLAYER_X = 16;
+    public static double INTAKE_HUMAN_PLAYER_X = 9.2;
 //    public static double INTAKE_HUMAN_PLAYER_FLICKER_TIME = 3;
 
     public static double RELEASE_BALLS_WAIT_TIME = 0.05; //time to wait at the chamber
@@ -50,19 +50,20 @@ public class leftCloseAutoFromClose extends LinearOpMode {
 
     private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop, goToWallHumanPlayer, grabPickupHumanPlayer, scorePickupHumanPlayer, goToReleaseBalls, goToPark; //define path chains (muliple paths interpolated)
 
-    private final Pose startPose = new Pose(15, 115+AUTO_Y_OFFSET, Math.toRadians(0)); // Start Pose of our robot
+    private final Pose startPose = new Pose(15, 115+AUTO_Y_OFFSET, Math.toRadians(180)); // Start Pose of our robot
     private final Pose scorePose = new Pose(54, 94, scoreHeading);
     private final Pose scorePreloadPose = new Pose(54, 94, Math.toRadians(SCORE_HEADING_PRELOAD));
     private final Pose grabPickupTopPose = new Pose(17 + INTAKE_X_OFFSET, 84, Math.toRadians(180));
-    private final Pose grabPickupTopPoseControlPoint1 = new Pose(81.407, 79.089);
-    private final Pose releaseBallsPose = new Pose(15.5, RELEASE_BALLS_Y, Math.toRadians(180));
+    private final Pose grabPickupTopPoseControlPoint1 = new Pose(64, 81);
+    private final Pose releaseBallsPose = new Pose(15.5, RELEASE_BALLS_Y, Math.toRadians(0));
     private final Pose releaseBallsPoseControlPoint1 = new Pose(45.859, 66.904);
     private final Pose grabPickupMiddlePose = new Pose(12 + INTAKE_X_OFFSET, 59.5, Math.toRadians(180));
-    private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(84.394, 51.175);
+    private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(64, 54);
     private final Pose scorePickupMiddlePoseControlPoint1 = new Pose(41.207, 69.341);
     private final Pose grabPickupBottomPose = new Pose(11.5 + INTAKE_X_OFFSET, 36, Math.toRadians(180));
-    private final Pose grabPickupBottomPoseControlPoint1 = new Pose(83.52, 24.812);
-    private final Pose goToWallHumanPlayerPose = new Pose(WALL_HUMAN_PLAYER_X, 45, Math.toRadians(270));
+    private final Pose grabPickupBottomPoseControlPoint1 = new Pose(64, 24);
+    private final Pose goToWallHumanPlayerPose = new Pose(WALL_HUMAN_PLAYER_X, 16, Math.toRadians(225));
+    private final Pose alignWallHumanPlayerPose = new Pose(INTAKE_HUMAN_PLAYER_X-0.5, 45, Math.toRadians(270));
     private final Pose grabPickupHumanPlayerPose = new Pose(INTAKE_HUMAN_PLAYER_X, 5, Math.toRadians(270));
     private final Pose parkPose = new Pose(44,70, Math.toRadians(180));
 
@@ -107,11 +108,14 @@ public class leftCloseAutoFromClose extends LinearOpMode {
                 .build();
         goToWallHumanPlayer = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, goToWallHumanPlayerPose))
+                .setTimeoutConstraint(100)
                 .setLinearHeadingInterpolation(scorePose.getHeading(), goToWallHumanPlayerPose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
                 .build();
         grabPickupHumanPlayer = follower.pathBuilder()
-                .addPath(new BezierLine(goToWallHumanPlayerPose, grabPickupHumanPlayerPose))
-                .setTangentHeadingInterpolation()
+                .addPath(new BezierLine(goToWallHumanPlayerPose, alignWallHumanPlayerPose))
+                .setConstantHeadingInterpolation(grabPickupHumanPlayerPose.getHeading())
+                .addPath(new BezierLine(alignWallHumanPlayerPose, grabPickupHumanPlayerPose))
+                .setConstantHeadingInterpolation(grabPickupHumanPlayerPose.getHeading())
                 .setNoDeceleration()
 //                .addTemporalCallback(INTAKE_HUMAN_PLAYER_FLICKER_TIME, intake::holdFlicker)
                 .build();
