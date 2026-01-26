@@ -26,7 +26,7 @@ public class rightCloseAutoFromCloseHumanPlayer extends LinearOpMode {
     public static double INTAKE_DELAY_TIME = 0.05;
     public static double INTAKE_DELAY_TIME_PRELOAD = 0.1;
     public static double WALL_HUMAN_PLAYER_X = 128;
-    public static double INTAKE_HUMAN_PLAYER_X = 136.43;
+    public static double INTAKE_HUMAN_PLAYER_X = 134.8;
 //    public static double INTAKE_HUMAN_PLAYER_FLICKER_TIME = 3;
 
     public static double RELEASE_BALLS_WAIT_TIME = 0.05; //time to wait at the chamber
@@ -54,15 +54,16 @@ public class rightCloseAutoFromCloseHumanPlayer extends LinearOpMode {
     private final Pose scorePose = new Pose(90, 94, scoreHeading);
     private final Pose scorePreloadPose = new Pose(90, 94, Math.toRadians(SCORE_HEADING_PRELOAD));
     private final Pose grabPickupTopPose = new Pose(127 + INTAKE_X_OFFSET, 84, Math.toRadians(0));
-    private final Pose grabPickupTopPoseControlPoint1 = new Pose(92, 81);
+    private final Pose grabPickupTopPoseControlPoint1 = new Pose(80, 81); //TODO: TUNE ALL CONTROL POINTS FARTHER BACK ON X
     private final Pose releaseBallsPose = new Pose(128.5, RELEASE_BALLS_Y, Math.toRadians(0));
     private final Pose releaseBallsPoseControlPoint1 = new Pose(98.141, 66.904);
     private final Pose grabPickupMiddlePose = new Pose(132 + INTAKE_X_OFFSET, 59.5, Math.toRadians(0));
-    private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(89, 54); //TODO: TUNE ALL CONTROL POINTS FARTHER BACK ON X
+    private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(80, 54); //TODO: TUNE ALL CONTROL POINTS FARTHER BACK ON X
     private final Pose scorePickupMiddlePoseControlPoint1 = new Pose(102.793, 69.341);
     private final Pose grabPickupBottomPose = new Pose(132.5 + INTAKE_X_OFFSET, 36, Math.toRadians(0));
-    private final Pose grabPickupBottomPoseControlPoint1 = new Pose(86, 24);
+    private final Pose grabPickupBottomPoseControlPoint1 = new Pose(80, 24); //TODO: TUNE ALL CONTROL POINTS FARTHER BACK ON X
     private final Pose goToWallHumanPlayerPose = new Pose(WALL_HUMAN_PLAYER_X, 45, Math.toRadians(315));
+    private final Pose alignWallHumanPlayerPose = new Pose(INTAKE_HUMAN_PLAYER_X+0.5, 45, Math.toRadians(270));
     private final Pose grabPickupHumanPlayerPose = new Pose(INTAKE_HUMAN_PLAYER_X, 5, Math.toRadians(270));
     private final Pose parkPose = new Pose(100,70, Math.toRadians(0));
 
@@ -107,11 +108,14 @@ public class rightCloseAutoFromCloseHumanPlayer extends LinearOpMode {
                 .build();
         goToWallHumanPlayer = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, goToWallHumanPlayerPose))
+                .setTimeoutConstraint(100)
                 .setLinearHeadingInterpolation(scorePose.getHeading(), goToWallHumanPlayerPose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
                 .build();
         grabPickupHumanPlayer = follower.pathBuilder()
-                .addPath(new BezierLine(goToWallHumanPlayerPose, grabPickupHumanPlayerPose))
-                .setLinearHeadingInterpolation(goToWallHumanPlayerPose.getHeading(), grabPickupHumanPlayerPose.getHeading())
+                .addPath(new BezierLine(goToWallHumanPlayerPose, alignWallHumanPlayerPose))
+                .setConstantHeadingInterpolation(grabPickupHumanPlayerPose.getHeading())
+                .addPath(new BezierLine(alignWallHumanPlayerPose, grabPickupHumanPlayerPose))
+                .setConstantHeadingInterpolation(grabPickupHumanPlayerPose.getHeading())
                 .setNoDeceleration()
 //                .addTemporalCallback(INTAKE_HUMAN_PLAYER_FLICKER_TIME, intake::holdFlicker)
                 .build();
