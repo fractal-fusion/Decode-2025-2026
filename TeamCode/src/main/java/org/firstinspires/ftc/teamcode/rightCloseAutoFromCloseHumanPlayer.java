@@ -63,7 +63,7 @@ public class rightCloseAutoFromCloseHumanPlayer extends LinearOpMode {
     private final Pose grabPickupBottomPose = new Pose(132.5 + INTAKE_X_OFFSET, 36, Math.toRadians(0));
     private final Pose grabPickupBottomPoseControlPoint1 = new Pose(80, 24);
     private final Pose goToWallHumanPlayerPose = new Pose(WALL_HUMAN_PLAYER_X, 45, Math.toRadians(315));
-    private final Pose alignWallHumanPlayerPose = new Pose(INTAKE_HUMAN_PLAYER_X+0.5, 45, Math.toRadians(270));
+    private final Pose alignWallHumanPlayerPose = new Pose(INTAKE_HUMAN_PLAYER_X-0.5, 45, Math.toRadians(270));
     private final Pose grabPickupHumanPlayerPose = new Pose(INTAKE_HUMAN_PLAYER_X, 5, Math.toRadians(270));
     private final Pose parkPose = new Pose(100,70, Math.toRadians(0));
 
