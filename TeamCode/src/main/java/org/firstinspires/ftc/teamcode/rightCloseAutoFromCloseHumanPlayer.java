@@ -414,7 +414,7 @@ public class rightCloseAutoFromCloseHumanPlayer extends LinearOpMode {
                         init = false;
                     }
                     else{
-                        follower.followPath(goToWallHumanPlayer, true);
+                        follower.followPath(goToWallHumanPlayer, false);
                         setPathState(13);
                     }
                 }
