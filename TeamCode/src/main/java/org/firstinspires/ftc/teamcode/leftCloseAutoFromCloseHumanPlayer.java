@@ -11,9 +11,9 @@ import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 
 @Config
-@Autonomous(name="Blue Close Auto From Close", group="Robot")
+@Autonomous(name="Blue Close Auto From Close HP", group="Robot")
 @SuppressWarnings("FieldCanBeLocal")
-public class leftCloseAutoFromClose extends LinearOpMode {
+public class leftCloseAutoFromCloseHumanPlayer extends LinearOpMode {
     Drivetrain drivetrain;
     Shooter shooter;
     Intake intake;
