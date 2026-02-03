@@ -57,15 +57,16 @@ public class productionOpmodeGateVersion extends LinearOpMode {
                 drivetrain.grounded = true;
             }
             else if (gamepad1.a) {
-                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPower(limelight.getBearing()));
+//                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPower(limelight.getBearing()));
+                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPower(-drivetrain.calculateOdoGoalBearing(follower.getPose(), drivetrain.BLUE_GOAL_POSITION)));
                 drivetrain.holdPose = follower.getPose();
 
-                if (!limelight.getRobotPose().equals(new Pose())){ //recalibrate pose using limelight
-                    follower.setPose(limelight.getRobotPose());
-                }
+//                if (!limelight.getRobotPose().equals(new Pose())){ //recalibrate pose using limelight TODO: relocalize limelight
+//                    follower.setPose(limelight.getRobotPose());
+//                }
             }
             else if (gamepad1.b){
-                //TODO: implement auto drive
+//                follower.turnTo(drivetrain.calculateOdoGoalAngle(follower.getPose(), drivetrain.BLUE_GOAL_POSITION));
             }
             else if (gamepad1.x) {
                 drivetrain.resetIMU();
@@ -200,6 +201,8 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             //driver power
             telemetry.addData("driver power: ", intake.driverPower);
 
+            telemetry.addData("current robot pose: ", follower.getPose());
+            telemetry.addData("current robot odo angle: ", drivetrain.calculateOdoGoalBearing(follower.getPose(), drivetrain.BLUE_GOAL_POSITION));
 
             telemetry.update();
         }

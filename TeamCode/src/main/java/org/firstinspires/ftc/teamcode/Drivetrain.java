@@ -27,6 +27,7 @@ public class Drivetrain {
     public static double AUTO_ALIGN_GAIN = 0.0175; //converts tx from limelight to power
     public static double AUTO_ALIGN_DRIVE_POWER_MULTIPLIER_MIDPOINT = 0.45; //half of max power
 
+    public Pose BLUE_GOAL_POSITION = new Pose(0, 144);
     public Gamepad currentGamepad = new Gamepad();
     public Gamepad previousGamepad = new Gamepad();
     public boolean grounded = false;
@@ -128,9 +129,17 @@ public class Drivetrain {
     }
 
     public double calculateAutoAlignPower(double bearing) {
-        double autoAlignPower;
-        autoAlignPower = Range.clip(bearing * AUTO_ALIGN_GAIN, -AUTO_ALIGN_MAX_SPEED, AUTO_ALIGN_MAX_SPEED);
-        return autoAlignPower;
+        return Range.clip(bearing * AUTO_ALIGN_GAIN, -AUTO_ALIGN_MAX_SPEED, AUTO_ALIGN_MAX_SPEED);
+    }
+
+    public double calculateOdoGoalBearing(Pose robotPose, Pose goalPose) {
+        double vectorY = goalPose.getY() - robotPose.getY();
+        double vectorX = goalPose.getX() - robotPose.getX();
+
+        double angle = (Math.atan2(vectorY, vectorX) - robotPose.getHeading());
+        if (angle <= -Math.PI) angle += Math.PI * 2;
+        if (angle > Math.PI) angle -= Math.PI * 2;
+        return angle;
     }
 
 //    public void toggleGrounded() {
