@@ -24,7 +24,9 @@ public class Drivetrain {
 
     //constants used for tuning auto alignment
     public static double AUTO_ALIGN_MAX_SPEED = 0.8; //auto alignment speed is clipped to minimum negative this and maximum positive this (bilateral tolerance)
-    public static double AUTO_ALIGN_GAIN = 0.0175; //converts tx from limelight to power
+    public static double AUTO_ALIGN_GAIN_LIMELIGHT = 0.0175; //converts tx from limelight to power
+    public static double AUTO_ALIGN_GAIN_ODO = 0.3; //converts tx from limelight to power
+
     public static double AUTO_ALIGN_DRIVE_POWER_MULTIPLIER_MIDPOINT = 0.45; //half of max power
 
     public Pose BLUE_GOAL_POSITION = new Pose(0, 144);
@@ -128,8 +130,12 @@ public class Drivetrain {
         backRight.setPower(backRightPower);
     }
 
-    public double calculateAutoAlignPower(double bearing) {
-        return Range.clip(bearing * AUTO_ALIGN_GAIN, -AUTO_ALIGN_MAX_SPEED, AUTO_ALIGN_MAX_SPEED);
+    public double calculateAutoAlignPowerLimelight(double bearing) {
+        return Range.clip(bearing * AUTO_ALIGN_GAIN_LIMELIGHT, -AUTO_ALIGN_MAX_SPEED, AUTO_ALIGN_MAX_SPEED);
+    }
+
+    public double calculateAutoAlignPowerOdo(double bearing) {
+        return Range.clip(bearing * AUTO_ALIGN_GAIN_ODO, -AUTO_ALIGN_MAX_SPEED, AUTO_ALIGN_MAX_SPEED);
     }
 
     public double calculateOdoGoalBearing(Pose robotPose, Pose goalPose) {

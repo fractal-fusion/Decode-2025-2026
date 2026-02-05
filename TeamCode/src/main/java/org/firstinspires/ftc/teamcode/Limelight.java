@@ -118,8 +118,24 @@ public class Limelight {
 
         if (result != null && result.isValid()) {
             Pose3D limelightPose = result.getBotpose_MT2();
-            Position limelightPoseInches = limelightPose.getPosition().toUnit(DistanceUnit.INCH);
-            return new Pose(limelightPoseInches.x, limelightPoseInches.y, limelightPose.getOrientation().getYaw(),InvertedFTCCoordinates.INSTANCE).getAsCoordinateSystem(PedroCoordinates.INSTANCE);
+            Position limelightPoseMeters = limelightPose.getPosition();
+
+            double limelightPoseInchesX = limelightPoseMeters.x * 39.3701;
+            double limelightPoseInchesY = limelightPoseMeters.y * 39.3701;
+
+            double x = limelightPoseInchesY;
+//            if (result.getFiducialResults().get(0).getFiducialId() == 20){
+//                x = -limelightPoseInchesY;
+//
+//            }
+//            else if (result.getFiducialResults().get(0).getFiducialId() == 24){
+//                x = limelightPoseInchesY;
+//            }
+            //manually convert to pedro coords
+            double y = -limelightPoseInchesX;
+            double heading = Math.toRadians(limelightPose.getOrientation().getYaw() + 90);
+
+            return new Pose(x, y, heading);
 
         }
 

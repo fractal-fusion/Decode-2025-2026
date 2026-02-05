@@ -56,14 +56,17 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             if (gamepad1.right_bumper){
                 drivetrain.grounded = true;
             }
-            else if (gamepad1.a) {
-//                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPower(limelight.getBearing()));
-                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPower(-drivetrain.calculateOdoGoalBearing(follower.getPose(), drivetrain.BLUE_GOAL_POSITION)));
+            else if (gamepad1.b) {
+                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPowerLimelight(limelight.getBearing()));
                 drivetrain.holdPose = follower.getPose();
 
-//                if (!limelight.getRobotPose().equals(new Pose())){ //recalibrate pose using limelight TODO: relocalize limelight
-//                    follower.setPose(limelight.getRobotPose());
-//                }
+                if (!limelight.getRobotPose().equals(new Pose())){ //recalibrate pose using limelight TODO: relocalize limelight
+                    follower.setPose(limelight.getRobotPose());
+                }
+            }
+            else if (gamepad1.a) {
+                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPowerOdo(-drivetrain.calculateOdoGoalBearing(follower.getPose(), drivetrain.BLUE_GOAL_POSITION)));
+                drivetrain.holdPose = follower.getPose();
             }
             else if (gamepad1.b){
 //                follower.turnTo(drivetrain.calculateOdoGoalAngle(follower.getPose(), drivetrain.BLUE_GOAL_POSITION));
@@ -181,7 +184,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
 //            telemetry.addData("shooter at velocity:", shooter.shooterAtTargetVelocity());
             telemetry.addData("apriltag range:", limelight.getRange());
             telemetry.addData("apriltag bearing:", limelight.getBearing());
-            telemetry.addData("drive power:", drivetrain.calculateAutoAlignPower(limelight.getBearing()));
+            telemetry.addData("drive power:", drivetrain.calculateAutoAlignPowerLimelight(limelight.getBearing()));
 
             telemetry.addData("pitch up time:", shooter.currentShooterClosedTime);
             telemetry.addData("pitch down time:", shooter.currentShooterOpenTime);
@@ -202,6 +205,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             telemetry.addData("driver power: ", intake.driverPower);
 
             telemetry.addData("current robot pose: ", follower.getPose());
+            telemetry.addData("camera robot pose:", limelight.getRobotPose());
             telemetry.addData("current robot odo angle: ", drivetrain.calculateOdoGoalBearing(follower.getPose(), drivetrain.BLUE_GOAL_POSITION));
 
             telemetry.update();

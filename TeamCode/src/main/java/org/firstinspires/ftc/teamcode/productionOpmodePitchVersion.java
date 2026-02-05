@@ -47,7 +47,7 @@ public class productionOpmodePitchVersion extends LinearOpMode {
 
             //drivetrain controls (field centric drive + autoalignment)
             if (gamepad1.a) {
-                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPower(limelight.getBearing()));
+                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPowerLimelight(limelight.getBearing()));
             }
             else if (gamepad1.x) {
                 drivetrain.resetIMU();
@@ -142,7 +142,7 @@ public class productionOpmodePitchVersion extends LinearOpMode {
 //            telemetry.addData("shooter at velocity:", shooter.shooterAtTargetVelocity());
             telemetry.addData("apriltag range:", limelight.getRange());
             telemetry.addData("apriltag bearing:", limelight.getBearing());
-            telemetry.addData("drive power:", drivetrain.calculateAutoAlignPower(limelight.getBearing()));
+            telemetry.addData("drive power:", drivetrain.calculateAutoAlignPowerLimelight(limelight.getBearing()));
 
             telemetry.addData("pitch up time:", shooter.currentShooterClosedTime);
             telemetry.addData("pitch down time:", shooter.currentShooterOpenTime);
