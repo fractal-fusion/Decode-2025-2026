@@ -5,7 +5,6 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 
@@ -207,6 +206,8 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             telemetry.addData("current robot pose: ", follower.getPose());
             telemetry.addData("camera robot pose:", limelight.getRobotPose());
             telemetry.addData("current robot odo angle: ", drivetrain.calculateOdoGoalBearing(follower.getPose(), drivetrain.BLUE_GOAL_POSITION));
+
+            Drawing.drawDebug(follower);
 
             telemetry.update();
         }
