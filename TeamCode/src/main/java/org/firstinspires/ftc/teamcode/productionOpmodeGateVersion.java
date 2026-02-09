@@ -59,7 +59,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
                 drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPowerLimelight(limelight.getBearing()));
                 drivetrain.holdPose = follower.getPose();
 
-                if (!limelight.getRobotPose().equals(new Pose())){ //recalibrate pose using limelight TODO: relocalize limelight
+                if (limelight.getRobotPose() != new Pose()){ //recalibrate pose using limelight TODO: relocalize limelight
                     follower.setPose(limelight.getRobotPose());
                 }
             }

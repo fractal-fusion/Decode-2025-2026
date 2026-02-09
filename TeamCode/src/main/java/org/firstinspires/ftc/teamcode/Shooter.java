@@ -115,7 +115,7 @@ public class Shooter{
 
         TESTSERVO = opMode.hardwareMap.get(Servo.class, testServo);
 
-        shooterRight.setDirection(DcMotor.Direction.REVERSE); //reverse shooter right motor so positive is out
+        shooterLeft.setDirection(DcMotor.Direction.REVERSE); //reverse shooter right left so positive is out
 
 //        shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //        shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); //slow down the motor faster

@@ -90,7 +90,7 @@ public class Limelight {
     public double getBearing() {
         LLResult result = limelight.getLatestResult();
         if (result != null && result.isValid()) {
-            return result.getTy();
+            return result.getTx();
         }
         return 0.0;
     }
@@ -117,25 +117,12 @@ public class Limelight {
         LLResult result = limelight.getLatestResult();
 
         if (result != null && result.isValid()) {
-            Pose3D limelightPose = result.getBotpose_MT2();
-            Position limelightPoseMeters = limelightPose.getPosition();
-
-            double limelightPoseInchesX = limelightPoseMeters.x * 39.3701;
-            double limelightPoseInchesY = limelightPoseMeters.y * 39.3701;
-
-            double x = limelightPoseInchesY;
-//            if (result.getFiducialResults().get(0).getFiducialId() == 20){
-//                x = -limelightPoseInchesY;
-//
-//            }
-//            else if (result.getFiducialResults().get(0).getFiducialId() == 24){
-//                x = limelightPoseInchesY;
-//            }
-            //manually convert to pedro coords
-            double y = -limelightPoseInchesX;
-            double heading = Math.toRadians(limelightPose.getOrientation().getYaw() + 90);
-
-            return new Pose(x, y, heading);
+            Pose3D limelightPose = result.getBotpose();
+            Position limelightPoseInches = limelightPose.getPosition().toUnit(DistanceUnit.INCH);
+            double x = limelightPoseInches.y + 72;
+            double y = -limelightPoseInches.x + 72;
+            double yaw = Math.toRadians(limelightPose.getOrientation().getYaw() - 90);
+            return new Pose(x, y, yaw);
 
         }
 
