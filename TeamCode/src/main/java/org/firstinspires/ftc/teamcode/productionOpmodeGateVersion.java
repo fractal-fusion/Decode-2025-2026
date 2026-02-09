@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import java.util.Objects;
+
 
 @TeleOp(name="productionOpmodeGateVersion", group="Robot")
 public class productionOpmodeGateVersion extends LinearOpMode {
@@ -59,7 +61,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
                 drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPowerLimelight(limelight.getBearing()));
                 drivetrain.holdPose = follower.getPose();
 
-                if (limelight.getRobotPose() != new Pose()){ //recalibrate pose using limelight TODO: relocalize limelight
+                if (!new Pose().roughlyEquals(limelight.getRobotPose(), 1)){ //recalibrate pose using limelight TODO: relocalize limelight
                     follower.setPose(limelight.getRobotPose());
                 }
             }
