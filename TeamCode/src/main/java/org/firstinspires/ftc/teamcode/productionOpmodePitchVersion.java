@@ -22,7 +22,7 @@ public class productionOpmodePitchVersion extends LinearOpMode {
 
 //        ColorDetector colorDetector = new ColorDetector(this);
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(PoseStorage.currentPose == null ? new Pose() : PoseStorage.currentPose); //get pose handed off from auto otherwise just create a new one
+        follower.setStartingPose(PoseManager.currentPose == null ? new Pose() : PoseManager.currentPose); //get pose handed off from auto otherwise just create a new one
 
 //        camera.setExposure(6); //low exposure and high gain to reduce blur for autoalignment not needed
 //        camera.setGain(250);

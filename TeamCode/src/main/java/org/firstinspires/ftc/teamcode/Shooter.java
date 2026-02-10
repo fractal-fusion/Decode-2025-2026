@@ -32,17 +32,18 @@ public class Shooter{
     public static double PITCH_SCORE_POSITION = 0.0; //flatten pitch so balls can pass for scoring
     public static double PITCH_INTAKE_POSITION = 0.054;
     public static double PITCH_CYCLE_POSITION = 0.18;
+    public static double RAMP_LEFT_SERVO_OFFSET = 0.02; //offset for ramp since the left servo is a little off
     public static double GATE_OPEN_POSITION = 0;
     public static double GATE_CLOSED_POSITION = 0.14;
     public static double RAMP_CYCLE_POSITION = 0.2;
-    public static double FAR_RAMP_SCORE_POSITION = 0.23;
+    public static double FAR_RAMP_SCORE_POSITION = 0;
     public static double FAR_TARGET_RPM = 4350;
     public static double FAR_AUTO_TARGET_RPM = 4350; //untested
     public static double FAR_DEBOUNCE = 3.0; //untested
 
     public static double FAR_TARGET_RPM_TICKS_PER_SECOND = FAR_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
 
-    public static double CLOSE_RAMP_SCORE_POSITION = 0.25;
+    public static double CLOSE_RAMP_SCORE_POSITION = 0.10;
     public static double CLOSE_TARGET_RPM = 3350;
     public static double CLOSE_AUTO_TARGET_RPM = 2950; //TODO: tune this
     public static double CLOSE_AUTO_TARGET_RPM_PRELOAD = CLOSE_AUTO_TARGET_RPM - 50; //TODO: tune this
@@ -128,8 +129,7 @@ public class Shooter{
 
         shooterGate.setDirection(Servo.Direction.REVERSE); //reverse gate servo so open position is zero and positive closes inwards
 
-        shooterRampRight.setPosition(0); //zero ramp servoes on initialization
-        shooterRampLeft.setPosition(0);
+        setRampPosition(0); //zero ramp servoes on initialization
 
         ((DcMotorEx) shooterLeft).setVelocityPIDFCoefficients(P, I, D, F);
         ((DcMotorEx) shooterRight).setVelocityPIDFCoefficients(P, I, D, F);
@@ -167,7 +167,7 @@ public class Shooter{
 
     public void setRampPosition(double position){
         shooterRampRight.setPosition(position);
-        shooterRampLeft.setPosition(position);
+        shooterRampLeft.setPosition(position + RAMP_LEFT_SERVO_OFFSET);
     }
 
     public void setPitchPosition(double position){
@@ -228,7 +228,7 @@ public class Shooter{
         }
 
         if(on){
-            setRampPosition(CLOSE_RAMP_SCORE_POSITION);
+//            setRampPosition(CLOSE_RAMP_SCORE_POSITION); TODO: make separate toggle for regression
             turnOnShooter();
         }
         else {
@@ -298,7 +298,7 @@ public class Shooter{
     public void setCurrentShooterClosedSeconds(double seconds){
         currentShooterClosedSeconds = seconds;
     }
-    
+
     public void updateGamepad(Gamepad gamepad) { //debounce method
         previousGamepad.copy(currentGamepad);
 
@@ -364,15 +364,15 @@ public class Shooter{
     public void testControlRampPosition(Gamepad gamepad){
 
         if(currentGamepad.right_bumper && !previousGamepad.right_bumper){
-            testRampPosition += 0.05;
+            testRampPosition += 0.01;
         } else if (currentGamepad.left_bumper && !previousGamepad.left_bumper) {
-            testRampPosition -= 0.05;
+            testRampPosition -= 0.01;
         }
 
         testRampPosition = Math.max(0, Math.min(testRampPosition, 1));
 
         shooterRampRight.setPosition(testRampPosition);
-        shooterRampLeft.setPosition(testRampPosition);
+        shooterRampLeft.setPosition(testRampPosition + RAMP_LEFT_SERVO_OFFSET);
 
         opMode.telemetry.addData("servoposRight", shooterRampRight.getPosition());
         opMode.telemetry.addData("servoposLeft", shooterRampLeft.getPosition());

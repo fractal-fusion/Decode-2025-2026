@@ -29,7 +29,6 @@ public class Drivetrain {
 
     public static double AUTO_ALIGN_DRIVE_POWER_MULTIPLIER_MIDPOINT = 0.45; //half of max power
 
-    public Pose BLUE_GOAL_POSITION = new Pose(0, 144);
     public Gamepad currentGamepad = new Gamepad();
     public Gamepad previousGamepad = new Gamepad();
     public boolean grounded = false;

@@ -7,8 +7,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-import java.util.Objects;
-
 
 @TeleOp(name="productionOpmodeGateVersion", group="Robot")
 public class productionOpmodeGateVersion extends LinearOpMode {
@@ -28,7 +26,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
 
 //        ColorDetector colorDetector = new ColorDetector(this);
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(PoseStorage.currentPose == null ? new Pose() : PoseStorage.currentPose); //get pose handed off from auto otherwise just create a new one
+        follower.setStartingPose(PoseManager.currentPose == null ? new Pose() : PoseManager.currentPose); //get pose handed off from auto otherwise just create a new one
 
 //        camera.setExposure(6); //low exposure and high gain to reduce blur for autoalignment not needed
 //        camera.setGain(250);
@@ -66,7 +64,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
                 }
             }
             else if (gamepad1.a) {
-                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPowerOdo(-drivetrain.calculateOdoGoalBearing(follower.getPose(), drivetrain.BLUE_GOAL_POSITION)));
+                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPowerOdo(-drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalPose)));
                 drivetrain.holdPose = follower.getPose();
             }
             else if (gamepad1.b){
@@ -207,7 +205,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
 
             telemetry.addData("current robot pose: ", follower.getPose());
             telemetry.addData("camera robot pose:", limelight.getRobotPose());
-            telemetry.addData("current robot odo angle: ", drivetrain.calculateOdoGoalBearing(follower.getPose(), drivetrain.BLUE_GOAL_POSITION));
+            telemetry.addData("current robot odo angle: ", drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalPose));
 
             Drawing.drawDebug(follower);
 

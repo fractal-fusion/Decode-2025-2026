@@ -380,7 +380,7 @@ public class leftCloseAutoFromFar extends LinearOpMode {
     public void intializeBurstClose(){
         shooter.setCurrentShooterClosedSeconds(Shooter.CLOSE_DEBOUNCE);
         shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM);
-        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
+//        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
         shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
     }
 

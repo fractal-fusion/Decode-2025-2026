@@ -51,8 +51,8 @@ public class testOpmode extends LinearOpMode {
 //                intake.setFlickerPosition(0);
             }
 
-            shooter.testControlServo(gamepad1);
-//            shooter.testControlRampPosition(gamepad1);
+//            shooter.testControlServo(gamepad1);
+            shooter.testControlRampPosition(gamepad1);
 //            shooter.testControlPitchPosition(gamepad1);
 //            colorDetector.telemetryColors();
         }
