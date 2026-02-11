@@ -10,8 +10,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import java.util.concurrent.TimeUnit;
-
 @Config
 public class Shooter{
     public Gamepad currentGamepad = new Gamepad(); //gamepads for rising edge detector
@@ -56,7 +54,8 @@ public class Shooter{
     public double currentTargetRPMTicksPerSecond = REGRESSION_RESTING_RPM * RPM_TO_TICKS_PER_SECOND;
     public static double TARGET_RPM_TOLERANCE_RPM_CLOSE = 100;
     public static double TARGET_RPM_TOLERANCE_RPM_FAR = 30;
-    public static double REGRESSION_RPM_OFFSET = 25;
+    public static double REGRESSION_RPM_OFFSET_LIMELIGHT = 25;
+    public static double REGRESSION_RPM_OFFSET_ODOMETRY = 25;
     public static double REGRESSION_RESTING_RPM = 3000;
     public double targetRPMToleranceRPM = TARGET_RPM_TOLERANCE_RPM_CLOSE; //initially set to the tolerance for close
     public double testShootPower = 0;
@@ -201,10 +200,10 @@ public class Shooter{
         return (((DcMotorEx) shooterRight).getVelocity());
     }
 
-    public double calculateShooterVelocityRPM(double ta){
+    public double calculateShooterVelocityRPMLimelight(double ta){
         if (ta != 0.0){
             regressionDebounceTimer.reset();
-            lastRegressionValue = (Range.clip(56.46904*Math.pow(ta, 4) - 600.82962*Math.pow(ta, 3) + 2341.80033*Math.pow(ta, 2) - 4123.28016*ta + 5585.99233, 2600, 4450)) + REGRESSION_RPM_OFFSET;
+            lastRegressionValue = (Range.clip(56.46904*Math.pow(ta, 4) - 600.82962*Math.pow(ta, 3) + 2341.80033*Math.pow(ta, 2) - 4123.28016*ta + 5585.99233, 2600, 4450)) + REGRESSION_RPM_OFFSET_LIMELIGHT;
             return lastRegressionValue;
         }
         else if (regressionDebounceTimer.time() > REGRESSION_DEBOUNCE_SECONDS){
@@ -213,6 +212,14 @@ public class Shooter{
         else { //return last regression valjue if regression debounce timer isn't over
             return lastRegressionValue;
         }
+    }
+
+    public double calculateShooterVelocityRPMOdometry(double distance){
+        return Range.clip(56.46904*Math.pow(distance, 4) - 600.82962*Math.pow(distance, 3) + 2341.80033*Math.pow(distance, 2) - 4123.28016*distance + 5585.99233, 2600, 4450) + REGRESSION_RPM_OFFSET_ODOMETRY; //TODO: tune this
+    }
+
+    public double calculateRampPositionOdometry(double distance){
+        return Range.clip(56.46904*Math.pow(distance, 4) - 600.82962*Math.pow(distance, 3) + 2341.80033*Math.pow(distance, 2) - 4123.28016*distance + 5585.99233, 2600, 4450); //TODO: tune this
     }
 
     public void toggleShooterClose(){
@@ -271,13 +278,13 @@ public class Shooter{
     }
 
     public void controlShooterGate(){
-        if ((passedThreshold && !cycling && shooterClosedTimerOver())){
+        if ((passedThreshold && !cycling && shooterClosedTimerOver() && on)){
             atVelocityTime = atVelocityTimer.getElapsedTimeSeconds();
             setGatePosition(Shooter.GATE_OPEN_POSITION);
         }
         else if (!passedThreshold && !cycling && shooterOpenGateTimerOver()){
-            setPitchPosition(PITCH_SCORE_POSITION);
-//            setGatePosition(Shooter.GATE_CLOSED_POSITION); //automatically raise the pitch when not ready to shoot
+//            setPitchPosition(PITCH_SCORE_POSITION); pitch doesn't exist anymore
+//            setGatePosition(Shooter.GATE_CLOSED_POSITION); //automatically close the gate when not ready to shoot, no longer needed because of shooting speed
         }
     }
 

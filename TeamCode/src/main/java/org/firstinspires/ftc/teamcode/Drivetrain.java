@@ -147,6 +147,13 @@ public class Drivetrain {
         return angle;
     }
 
+    public double calculateOdoGoalDistance(Pose robotPose, Pose goalPose){
+        double vectorY = goalPose.getY() - robotPose.getY();
+        double vectorX = goalPose.getX() - robotPose.getX();
+
+        return Math.hypot(vectorX, vectorY);
+    }
+
 //    public void toggleGrounded() {
 //        if (currentGamepad.b && !previousGamepad.b) {
 //            grounded = !grounded;

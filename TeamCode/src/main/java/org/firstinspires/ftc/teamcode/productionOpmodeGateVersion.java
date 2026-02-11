@@ -158,7 +158,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             else {
 //                camera.setHeadingOffset(Camera.HEADING_OFFSET_CLOSE);
                 //update regression only for close
-                shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPM(limelight.getRange()));
+                shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPMLimelight(limelight.getRange()));
                 shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
             }
 
@@ -173,7 +173,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             }
 
 //            telemetry.addData("intake current time:", intake.currentTime);
-            telemetry.addData("shooter target velocity: ", shooter.calculateShooterVelocityRPM(limelight.getRange()));
+            telemetry.addData("shooter target velocity: ", shooter.calculateShooterVelocityRPMLimelight(limelight.getRange()));
             telemetry.addData("shooter left velocity:", shooter.shooterLeftGetVelocity() * Shooter.TICKS_PER_SECOND_TO_RPM);
             telemetry.addData("shooter right velocity:", shooter.shooterRightGetVelocity() * Shooter.TICKS_PER_SECOND_TO_RPM);
             telemetry.addData("shooter at velocity:", shooter.shooterAtTargetVelocity());
@@ -194,18 +194,20 @@ public class productionOpmodeGateVersion extends LinearOpMode {
 //            telemetry.addData("shooter at velocity time:", shooter.atVelocityTime);
 
             //regression zero debounce
-            telemetry.addData("current regression zero time: ", shooter.regressionDebounceTimer.time());
-            telemetry.addData("last regression value: ", shooter.lastRegressionValue);
+            telemetry.addData("current regression zero time:", shooter.regressionDebounceTimer.time());
+            telemetry.addData("last regression value:", shooter.lastRegressionValue);
 
             //grounded
-            telemetry.addData("grounded: ", drivetrain.grounded);
+            telemetry.addData("grounded:", drivetrain.grounded);
 
             //driver power
             telemetry.addData("driver power: ", intake.driverPower);
 
-            telemetry.addData("current robot pose: ", follower.getPose());
+            telemetry.addData("current robot pose:", follower.getPose());
             telemetry.addData("camera robot pose:", limelight.getRobotPose());
-            telemetry.addData("current robot odo angle: ", drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalPose));
+            telemetry.addData("current robot odo angle:", drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalPose));
+
+            telemetry.addData("current inches from goal:", drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose));
 
             Drawing.drawDebug(follower);
 
