@@ -58,7 +58,8 @@ public class Shooter{
     public static double REGRESSION_RPM_OFFSET_ODOMETRY = 25;
     public static double REGRESSION_RESTING_RPM = 3000;
     public double targetRPMToleranceRPM = TARGET_RPM_TOLERANCE_RPM_CLOSE; //initially set to the tolerance for close
-    public double testShootPower = 0;
+    public double testShootRPM = 0;
+    public static double TEST_SHOOT_INCREMENT = 50;
     public double testRampPosition = 0;
     public double testPitchPosition = 0;
     public boolean on = false; //boolean for on or off shooter
@@ -145,6 +146,11 @@ public class Shooter{
         ((DcMotorEx) shooterLeft).setVelocity(currentTargetRPMTicksPerSecond);
     }
 
+    public void turnOnShooterPower(double power){
+        shooterRight.setPower(power);
+        shooterLeft.setPower(power);
+    }
+
     public void turnOnShooter(double RPM){
         shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -209,7 +215,7 @@ public class Shooter{
         else if (regressionDebounceTimer.time() > REGRESSION_DEBOUNCE_SECONDS){
             return REGRESSION_RESTING_RPM;
         }
-        else { //return last regression valjue if regression debounce timer isn't over
+        else { //return last regression value if regression debounce timer isn't over
             return lastRegressionValue;
         }
     }
@@ -370,20 +376,20 @@ public class Shooter{
     //test methods
     public void testControlRampPosition(Gamepad gamepad){
 
-        if(currentGamepad.right_bumper && !previousGamepad.right_bumper){
+        if(currentGamepad.dpad_up && !previousGamepad.dpad_up){
             testRampPosition += 0.01;
-        } else if (currentGamepad.left_bumper && !previousGamepad.left_bumper) {
+        } else if (currentGamepad.dpad_down && !previousGamepad.dpad_down) {
             testRampPosition -= 0.01;
         }
 
-        testRampPosition = Math.max(0, Math.min(testRampPosition, 1));
+        testRampPosition = Math.max(0, Math.min(testRampPosition, 0.15));
 
         shooterRampRight.setPosition(testRampPosition);
         shooterRampLeft.setPosition(testRampPosition + RAMP_LEFT_SERVO_OFFSET);
 
         opMode.telemetry.addData("servoposRight", shooterRampRight.getPosition());
         opMode.telemetry.addData("servoposLeft", shooterRampLeft.getPosition());
-        opMode.telemetry.update();
+//        opMode.telemetry.update();
     }
 
     public void testControlPitchPosition(Gamepad gamepad){
@@ -401,29 +407,32 @@ public class Shooter{
 
         opMode.telemetry.addData("servoposRight", shooterPitchRight.getPosition());
         opMode.telemetry.addData("servoposLeft", shooterPitchLeft.getPosition());
-        opMode.telemetry.update();
+//        opMode.telemetry.update();
     }
 
     public void testShoot(Gamepad gamepad){
 
-//        if(currentGamepad.dpad_up && !previousGamepad.dpad_up){
-//            testShootPower += .1;
-//        } else if (currentGamepad.dpad_down && !previousGamepad.dpad_down) {
-//            testShootPower -= .1;
-//        }
+        if(currentGamepad.dpad_right && !previousGamepad.dpad_right){
+            testShootRPM += TEST_SHOOT_INCREMENT;
+        } else if (currentGamepad.dpad_left && !previousGamepad.dpad_left) {
+            testShootRPM -= TEST_SHOOT_INCREMENT;
+        }
 //
-        if (currentGamepad.a && !previousGamepad.a){
+        if (currentGamepad.x && !previousGamepad.x){
             on = !on;
         }
 //
-//        testShootPower = Math.max(0, Math.min(testShootPower, 1));
+        testShootRPM = Math.max(0, Math.min(testShootRPM, 5500));
 
         if(on){
-            turnOnShooter();
+            turnOnShooter(testShootRPM);
         }
         else {
             turnOffShooter();
         }
+
+        opMode.telemetry.addData("shooter power:", testShootRPM);
+
     }
 
     public void testControlServo(Gamepad gamepad){ //method to test individual servos
@@ -439,7 +448,7 @@ public class Shooter{
         TESTSERVO.setPosition(testPosition);
 
         opMode.telemetry.addData("servopos:", TESTSERVO.getPosition());
-        opMode.telemetry.update();
+//        opMode.telemetry.update();
     }
 
 
