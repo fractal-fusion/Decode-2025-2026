@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
-import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -34,7 +34,7 @@ public class Drivetrain {
     public Gamepad currentGamepad = new Gamepad();
     public Gamepad previousGamepad = new Gamepad();
     public boolean grounded = false;
-    public boolean isHoldingPose = false; //follower.isbusy doesn't work so this boolean will make sure hold pose is only called once
+    public boolean isFollowing = false; //follower.isbusy doesn't work so this boolean will make sure hold pose or follow path is only called once
     public Pose holdPose = new Pose();
 //    private Follower follower;
 
@@ -159,7 +159,6 @@ public class Drivetrain {
     public boolean isFarOdometry(Pose currentPose){
         return currentPose.getY() < IS_FAR_THRESHOLD_Y;
     }
-
 //    public void toggleGrounded() {
 //        if (currentGamepad.b && !previousGamepad.b) {
 //            grounded = !grounded;

@@ -63,13 +63,13 @@ public class productionOpmodePitchVersion extends LinearOpMode {
             }
 
 //            pedropathing holdpoint control
-            if (drivetrain.grounded && !drivetrain.isHoldingPose) {
+            if (drivetrain.grounded && !drivetrain.isFollowing) {
                 follower.holdPoint(drivetrain.holdPose);
-                drivetrain.isHoldingPose = true;
+                drivetrain.isFollowing = true;
             }
-            else if (!drivetrain.grounded && drivetrain.isHoldingPose){
+            else if (!drivetrain.grounded && drivetrain.isFollowing){
                 follower.breakFollowing();
-                drivetrain.isHoldingPose = false;
+                drivetrain.isFollowing = false;
             }
 
             //mechanism intake control

@@ -2,7 +2,11 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.HeadingInterpolator;
+import com.pedropathing.paths.Path;
+import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -33,6 +37,18 @@ public class productionOpmodeGateVersion extends LinearOpMode {
 
         shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
 
+        //build paths for teleop in init
+        PathChain goToLeverPosition = follower.pathBuilder()
+                .addPath(new Path(new BezierLine(follower::getPose, PoseManager.currentLeverPose)))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(PoseManager.currentLeverPose.getHeading()), 0.8))
+                .build();
+
+        PathChain goToFarPosition = follower.pathBuilder()
+                .addPath(new Path(new BezierLine(follower::getPose, PoseManager.currentFarPose)))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(PoseManager.currentFarPose.getHeading()), 0.8))
+                .build();
+
+
         telemetry.addLine("Robot Ready.");
         telemetry.update();
 
@@ -53,7 +69,20 @@ public class productionOpmodeGateVersion extends LinearOpMode {
 
             //drivetrain controls (field centric drive + autoalignment)
             if (gamepad1.right_bumper){
-                drivetrain.grounded = true;
+                if (!drivetrain.isFollowing){
+                    follower.holdPoint(drivetrain.holdPose);
+                    drivetrain.isFollowing = true;
+                }
+            }
+            else if (gamepad1.dpad_down){
+                if(!drivetrain.isFollowing){
+                    follower.followPath(goToFarPosition, true);
+                }
+            }
+            else if (gamepad1.dpad_right){
+                if(!drivetrain.isFollowing){
+                    follower.followPath(goToLeverPosition, true);
+                }
             }
             else if (gamepad1.b) {
                 drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPowerLimelight(limelight.getBearing()));
@@ -71,20 +100,14 @@ public class productionOpmodeGateVersion extends LinearOpMode {
                 drivetrain.resetIMU();
             }
             else {
-                drivetrain.grounded = false;
                 drivetrain.holdPose = follower.getPose(); //update hold pose when not grounded
 
-                drivetrain.drive(gamepad1);
-            }
+                if (drivetrain.isFollowing){
+                    follower.breakFollowing();
+                    drivetrain.isFollowing = false;
+                }
 
-//            pedropathing holdpoint control
-            if (drivetrain.grounded && !drivetrain.isHoldingPose) {
-                follower.holdPoint(drivetrain.holdPose);
-                drivetrain.isHoldingPose = true;
-            }
-            else if (!drivetrain.grounded && drivetrain.isHoldingPose){
-                follower.breakFollowing();
-                drivetrain.isHoldingPose = false;
+                drivetrain.drive(gamepad1);
             }
 
             //mechanism intake control
