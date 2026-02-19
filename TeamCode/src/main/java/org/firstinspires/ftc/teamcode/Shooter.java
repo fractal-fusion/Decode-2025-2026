@@ -241,7 +241,7 @@ public class Shooter{
         }
 
         if(on){
-//            setRampPosition(CLOSE_RAMP_SCORE_POSITION); TODO: make separate toggle for regression
+//            setRampPosition(CLOSE_RAMP_SCORE_POSITION);
             turnOnShooter();
         }
         else {
@@ -264,7 +264,7 @@ public class Shooter{
         }
 
         if(on){
-            setRampPosition(FAR_RAMP_SCORE_POSITION);
+//            setRampPosition(FAR_RAMP_SCORE_POSITION);
             turnOnShooter();
         }
         else {

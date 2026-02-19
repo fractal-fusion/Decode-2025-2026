@@ -59,16 +59,13 @@ public class productionOpmodeGateVersion extends LinearOpMode {
                 drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPowerLimelight(limelight.getBearing()));
                 drivetrain.holdPose = follower.getPose();
 
-                if (!new Pose().roughlyEquals(limelight.getRobotPose(), 1)){ //recalibrate pose using limelight TODO: relocalize limelight
+                if (!new Pose().roughlyEquals(limelight.getRobotPose(), 1)){ //recalibrate pose using limelight
                     follower.setPose(limelight.getRobotPose());
                 }
             }
             else if (gamepad1.a) {
                 drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPowerOdo(-drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalPose)));
                 drivetrain.holdPose = follower.getPose();
-            }
-            else if (gamepad1.b){
-//                follower.turnTo(drivetrain.calculateOdoGoalAngle(follower.getPose(), drivetrain.BLUE_GOAL_POSITION));
             }
             else if (gamepad1.x) {
                 drivetrain.resetIMU();
@@ -144,6 +141,13 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             //constantly update shooter velocity for close regression
             if(shooter.on){
                 shooter.updateShooterVelocity();
+
+                if (!drivetrain.isFarOdometry(follower.getPose())){ //only update ramp regression when close and shooter is on
+                    //                shooter.setRampPosition(shooter.calculateRampPositionOdometry(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose))); TODO: tune ramp so odometry regression works
+                }
+                else{
+                    shooter.setRampPosition(Shooter.FAR_RAMP_SCORE_POSITION);
+                }
             }
 
             //open the gate when scoring so balls can pass to shooter motors
@@ -158,7 +162,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             else {
 //                camera.setHeadingOffset(Camera.HEADING_OFFSET_CLOSE);
                 //update regression only for close
-                shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPMLimelight(limelight.getRange()));
+                shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPMLimelight(limelight.getRange()));// TODO: replace regression with odometry
                 shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
             }
 
