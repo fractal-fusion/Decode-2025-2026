@@ -157,7 +157,7 @@ public class Drivetrain {
     }
 
     public boolean isFarOdometry(Pose currentPose){
-        return currentPose.getY() < IS_FAR_THRESHOLD_Y;
+        return currentPose.getY() > IS_FAR_THRESHOLD_Y;
     }
 //    public void toggleGrounded() {
 //        if (currentGamepad.b && !previousGamepad.b) {

@@ -21,7 +21,7 @@ public class PoseManager {
     public static Pose RED_GOAL_POSITION = new Pose(130, 130);
     public static Pose BLUE_GOAL_POSITION = RED_GOAL_POSITION.mirror();
 
-    public static Pose RED_LEVER_POSITION = new Pose(134,61.5, Math.toRadians(RED_LEVER_HEADING));
+    public static Pose RED_LEVER_POSITION = new Pose(134,62.5, Math.toRadians(RED_LEVER_HEADING));
     public static Pose BLUE_LEVER_POSITION = RED_LEVER_POSITION.mirror();
 
     public static Pose RED_FAR_POSITION = new Pose(83,14, Math.toRadians(RED_FAR_SHOOTING_HEADING));

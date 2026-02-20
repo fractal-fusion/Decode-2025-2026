@@ -41,7 +41,7 @@ public class Shooter{
 
     public static double FAR_TARGET_RPM_TICKS_PER_SECOND = FAR_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
 
-    public static double CLOSE_RAMP_SCORE_POSITION = 0.10;
+    public static double CLOSE_RAMP_SCORE_POSITION = 0.02;
     public static double CLOSE_TARGET_RPM = 3350;
     public static double CLOSE_AUTO_TARGET_RPM = 2950; //TODO: tune this
     public static double CLOSE_AUTO_TARGET_RPM_PRELOAD = CLOSE_AUTO_TARGET_RPM - 50; //TODO: tune this
@@ -221,11 +221,11 @@ public class Shooter{
     }
 
     public double calculateShooterVelocityRPMOdometry(double distance){
-        return Range.clip(56.46904*Math.pow(distance, 4) - 600.82962*Math.pow(distance, 3) + 2341.80033*Math.pow(distance, 2) - 4123.28016*distance + 5585.99233, 2600, 4450) + REGRESSION_RPM_OFFSET_ODOMETRY; //TODO: tune this
+        return Range.clip(-0.0000333119*Math.pow(distance, 4) + 0.0144551*Math.pow(distance, 3) - 1.97818*Math.pow(distance, 2) + 121.23395*distance + 289.22354, 2600, 4450) + REGRESSION_RPM_OFFSET_ODOMETRY; //TODO: tune this
     }
 
     public double calculateRampPositionOdometry(double distance){
-        return Range.clip(56.46904*Math.pow(distance, 4) - 600.82962*Math.pow(distance, 3) + 2341.80033*Math.pow(distance, 2) - 4123.28016*distance + 5585.99233, 2600, 4450); //TODO: tune this
+        return Range.clip(0.00000000425734*Math.pow(distance, 4) - 0.00000154569*Math.pow(distance, 3) + 0.000204416*Math.pow(distance, 2) - 0.0116699*distance + 0.262481, 0, 0.15) + REGRESSION_RPM_OFFSET_ODOMETRY; //TODO: tune this
     }
 
     public void toggleShooterClose(){
