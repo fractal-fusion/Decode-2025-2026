@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.Path;
-import com.pedropathing.paths.PathBuilder;
 
 public class PoseManager {
     public enum Team {
@@ -11,19 +9,22 @@ public class PoseManager {
         RED
     }
 
-    public static double FAR_SHOOTING_HEADING_RED = 70;
+    public static double RED_FAR_SHOOTING_HEADING = 70;
+    public static double RED_LEVER_HEADING = 40.5;
+//    public static double BLUE_FAR_SHOOTING_HEADING = 70 + 45;
+//    public static double BLUE_LEVER_HEADING = RED_LEVER_HEADING + 90;
 
     public static Pose currentPose = new Pose();
 //    public static Team currentTeam = Team.NONE;
 
     //initialize where the team-specific poses actually are
-    public static Pose RED_GOAL_POSITION = new Pose(144, 140);
+    public static Pose RED_GOAL_POSITION = new Pose(130, 130);
     public static Pose BLUE_GOAL_POSITION = RED_GOAL_POSITION.mirror();
 
-    public static Pose RED_LEVER_POSITION = new Pose(134,61.5, Math.toRadians(40.5));
+    public static Pose RED_LEVER_POSITION = new Pose(134,61.5, Math.toRadians(RED_LEVER_HEADING));
     public static Pose BLUE_LEVER_POSITION = RED_LEVER_POSITION.mirror();
 
-    public static Pose RED_FAR_POSITION = new Pose(83,14, Math.toRadians(FAR_SHOOTING_HEADING_RED));
+    public static Pose RED_FAR_POSITION = new Pose(83,14, Math.toRadians(RED_FAR_SHOOTING_HEADING));
     public static Pose BLUE_FAR_POSITION = RED_FAR_POSITION.mirror();
 
     //define where team-specific poses are stored

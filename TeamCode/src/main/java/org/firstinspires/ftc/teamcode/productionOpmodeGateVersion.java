@@ -40,12 +40,12 @@ public class productionOpmodeGateVersion extends LinearOpMode {
         //build paths for teleop in init
         PathChain goToLeverPosition = follower.pathBuilder()
                 .addPath(new Path(new BezierLine(follower::getPose, PoseManager.currentLeverPose)))
-                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(PoseManager.currentLeverPose.getHeading()), 0.8))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, PoseManager.currentLeverPose.getHeading(), 0.8))
                 .build();
 
         PathChain goToFarPosition = follower.pathBuilder()
                 .addPath(new Path(new BezierLine(follower::getPose, PoseManager.currentFarPose)))
-                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(PoseManager.currentFarPose.getHeading()), 0.8))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, PoseManager.currentFarPose.getHeading(), 0.8))
                 .build();
 
 
@@ -77,11 +77,13 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             else if (gamepad1.dpad_down){
                 if(!drivetrain.isFollowing){
                     follower.followPath(goToFarPosition, true);
+                    drivetrain.isFollowing = true;
                 }
             }
             else if (gamepad1.dpad_right){
                 if(!drivetrain.isFollowing){
                     follower.followPath(goToLeverPosition, true);
+                    drivetrain.isFollowing = true;
                 }
             }
             else if (gamepad1.b) {
