@@ -150,8 +150,8 @@ public class Drivetrain {
     }
 
     public double calculateOdoGoalDistance(Pose robotPose, Pose goalPose){
-        double vectorY = goalPose.getY() - robotPose.getY();
-        double vectorX = goalPose.getX() - robotPose.getX();
+        double vectorY = Math.abs(goalPose.getY() - robotPose.getY());
+        double vectorX = Math.abs(goalPose.getX() - robotPose.getX());
 
         return Math.hypot(vectorX, vectorY);
     }
