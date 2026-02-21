@@ -225,7 +225,7 @@ public class Shooter{
     }
 
     public double calculateRampPositionOdometry(double distance){
-        return Range.clip(0.00000000425734*Math.pow(distance, 4) - 0.00000154569*Math.pow(distance, 3) + 0.000204416*Math.pow(distance, 2) - 0.0116699*distance + 0.262481, 0, 0.15) + REGRESSION_RPM_OFFSET_ODOMETRY; //TODO: tune this
+        return Range.clip(0.00000000425734*Math.pow(distance, 4) - 0.00000154569*Math.pow(distance, 3) + 0.000204416*Math.pow(distance, 2) - 0.0116699*distance + 0.262481, 0, 0.15); //TODO: tune this
     }
 
     public void toggleShooterClose(){

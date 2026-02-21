@@ -29,7 +29,7 @@ public class Drivetrain {
     public static double AUTO_ALIGN_GAIN_ODO = 0.3; //converts tx from limelight to power
 
     public static double AUTO_ALIGN_DRIVE_POWER_MULTIPLIER_MIDPOINT = 0.45; //half of max power
-    public static double IS_FAR_THRESHOLD_Y = 90; //less than this Y value is considered far
+    public static double IS_FAR_THRESHOLD_Y = 40; //less than this Y value is considered far
 
     public Gamepad currentGamepad = new Gamepad();
     public Gamepad previousGamepad = new Gamepad();
@@ -157,7 +157,7 @@ public class Drivetrain {
     }
 
     public boolean isFarOdometry(Pose currentPose){
-        return currentPose.getY() > IS_FAR_THRESHOLD_Y;
+        return currentPose.getY() < IS_FAR_THRESHOLD_Y;
     }
 //    public void toggleGrounded() {
 //        if (currentGamepad.b && !previousGamepad.b) {

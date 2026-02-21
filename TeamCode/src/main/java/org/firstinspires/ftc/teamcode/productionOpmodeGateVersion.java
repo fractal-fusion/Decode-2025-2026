@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
@@ -17,8 +18,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        FtcDashboard dashboard = FtcDashboard.getInstance();
-        Telemetry telemetry = dashboard.getTelemetry();
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         Drivetrain drivetrain = new Drivetrain(this);
         Shooter shooter = new Shooter(this);
@@ -166,7 +166,6 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             //constantly update shooter velocity for close regression
             if(shooter.on){
                 shooter.updateShooterVelocity();
-
                 if (!drivetrain.isFarOdometry(follower.getPose())){ //only update ramp regression when close and shooter is on
                     shooter.setRampPosition(shooter.calculateRampPositionOdometry(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose))); //TODO: tune ramp so odometry regression works
                 }
@@ -236,9 +235,11 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             telemetry.addData("current robot pose:", follower.getPose());
             telemetry.addData("camera robot pose:", limelight.getRobotPose());
             telemetry.addData("current robot odo angle:", drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalPose));
-
             telemetry.addData("current inches from goal:", drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose));
 
+            telemetry.addData("current ramp position:", shooter.calculateRampPositionOdometry(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
+
+            telemetry.addData("drivetrain is far:", drivetrain.isFarOdometry(follower.getPose()));
             Drawing.drawDebug(follower);
 
             telemetry.update();
