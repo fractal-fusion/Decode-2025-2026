@@ -89,7 +89,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
                 drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPowerLimelight(limelight.getBearing()));
                 drivetrain.holdPose = follower.getPose();
 
-                if (!new Pose().roughlyEquals(limelight.getRobotPose(), 1)){ //recalibrate pose using limelight
+                if (!new Pose().roughlyEquals(limelight.getRobotPose(), 1) && !limelight.isFar){ //recalibrate pose using limelight
                     follower.setPose(limelight.getRobotPose());
                 }
             }
@@ -203,7 +203,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             }
 
 //            telemetry.addData("intake current time:", intake.currentTime);
-            telemetry.addData("shooter target velocity: ", shooter.calculateShooterVelocityRPMLimelight(limelight.getRange()));
+            telemetry.addData("shooter target velocity: ", shooter.currentTargetRPMTicksPerSecond);
             telemetry.addData("shooter left velocity:", shooter.shooterLeftGetVelocity() * Shooter.TICKS_PER_SECOND_TO_RPM);
             telemetry.addData("shooter right velocity:", shooter.shooterRightGetVelocity() * Shooter.TICKS_PER_SECOND_TO_RPM);
             telemetry.addData("shooter at velocity:", shooter.shooterAtTargetVelocity());
