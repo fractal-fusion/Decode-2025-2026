@@ -10,7 +10,6 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 
 @TeleOp(name="productionOpmodeGateVersion", group="Robot")
@@ -167,10 +166,12 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             if(shooter.on){
                 shooter.updateShooterVelocity();
                 if (!drivetrain.isFarOdometry(follower.getPose())){ //only update ramp regression when close and shooter is on
+                    shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPMOdometryClose(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
                     shooter.setRampPosition(shooter.calculateRampPositionOdometry(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose))); //TODO: tune ramp so odometry regression works
                 }
                 else{
-//                    shooter.setRampPosition(Shooter.FAR_RAMP_SCORE_POSITION);
+                    shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPMOdometryFar(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
+                    shooter.setRampPosition(Shooter.FAR_RAMP_SCORE_POSITION);
                 }
             }
 
@@ -187,7 +188,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
 //                camera.setHeadingOffset(Camera.HEADING_OFFSET_CLOSE);
                 //update regression only for close
 //                shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPMLimelight(limelight.getRange()));// TODO: replace regression with odometry
-                shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPMOdometry(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
+//                shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPMOdometry(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
                 shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
             }
 
@@ -240,6 +241,9 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             telemetry.addData("current ramp position:", shooter.calculateRampPositionOdometry(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
 
             telemetry.addData("drivetrain is far:", drivetrain.isFarOdometry(follower.getPose()));
+            telemetry.addData("current target rpm close:", shooter.calculateShooterVelocityRPMOdometryClose(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
+            telemetry.addData("current target rpm far:", shooter.calculateShooterVelocityRPMOdometryFar(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
+
             Drawing.drawDebug(follower);
 
             telemetry.update();

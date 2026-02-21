@@ -35,7 +35,7 @@ public class Shooter{
     public static double GATE_CLOSED_POSITION = 0.14;
     public static double RAMP_CYCLE_POSITION = 0.2;
     public static double FAR_RAMP_SCORE_POSITION = 0;
-    public static double FAR_TARGET_RPM = 4350;
+    public static double FAR_TARGET_RPM = 4250;
     public static double FAR_AUTO_TARGET_RPM = 4350; //untested
     public static double FAR_DEBOUNCE = 3.0; //untested
 
@@ -220,8 +220,11 @@ public class Shooter{
         }
     }
 
-    public double calculateShooterVelocityRPMOdometry(double distance){
+    public double calculateShooterVelocityRPMOdometryClose(double distance){
         return Range.clip(-0.0000333119*Math.pow(distance, 4) + 0.0144551*Math.pow(distance, 3) - 1.97818*Math.pow(distance, 2) + 121.23395*distance + 289.22354, 2600, 4450) + REGRESSION_RPM_OFFSET_ODOMETRY; //TODO: tune this
+    }
+    public double calculateShooterVelocityRPMOdometryFar(double distance){
+        return Range.clip(-0.00569463*Math.pow(distance, 3) + 1.80372*Math.pow(distance, 2) - 167.57901*distance + 8139.81553, 4150, 4400); //TODO: tune this
     }
 
     public double calculateRampPositionOdometry(double distance){
