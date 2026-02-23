@@ -26,7 +26,7 @@ public class Drivetrain {
     //constants used for tuning auto alignment
     public static double AUTO_ALIGN_MAX_SPEED = 0.8; //auto alignment speed is clipped to minimum negative this and maximum positive this (bilateral tolerance)
     public static double AUTO_ALIGN_GAIN_LIMELIGHT = 0.0175; //converts tx from limelight to power
-    public static double AUTO_ALIGN_GAIN_ODO = 0.4; //converts tx from limelight to power
+    public static double AUTO_ALIGN_GAIN_ODO = 0.6; //converts tx from limelight to power
 
     public static double AUTO_ALIGN_DRIVE_POWER_MULTIPLIER_MIDPOINT = 0.45; //half of max power
     public static double IS_FAR_THRESHOLD_Y = 40; //less than this Y value is considered far
