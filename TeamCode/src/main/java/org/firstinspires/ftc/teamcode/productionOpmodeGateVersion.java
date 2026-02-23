@@ -94,7 +94,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
                 }
             }
             else if (gamepad1.a) {
-                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPowerOdo(-drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalPose)));
+                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPowerOdo(-drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose)));
                 drivetrain.holdPose = follower.getPose();
             }
             else if (gamepad1.x) {

@@ -214,7 +214,7 @@ public class leftCloseAutoFromCloseGate extends LinearOpMode {
                 //hold the flicker in
                 if (init){
                     //intake.setFlickerPosition(Intake.FLICKER_HOLD_POSITION);
-
+                    shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
                     init = false;
                 }
                 else{ //move to scoring position

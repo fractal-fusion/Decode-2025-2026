@@ -29,15 +29,15 @@ public class rightCloseAutoFromCloseGate extends LinearOpMode {
     public static double INTAKE_HUMAN_PLAYER_X = 136.43;
 //    public static double INTAKE_HUMAN_PLAYER_FLICKER_TIME = 3;
 
-    public static double RELEASE_BALLS_WAIT_TIME = 0.7; //time to wait at the chamber
-    public static double SECOND_RELEASE_BALLS_WAIT_TIME = 0.7; //time to wait at the chamber
-    public static double COLLECT_ALL_BALLS_WAIT_TIME = 1.8;
+    public static double RELEASE_BALLS_WAIT_TIME = 0.1; //time to wait at the chamber
+    public static double SECOND_RELEASE_BALLS_WAIT_TIME = 0.15; //time to wait at the chamber
+    public static double COLLECT_ALL_BALLS_WAIT_TIME = 1;
     public static double HEADING_INTERPOLATION_END_PERCENTAGE = 0.65;
     public static double AUTO_Y_OFFSET = 0;
     public static double INTAKE_X_OFFSET = 0;
 //    public static double RELEASE_BALLS_Y = 74.2;
-    public static double COLLECT_BALLS_Y = 61.5;
-    public static double COLLECT_HEADING = 40.5;
+    public static double COLLECT_BALLS_Y = 60.5;
+    public static double COLLECT_HEADING = 38.5;
     public static double SCORE_HEADING_OFFSET = -5; //score heading offset since center of goals are not exactly 45 degrees
     public static double SCORE_HEADING_PRELOAD_TOLERANCE = 0.1;
     public static double SCORE_HEADING_PRELOAD = 44.5;
@@ -65,14 +65,14 @@ public class rightCloseAutoFromCloseGate extends LinearOpMode {
     private final Pose collectBallsPoseControlPoint1 = new Pose(80, 72);
     private final Pose moveBackCollectBallsPose = new Pose(134, COLLECT_BALLS_Y-3, Math.toRadians(COLLECT_HEADING));
     private final Pose scoreCollectBallsPoseControlPoint1 = new Pose(80, 69.341);
-    private final Pose grabPickupMiddlePose = new Pose(132 + INTAKE_X_OFFSET, 59.5, Math.toRadians(0));
+    private final Pose grabPickupMiddlePose = new Pose(132 + INTAKE_X_OFFSET, 58, Math.toRadians(0));
     private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(80, 54);
     private final Pose scorePickupMiddlePoseControlPoint1 = new Pose(80, 69.341);
     private final Pose grabPickupBottomPose = new Pose(132.5 + INTAKE_X_OFFSET, 36, Math.toRadians(0));
     private final Pose grabPickupBottomPoseControlPoint1 = new Pose(80, 24);
     private final Pose goToWallHumanPlayerPose = new Pose(WALL_HUMAN_PLAYER_X, 45, Math.toRadians(315));
     private final Pose grabPickupHumanPlayerPose = new Pose(INTAKE_HUMAN_PLAYER_X, 5, Math.toRadians(270));
-    private final Pose parkPose = new Pose(100,70, Math.toRadians(0));
+    private final Pose parkPose = new Pose(83,101, Math.toRadians(0));
 
     public void buildPaths() {
         scorePreload = follower.pathBuilder()
@@ -215,7 +215,7 @@ public class rightCloseAutoFromCloseGate extends LinearOpMode {
                 //hold the flicker in
                 if (init){
                     //intake.setFlickerPosition(Intake.FLICKER_HOLD_POSITION);
-
+                    shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
                     init = false;
                 }
                 else{ //move to scoring position
@@ -435,7 +435,72 @@ public class rightCloseAutoFromCloseGate extends LinearOpMode {
                     }
                 }
                 break;
-            case 13: // intake top row
+            case 13: //third collect balls from gate
+                if (!follower.isBusy()){
+                    if (init){
+                        intake.turnOnIntakeAuto();
+                        init = false;
+                    }
+                    else {
+                        follower.followPath(collectBalls, true);
+                        if (pathTimer.getElapsedTimeSeconds() > SECOND_RELEASE_BALLS_WAIT_TIME) {
+                            setPathState(14);
+                        }
+                    }
+                }
+                break;
+            case 14: //third move back collect all balls from gate
+                if (!follower.isBusy()){
+                    follower.followPath(moveBackCollectBalls, 0.4, false);
+                    if (pathTimer.getElapsedTimeSeconds() > COLLECT_ALL_BALLS_WAIT_TIME) {
+                        setPathState(15);
+                    }
+                }
+                break;
+            case 15: //third move to score position for collected balls
+                if (!follower.isBusy()) {
+                    if (init){
+                        intake.turnOffIntake();
+                        intializeBurstClosePreload(); //prestart shooter
+                        turnOnShooterAuto();
+                        shooter.setGatePosition(Shooter.GATE_OPEN_POSITION);
+                        init = false;
+                    }
+                    else{
+                        follower.followPath(scoreCollectBalls, true);
+                        setPathState(16);
+                    }
+                }
+                break;
+            case 16: //third shoot collected balls
+                if (!follower.isBusy()) {
+                    if(init){
+                        shooter.ballsShot = 9;
+//                            intializeBurstClose();
+//                            turnOnShooterAuto();
+                        shooter.setGatePosition(Shooter.GATE_OPEN_POSITION);
+
+                        init = false;
+                    }
+                    else{
+                        if (pathTimer.getElapsedTimeSeconds() > INTAKE_DELAY_TIME) {
+                            intake.turnOnIntakeAuto();
+                            //intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
+
+                        }
+
+                        if (pathTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_COLLECT_BALLS_TIME) {
+                            scorePickupMiddleTime = opmodeTimer.getElapsedTimeSeconds();
+
+                            shooter.ballsShot = 12;
+                            shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
+                            turnOffShooterAuto();
+                            setPathState(17);
+                        }
+                    }
+                }
+                break;
+            case 17: // intake top row
                 if (!follower.isBusy()) {
                     if (init){
                         //intake.setFlickerPosition(Intake.FLICKER_OPEN_POSITION);
@@ -443,19 +508,19 @@ public class rightCloseAutoFromCloseGate extends LinearOpMode {
                     }
                     else{
                         follower.followPath(grabPickupTop, true);
-                        setPathState(14);
+                        setPathState(18);
                     }
                 }
                 break;
-            case 14: //move to score position for top row
+            case 18: //move to score position for top row
                 if (!follower.isBusy()) {
                     follower.followPath(scorePickupTop, true);
                     intializeBurstClose(); //prestart shooter
                     turnOnShooterAuto();
-                    setPathState(15);
+                    setPathState(19);
                 }
                 break;
-            case 15: //score top row
+            case 19: //score top row
                 if (!follower.isBusy()) {
                     if(init){
                         shooter.ballsShot = 3;
@@ -478,12 +543,12 @@ public class rightCloseAutoFromCloseGate extends LinearOpMode {
                             shooter.ballsShot = 6;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                             turnOffShooterAuto();
-                            setPathState(16);
+                            setPathState(20);
                         }
                     }
                 }
                 break;
-            case 16:
+            case 20:
                 if(!follower.isBusy()){
                     follower.followPath(goToPark);
                     setPathState(-1);
