@@ -30,8 +30,8 @@ public class rightCloseAutoFromCloseGateGoldenFish extends LinearOpMode {
 //    public static double INTAKE_HUMAN_PLAYER_FLICKER_TIME = 3;
 
     public static double RELEASE_BALLS_WAIT_TIME = 0.05; //time to wait at the chamber
-    public static double COLLECT_BALLS_WAIT_TIME = 0.6; //time to wait at the chamber
-    public static double SECOND_COLLECT_BALLS_WAIT_TIME = 0.6; //time to wait at the chamber
+    public static double COLLECT_BALLS_WAIT_TIME = 0.8; //time to wait at the chamber
+    public static double SECOND_COLLECT_BALLS_WAIT_TIME = 0.8; //time to wait at the chamber
     public static double COLLECT_ALL_BALLS_WAIT_TIME = 0;
     public static double HEADING_INTERPOLATION_END_PERCENTAGE = 0.65;
     public static double AUTO_Y_OFFSET = 0;
