@@ -166,11 +166,11 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             if(shooter.on){
                 shooter.updateShooterVelocity();
                 if (!drivetrain.isFarOdometry(follower.getPose())){ //only update ramp regression when close and shooter is on
-                    shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPMOdometryClose(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
-                    shooter.setRampPosition(shooter.calculateRampPositionOdometry(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose))); //TODO: tune ramp so odometry regression works
+//                    shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPMOdometryClose(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
+//                    shooter.setRampPosition(shooter.calculateRampPositionOdometry(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose))); //TODO: tune ramp so odometry regression works
                 }
                 else{
-                    shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPMOdometryFar(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
+//                    shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPMOdometryFar(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
                     shooter.setRampPosition(Shooter.FAR_RAMP_SCORE_POSITION);
                 }
             }

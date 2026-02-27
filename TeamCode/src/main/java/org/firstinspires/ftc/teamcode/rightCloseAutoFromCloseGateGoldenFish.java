@@ -95,7 +95,7 @@ public class rightCloseAutoFromCloseGateGoldenFish extends LinearOpMode {
                 .build();
         scorePickupTop = follower.pathBuilder()
                 .addPath(new BezierLine(grabPickupTopPose, scorePose))
-                .setNoDeceleration()
+//                .setNoDeceleration()
                 .setLinearHeadingInterpolation(grabPickupTopPose.getHeading(), scorePose.getHeading())
                 .build();
         grabPickupMiddle = follower.pathBuilder()
@@ -146,6 +146,7 @@ public class rightCloseAutoFromCloseGateGoldenFish extends LinearOpMode {
                 .build();
         goToPark = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, parkPose))
+                .setNoDeceleration()
                 .setLinearHeadingInterpolation(scorePose.getHeading(), parkPose.getHeading())
                 .build();
     }

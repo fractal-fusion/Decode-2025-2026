@@ -37,7 +37,7 @@ public class leftCloseAutoFromCloseGateGoldenFish extends LinearOpMode {
     public static double AUTO_Y_OFFSET = 0;
     public static double INTAKE_X_OFFSET = 0;
     public static double RELEASE_BALLS_Y = 70.2;
-    public static double COLLECT_BALLS_Y = 59.6;
+    public static double COLLECT_BALLS_Y = 59.6 + 1; //TODO: check if this is right auto position
     public static double COLLECT_HEADING = 33;
     public static double SCORE_HEADING_OFFSET = -0.5; //score heading offset since center of goals are not exactly 45 degrees
     public static double SCORE_HEADING_PRELOAD_TOLERANCE = 0.1;
@@ -183,7 +183,7 @@ public class leftCloseAutoFromCloseGateGoldenFish extends LinearOpMode {
             follower.update(); //update follower
             currentPose = follower.getPose(); //update current pose
 
-            PoseManager.initializeTeleopPoses(PoseManager.Team.RED, currentPose);
+            PoseManager.initializeTeleopPoses(PoseManager.Team.BLUE, currentPose);
 
 
             updateStateMachine();
