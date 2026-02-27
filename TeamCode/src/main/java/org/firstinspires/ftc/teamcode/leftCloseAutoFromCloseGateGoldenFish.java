@@ -11,9 +11,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Config
-@Autonomous(name="Red Close Auto From Close Gate GoldenFish", group="Robot")
+@Autonomous(name="Blue Close Auto From Close Gate GoldenFish", group="Robot")
 @SuppressWarnings("FieldCanBeLocal")
-public class rightCloseAutoFromCloseGateGoldenFish extends LinearOpMode {
+public class leftCloseAutoFromCloseGateGoldenFish extends LinearOpMode {
     Drivetrain drivetrain;
     Shooter shooter;
     Intake intake;
@@ -55,25 +55,25 @@ public class rightCloseAutoFromCloseGateGoldenFish extends LinearOpMode {
 
     private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop, goToWallHumanPlayer, grabPickupHumanPlayer, scorePickupHumanPlayer, goToReleaseBalls, collectBalls, moveBackCollectBalls, scoreCollectBalls, goToPark; //define path chains (muliple paths interpolated)
 
-    private final Pose startPose = new Pose(129, 115+AUTO_Y_OFFSET, Math.toRadians(180)); // Start Pose of our robot
-    private final Pose scorePose = new Pose(85, 83, scoreHeading);
-    private final Pose scorePreloadPose = new Pose(90, 94, Math.toRadians(SCORE_HEADING_PRELOAD));
-    private final Pose grabPickupTopPose = new Pose(127.5 + INTAKE_X_OFFSET, 85, Math.toRadians(0));
-    private final Pose grabPickupTopPoseControlPoint1 = new Pose(80, 81);
-    private final Pose releaseBallsPose = new Pose(126, RELEASE_BALLS_Y, Math.toRadians(0));
-    private final Pose releaseBallsPoseControlPoint1 = new Pose(98.141, 66.904);
-    private final Pose collectBallsPose = new Pose(134.5, COLLECT_BALLS_Y, Math.toRadians(COLLECT_HEADING));
-    private final Pose collectBallsPoseControlPoint1 = new Pose(80, 72);
-    private final Pose moveBackCollectBallsPose = new Pose(134, COLLECT_BALLS_Y-3, Math.toRadians(COLLECT_HEADING));
-    private final Pose scoreCollectBallsPoseControlPoint1 = new Pose(80, 69.341);
-    private final Pose grabPickupMiddlePose = new Pose(132 + INTAKE_X_OFFSET, 58, Math.toRadians(0));
-    private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(80, 54);
-    private final Pose scorePickupMiddlePoseControlPoint1 = new Pose(80, 69.341);
-    private final Pose grabPickupBottomPose = new Pose(132.5 + INTAKE_X_OFFSET, 36, Math.toRadians(0));
-    private final Pose grabPickupBottomPoseControlPoint1 = new Pose(80, 24);
-    private final Pose goToWallHumanPlayerPose = new Pose(WALL_HUMAN_PLAYER_X, 45, Math.toRadians(315));
-    private final Pose grabPickupHumanPlayerPose = new Pose(INTAKE_HUMAN_PLAYER_X, 5, Math.toRadians(270));
-    private final Pose parkPose = new Pose(83,101, Math.toRadians(0));
+    private final Pose startPose  = new Pose(129, 115+AUTO_Y_OFFSET, Math.toRadians(180)).mirror(); // Start Pose of our robot
+    private final Pose scorePose = new Pose(85, 83, scoreHeading).mirror();
+    private final Pose scorePreloadPose = new Pose(90, 94, Math.toRadians(SCORE_HEADING_PRELOAD)).mirror();
+    private final Pose grabPickupTopPose = new Pose(127.5 + INTAKE_X_OFFSET, 85, Math.toRadians(0)).mirror();
+    private final Pose grabPickupTopPoseControlPoint1 = new Pose(80, 81).mirror();
+    private final Pose releaseBallsPose = new Pose(126, RELEASE_BALLS_Y, Math.toRadians(0)).mirror();
+    private final Pose releaseBallsPoseControlPoint1 = new Pose(98.141, 66.904).mirror();
+    private final Pose collectBallsPose = new Pose(134.5, COLLECT_BALLS_Y, Math.toRadians(COLLECT_HEADING)).mirror();
+    private final Pose collectBallsPoseControlPoint1 = new Pose(80, 72).mirror();
+    private final Pose moveBackCollectBallsPose = new Pose(134, COLLECT_BALLS_Y-3, Math.toRadians(COLLECT_HEADING)).mirror();
+    private final Pose scoreCollectBallsPoseControlPoint1 = new Pose(80, 69.341).mirror();
+    private final Pose grabPickupMiddlePose = new Pose(132 + INTAKE_X_OFFSET, 58, Math.toRadians(0)).mirror();
+    private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(80, 54).mirror();
+    private final Pose scorePickupMiddlePoseControlPoint1 = new Pose(80, 69.341).mirror();
+    private final Pose grabPickupBottomPose = new Pose(132.5 + INTAKE_X_OFFSET, 36, Math.toRadians(0)).mirror();
+    private final Pose grabPickupBottomPoseControlPoint1 = new Pose(80, 24).mirror();
+    private final Pose goToWallHumanPlayerPose = new Pose(WALL_HUMAN_PLAYER_X, 45, Math.toRadians(315)).mirror();
+    private final Pose grabPickupHumanPlayerPose = new Pose(INTAKE_HUMAN_PLAYER_X, 5, Math.toRadians(270)).mirror();
+    private final Pose parkPose = new Pose(83,101, Math.toRadians(0)).mirror();
 
     public void buildPaths() {
         scorePreload = follower.pathBuilder()

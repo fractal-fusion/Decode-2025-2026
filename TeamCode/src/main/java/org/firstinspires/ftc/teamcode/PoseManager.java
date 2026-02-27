@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.Pose;
 
+@Config
 public class PoseManager {
     public enum Team {
         NONE,
@@ -22,12 +24,12 @@ public class PoseManager {
     public static Pose BLUE_GOAL_DISTANCE_POSITION = RED_GOAL_DISTANCE_POSITION.mirror();
 
     public static double RED_GOAL_AUTOALIGN_X = 140;
-    public static double RED_GOAL_AUTOALIGN_Y = 140;
+    public static double RED_GOAL_AUTOALIGN_Y = 150;
 
     public static Pose RED_GOAL_AUTOALIGN_POSITION = new Pose(RED_GOAL_AUTOALIGN_X, RED_GOAL_AUTOALIGN_Y);
     public static Pose BLUE_GOAL_AUTOALIGN_POSITION = RED_GOAL_AUTOALIGN_POSITION.mirror();
 
-    public static Pose RED_LEVER_POSITION = new Pose(134,62.5, Math.toRadians(RED_LEVER_HEADING));
+    public static Pose RED_LEVER_POSITION = new Pose(134.5,60.8, Math.toRadians(RED_LEVER_HEADING));
     public static Pose BLUE_LEVER_POSITION = RED_LEVER_POSITION.mirror();
 
     public static Pose RED_FAR_POSITION = new Pose(83,14, Math.toRadians(RED_FAR_SHOOTING_HEADING));
