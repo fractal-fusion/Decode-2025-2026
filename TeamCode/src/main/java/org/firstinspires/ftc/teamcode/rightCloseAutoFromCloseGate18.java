@@ -40,7 +40,7 @@ public class rightCloseAutoFromCloseGate18 extends LinearOpMode {
 //    public static double RELEASE_BALLS_Y = 74.2;
     public static double COLLECT_BALLS_Y = 60;
     public static double COLLECT_HEADING = 33;
-    public static double SCORE_HEADING_OFFSET = -5; //score heading offset since center of goals are not exactly 45 degrees
+    public static double SCORE_HEADING_OFFSET = -0.5; //score heading offset since center of goals are not exactly 45 degrees
     public static double SCORE_HEADING_PRELOAD_TOLERANCE = 0.1;
     public static double SCORE_HEADING_PRELOAD = 44.5;
     public static double MAX_POWER = 1;

@@ -25,8 +25,8 @@ public class leftCloseAutoFromCloseHumanPlayer extends LinearOpMode {
     private boolean init = true;
     public static double INTAKE_DELAY_TIME = 0.05;
     public static double INTAKE_DELAY_TIME_PRELOAD = 0.1;
-    public static double WALL_HUMAN_PLAYER_X = 16;
-    public static double INTAKE_HUMAN_PLAYER_X = 9.2;
+    public static double WALL_HUMAN_PLAYER_X = 128;
+    public static double INTAKE_HUMAN_PLAYER_X = 134.8;
 //    public static double INTAKE_HUMAN_PLAYER_FLICKER_TIME = 3;
 
     public static double RELEASE_BALLS_WAIT_TIME = 0.05; //time to wait at the chamber
@@ -34,9 +34,9 @@ public class leftCloseAutoFromCloseHumanPlayer extends LinearOpMode {
     public static double AUTO_Y_OFFSET = 0;
     public static double INTAKE_X_OFFSET = 0;
     public static double RELEASE_BALLS_Y = 74.2;
-    public static double SCORE_HEADING_OFFSET = 5; //score heading offset since center of goals are not exactly 45 degrees
+    public static double SCORE_HEADING_OFFSET = -0.5; //score heading offset since center of goals are not exactly 45 degrees
     public static double SCORE_HEADING_PRELOAD_TOLERANCE = 0.1;
-    public static double SCORE_HEADING_PRELOAD = 135.5;
+    public static double SCORE_HEADING_PRELOAD = 44.5;
     public static double MAX_POWER = 1;
     public static double INTAKE_HUMAN_PLAYER_MAX_POWER = 0.45;
 
@@ -46,26 +46,26 @@ public class leftCloseAutoFromCloseHumanPlayer extends LinearOpMode {
     private double scorePickupMiddleTime = 0.0;
     private double scorePickupBottomTime = 0.0;
     private double scorePickupHumanPlayerTime = 0.0;
-    public double scoreHeading = Math.toRadians(135 + SCORE_HEADING_OFFSET);
+    public double scoreHeading = Math.toRadians(45 + SCORE_HEADING_OFFSET);
 
     private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop, goToWallHumanPlayer, grabPickupHumanPlayer, scorePickupHumanPlayer, goToReleaseBalls, goToPark; //define path chains (muliple paths interpolated)
 
-    private final Pose startPose = new Pose(15, 115+AUTO_Y_OFFSET, Math.toRadians(0)); // Start Pose of our robot
-    private final Pose scorePose = new Pose(54, 94, scoreHeading);
-    private final Pose scorePreloadPose = new Pose(54, 94, Math.toRadians(SCORE_HEADING_PRELOAD));
-    private final Pose grabPickupTopPose = new Pose(17 + INTAKE_X_OFFSET, 84, Math.toRadians(180));
-    private final Pose grabPickupTopPoseControlPoint1 = new Pose(64, 81);
-    private final Pose releaseBallsPose = new Pose(15.5, RELEASE_BALLS_Y, Math.toRadians(180));
-    private final Pose releaseBallsPoseControlPoint1 = new Pose(45.859, 66.904);
-    private final Pose grabPickupMiddlePose = new Pose(12 + INTAKE_X_OFFSET, 59.5, Math.toRadians(180));
-    private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(64, 54);
-    private final Pose scorePickupMiddlePoseControlPoint1 = new Pose(41.207, 69.341);
-    private final Pose grabPickupBottomPose = new Pose(11.5 + INTAKE_X_OFFSET, 36, Math.toRadians(180));
-    private final Pose grabPickupBottomPoseControlPoint1 = new Pose(64, 24);
-    private final Pose goToWallHumanPlayerPose = new Pose(WALL_HUMAN_PLAYER_X, 45, Math.toRadians(225));
-    private final Pose alignWallHumanPlayerPose = new Pose(INTAKE_HUMAN_PLAYER_X+0.5, 45, Math.toRadians(270));
-    private final Pose grabPickupHumanPlayerPose = new Pose(INTAKE_HUMAN_PLAYER_X, 5, Math.toRadians(270));
-    private final Pose parkPose = new Pose(44,70, Math.toRadians(180));
+    private final Pose startPose = new Pose(129, 115+AUTO_Y_OFFSET, Math.toRadians(180)).mirror(); // Start Pose of our robot
+    private final Pose scorePose = new Pose(90, 94, scoreHeading).mirror();
+    private final Pose scorePreloadPose = new Pose(90, 94, Math.toRadians(SCORE_HEADING_PRELOAD)).mirror();
+    private final Pose grabPickupTopPose = new Pose(127 + INTAKE_X_OFFSET, 84, Math.toRadians(0)).mirror();
+    private final Pose grabPickupTopPoseControlPoint1 = new Pose(80, 81).mirror();
+    private final Pose releaseBallsPose = new Pose(128.5, RELEASE_BALLS_Y, Math.toRadians(0)).mirror();
+    private final Pose releaseBallsPoseControlPoint1 = new Pose(98.141, 66.904).mirror();
+    private final Pose grabPickupMiddlePose = new Pose(132 + INTAKE_X_OFFSET, 58, Math.toRadians(0)).mirror();
+    private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(80, 54).mirror();
+    private final Pose scorePickupMiddlePoseControlPoint1 = new Pose(102.793, 69.341).mirror();
+    private final Pose grabPickupBottomPose = new Pose(132.5 + INTAKE_X_OFFSET, 36, Math.toRadians(0)).mirror();
+    private final Pose grabPickupBottomPoseControlPoint1 = new Pose(80, 24).mirror();
+    private final Pose goToWallHumanPlayerPose = new Pose(WALL_HUMAN_PLAYER_X, 45, Math.toRadians(315)).mirror();
+    private final Pose alignWallHumanPlayerPose = new Pose(INTAKE_HUMAN_PLAYER_X-0.5, 45, Math.toRadians(270)).mirror();
+    private final Pose grabPickupHumanPlayerPose = new Pose(INTAKE_HUMAN_PLAYER_X, 5, Math.toRadians(270)).mirror();
+    private final Pose parkPose = new Pose(100,70, Math.toRadians(0)).mirror();
 
     public void buildPaths() {
         scorePreload = follower.pathBuilder()
