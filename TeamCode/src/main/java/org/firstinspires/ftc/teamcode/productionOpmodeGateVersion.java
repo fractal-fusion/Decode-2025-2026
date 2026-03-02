@@ -94,7 +94,9 @@ public class productionOpmodeGateVersion extends LinearOpMode {
                 }
             }
             else if (gamepad1.a) {
-                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPowerOdo(-drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose)));
+                //sotm
+                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPowerOdo(-drivetrain.calculateOdoGoalBearing(follower.getPose(), drivetrain.calculateVirtualGoalPose(follower, drivetrain.calculateAirTime(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)), PoseManager.currentGoalAutoAlignPose))));
+//                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculNGateAutoAlignPowerOdo(-drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose)));
                 drivetrain.holdPose = follower.getPose();
             }
             else if (gamepad1.x) {
@@ -118,7 +120,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
                     intake.setDriverPower(Intake.DRIVER_INTAKE_POWER);
                     shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                 }
-//                else{ todo: implement this aswell
+//                else{
 //                    intake.setDriverPower(intake.calculateDriverPower(limelight.getRange()));
 //                }
             }
@@ -166,7 +168,9 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             if(shooter.on){
                 shooter.updateShooterVelocity();
                 if (!drivetrain.isFarOdometry(follower.getPose())){ //only update ramp regression when close and shooter is on
-                    shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPMOdometryClose(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
+                    //sotm
+                    shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPMOdometryClose(drivetrain.calculateOdoGoalDistance(follower.getPose(), drivetrain.calculateVirtualGoalPose(follower, drivetrain.calculateAirTime(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)), PoseManager.currentGoalPose))));
+//                    shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPMOdometryClose(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
                     shooter.setRampPosition(shooter.calculateRampPositionOdometry(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
                     shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
 
