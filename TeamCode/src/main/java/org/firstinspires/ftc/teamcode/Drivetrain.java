@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.math.Vector;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -30,6 +31,8 @@ public class Drivetrain {
 
     public static double AUTO_ALIGN_DRIVE_POWER_MULTIPLIER_MIDPOINT = 0.45; //half of max power
     public static double IS_FAR_THRESHOLD_Y = 40; //less than this Y value is considered far
+
+    public static double FUTURE_VELOCITY_TIME = 0.15;
 
     public Gamepad currentGamepad = new Gamepad();
     public Gamepad previousGamepad = new Gamepad();
@@ -154,6 +157,18 @@ public class Drivetrain {
         double vectorX = Math.abs(goalPose.getX() - robotPose.getX());
 
         return Math.hypot(vectorX, vectorY);
+    }
+
+    public double calculateAirTime(double distance){
+        return (0.0025 * distance + 0.3871);
+    }
+
+    public Pose calculateVirtualGoalPose(Follower follower, double airtime, Pose goalpose) {
+        double ballDistanceFromGoal = follower.getVelocity().getMagnitude() * airtime; //calculate how the distance the ball will travel in the air, using relation of distance vs time since longer time means longer distance
+                                                                                       //velocity is inches/second, so need to multiply by time to get actual distance
+
+        Vector futureRobotOffset = new Vector(ballDistanceFromGoal, follower.getVelocity().getTheta());
+        return new Pose(-futureRobotOffset.getXComponent() + goalpose.getX(), -futureRobotOffset.getYComponent() + goalpose.getY());
     }
 
     public boolean isFarOdometry(Pose currentPose){
