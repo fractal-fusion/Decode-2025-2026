@@ -30,70 +30,28 @@ public class rightCloseAutoFromFar extends LinearOpMode {
     public static double AUTO_Y_OFFSET = 0;
     public static double RELEASE_BALLS_Y = 73.5;
     public static double INTAKE_X_OFFSET = 0.5;
-    public static double SCORE_HEADING_OFFSET = -5; //score heading offset since center of goals are not exactly 45 degrees
-    public static double MAX_POWER = 0.9;
+    public static double SCORE_HEADING_OFFSET = 0; //score heading offset since center of goals are not exactly 45 degrees
+    public static double MAX_POWER = 1;
 
     //variables to keep track of how long each score took in order to implement failsafes based on the opmode timer
     private double scorePreloadTime = 0.0;
     private double scorePickupTopTime = 0.0;
     private double scorePickupMiddleTime = 0.0;
     private double scorePickupBottomTime = 0.0;
-    public double scoreHeading = Math.toRadians(45 + SCORE_HEADING_OFFSET);
+    public double scoreHeading = 70;
 
     private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop, goToReleaseBalls, goToPark; //define path chains (muliple paths interpolated)
 
     private final Pose startPose = new Pose(89.5, 8+AUTO_Y_OFFSET, Math.toRadians(90)); // Start Pose of our robot
-    private final Pose scorePose = new Pose(98, 100, scoreHeading);
-    private final Pose grabPickupTopPose = new Pose(128 + INTAKE_X_OFFSET, 84, Math.toRadians(0));
-    private final Pose grabPickupTopPoseControlPoint1 = new Pose(59.593, 79.089);
-    private final Pose releaseBallsPose = new Pose(128.5, RELEASE_BALLS_Y, Math.toRadians(0));
-    private final Pose releaseBallsPoseControlPoint1 = new Pose(117.858, 75.323);
-    private final Pose grabPickupMiddlePose = new Pose(132 + INTAKE_X_OFFSET, 60, Math.toRadians(0));
-    private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(55.606, 51.175);
-    private final Pose scorePickupMiddlePoseControlPoint1 = new Pose(102.793, 69.341);
-    private final Pose grabPickupBottomPose = new Pose(132.5 + INTAKE_X_OFFSET, 36, Math.toRadians(0));
-    private final Pose grabPickupBottomPoseControlPoint1 = new Pose(60.48, 24.812);
+    private final Pose scorePose =  new Pose(83,14, Math.toRadians(scoreHeading));
     private final Pose parkPose = new Pose(100,70, Math.toRadians(0));
 
     public void buildPaths() {
         scorePreload = follower.pathBuilder()
                 .addPath(new BezierLine(startPose, scorePose))
-                .addTemporalCallback(SHOOTER_ON_DELAY_PRELOAD, this::intializeBurstClose)
-                .addTemporalCallback(SHOOTER_ON_DELAY_PRELOAD, this::turnOnShooterAuto)
                 .setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading())
                 .build();
-        grabPickupTop = follower.pathBuilder()
-                .addPath(new BezierCurve(scorePose, grabPickupTopPoseControlPoint1, grabPickupTopPose))
-//                    .addPath(new BezierLine(scorePose, grabPickupTopPose))
-                .setLinearHeadingInterpolation(scorePose.getHeading(), grabPickupTopPose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
-//                .addPoseCallback(new Pose(127, 84), intake::holdFlicker, 0.5)
-                .build();
-        goToReleaseBalls = follower.pathBuilder()
-                .addPath(new BezierCurve(grabPickupTopPose, releaseBallsPoseControlPoint1, releaseBallsPose))
-                .setLinearHeadingInterpolation(grabPickupTopPose.getHeading(), releaseBallsPose.getHeading())
-                .build();
-        scorePickupTop = follower.pathBuilder()
-                .addPath(new BezierLine(grabPickupTopPose, scorePose))
-                .setLinearHeadingInterpolation(grabPickupTopPose.getHeading(), scorePose.getHeading())
-                .build();
-        grabPickupMiddle = follower.pathBuilder()
-                .addPath(new BezierCurve(scorePose, grabPickupMiddlePoseControlPoint1, grabPickupMiddlePose))
-                .setLinearHeadingInterpolation(scorePose.getHeading(), grabPickupMiddlePose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
-//                .addPoseCallback(new Pose(131, 58), intake::holdFlicker, 0.5)
-                .build();
-        scorePickupMiddle = follower.pathBuilder()
-                .addPath(new BezierCurve(grabPickupMiddlePose, scorePickupMiddlePoseControlPoint1, scorePose))
-                .setLinearHeadingInterpolation(grabPickupMiddlePose.getHeading(), scorePose.getHeading())
-                .build();
-        grabPickupBottom = follower.pathBuilder()
-                .addPath(new BezierCurve(scorePose, grabPickupBottomPoseControlPoint1, grabPickupBottomPose))
-                .setLinearHeadingInterpolation(scorePose.getHeading(), grabPickupBottomPose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
-//                .addPoseCallback(new Pose(131, 36), intake::holdFlicker, 0.5)
-                .build();
-        scorePickupBottom = follower.pathBuilder()
-                .addPath(new BezierLine(grabPickupBottomPose, scorePose))
-                .setLinearHeadingInterpolation(grabPickupBottomPose.getHeading(), scorePose.getHeading())
-                .build();
+        
         goToPark = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, parkPose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), parkPose.getHeading())

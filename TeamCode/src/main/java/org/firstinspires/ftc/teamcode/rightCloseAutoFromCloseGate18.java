@@ -493,7 +493,7 @@ public class rightCloseAutoFromCloseGate18 extends LinearOpMode {
                         if (pathTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_COLLECT_BALLS_TIME) {
                             scorePickupMiddleTime = opmodeTimer.getElapsedTimeSeconds();
 
-                            shooter.ballsShot = 12;
+                            shooter.ballsShot = 15;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                             turnOffShooterAuto();
                             setPathState(17);
@@ -541,7 +541,7 @@ public class rightCloseAutoFromCloseGate18 extends LinearOpMode {
                         if (pathTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_TOP_ROW_TIME) {
                             scorePickupTopTime = opmodeTimer.getElapsedTimeSeconds();
 
-                            shooter.ballsShot = 6;
+                            shooter.ballsShot = 18;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                             turnOffShooterAuto();
                             setPathState(20);
