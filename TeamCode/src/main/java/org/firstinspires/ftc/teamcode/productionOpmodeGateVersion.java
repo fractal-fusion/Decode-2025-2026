@@ -93,10 +93,14 @@ public class productionOpmodeGateVersion extends LinearOpMode {
                     follower.setPose(limelight.getRobotPose());
                 }
             }
-            else if (gamepad1.a) {
+            else if (gamepad1.y) {
                 //sotm
                 drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPowerOdo(-drivetrain.calculateOdoGoalBearing(follower.getPose(), drivetrain.calculateVirtualGoalPose(follower, drivetrain.calculateAirTime(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)), PoseManager.currentGoalAutoAlignPose))));
 //                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculNGateAutoAlignPowerOdo(-drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose)));
+                drivetrain.holdPose = follower.getPose();
+            }
+            else if (gamepad1.a) {
+                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPowerOdo(-drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose)));
                 drivetrain.holdPose = follower.getPose();
             }
             else if (gamepad1.x) {
