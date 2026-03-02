@@ -174,6 +174,17 @@ public class Drivetrain {
     public boolean isFarOdometry(Pose currentPose){
         return currentPose.getY() < IS_FAR_THRESHOLD_Y;
     }
+
+    public boolean ifSlowDriverOdometry(double distance){
+        if (distance > 110) {
+            return true;
+        }
+        else if (distance < 28) {
+            return true;
+        }
+
+        return false;
+    }
 //    public void toggleGrounded() {
 //        if (currentGamepad.b && !previousGamepad.b) {
 //            grounded = !grounded;

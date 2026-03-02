@@ -154,7 +154,6 @@ public class productionOpmodeGateVersion extends LinearOpMode {
 
             //mechanism shooter control
             if (gamepad2.x) {
-                intake.setDriverPower(Intake.DRIVER_CLOSE_SHOOTING_POWER);
                 shooter.toggleShooterClose();
             }
             else if (gamepad2.y){
@@ -163,15 +162,27 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             }
 
             //constantly update shooter velocity for close regression
+            //DYNAMIC FAR AND CLOSE
             if(shooter.on){
                 shooter.updateShooterVelocity();
                 if (!drivetrain.isFarOdometry(follower.getPose())){ //only update ramp regression when close and shooter is on
-//                    shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPMOdometryClose(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
-//                    shooter.setRampPosition(shooter.calculateRampPositionOdometry(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose))); //TODO: tune ramp so odometry regression works
+                    shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPMOdometryClose(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
+                    shooter.setRampPosition(shooter.calculateRampPositionOdometry(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
+                    shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
+
+                    //reduce driver speed if too close or too far to goal inside close zone
+                    if(drivetrain.ifSlowDriverOdometry(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose))) {
+                        intake.setDriverPower(Intake.DRIVER_CLOSE_SLOW_SHOOTING_POWER);
+                    }
+                    else {
+                        intake.setDriverPower(Intake.DRIVER_CLOSE_SHOOTING_POWER);
+                    }
+
                 }
                 else{
-//                    shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPMOdometryFar(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
+                    shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPMOdometryFar(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
                     shooter.setRampPosition(Shooter.FAR_RAMP_SCORE_POSITION);
+                    shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_FAR);
                 }
             }
 
@@ -179,20 +190,16 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             shooter.update();
             shooter.controlShooterGate();
 
-            //DYNAMIC FAR AND CLOSE
-            if (limelight.isFar) {
+//            //no longer use limelight for far and close detection
+//            if (limelight.isFar) {
 //                camera.setHeadingOffset(Camera.HEADING_OFFSET_FAR);
-                shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_FAR);
-            }
-            else {
+//                shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_FAR);
+//            }
+//            else {
 //                camera.setHeadingOffset(Camera.HEADING_OFFSET_CLOSE);
-                //update regression only for close
-//                shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPMLimelight(limelight.getRange()));// TODO: replace regression with odometry
-//                shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPMOdometry(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
-                shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
-            }
-
-            limelight.updateIsFar();
+//                shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
+//            }
+//            limelight.updateIsFar();
 
             //indicator light control
             if (limelight.getBearing() >= -Limelight.HEADING_VALID_RANGE && limelight.getBearing() <= Limelight.HEADING_VALID_RANGE && limelight.getBearing() != 0.0){
@@ -208,17 +215,19 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             telemetry.addData("shooter right velocity:", shooter.shooterRightGetVelocity() * Shooter.TICKS_PER_SECOND_TO_RPM);
             telemetry.addData("shooter at velocity:", shooter.shooterAtTargetVelocity());
             telemetry.addData("balls shot:", shooter.ballsShot);
-
+            telemetry.addLine("------------------------------------------------------");
 
 //            telemetry.addData("shooter at velocity:", shooter.shooterAtTargetVelocity());
             telemetry.addData("apriltag range:", limelight.getRange());
             telemetry.addData("apriltag bearing:", limelight.getBearing());
             telemetry.addData("drive power:", drivetrain.calculateAutoAlignPowerLimelight(limelight.getBearing()));
+            telemetry.addLine("------------------------------------------------------");
 
             telemetry.addData("pitch up time:", shooter.currentShooterClosedTime);
             telemetry.addData("pitch down time:", shooter.currentShooterOpenTime);
             telemetry.addData("pitch up debounce:", shooter.shooterClosedTimerOver());
             telemetry.addData("pitch down debounce:", shooter.shooterOpenPitchTimerOver());
+            telemetry.addLine("------------------------------------------------------");
 
             //shooter at velocity time
 //            telemetry.addData("shooter at velocity time:", shooter.atVelocityTime);
@@ -226,19 +235,24 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             //regression zero debounce
             telemetry.addData("current regression zero time:", shooter.regressionDebounceTimer.time());
             telemetry.addData("last regression value:", shooter.lastRegressionValue);
+            telemetry.addLine("------------------------------------------------------");
 
             //grounded
             telemetry.addData("grounded:", drivetrain.grounded);
+            telemetry.addLine("------------------------------------------------------");
 
             //driver power
             telemetry.addData("driver power: ", intake.driverPower);
+            telemetry.addLine("------------------------------------------------------");
 
             telemetry.addData("current robot pose:", follower.getPose());
             telemetry.addData("camera robot pose:", limelight.getRobotPose());
             telemetry.addData("current robot odo angle:", drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalPose));
             telemetry.addData("current inches from goal:", drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose));
+            telemetry.addLine("------------------------------------------------------");
 
             telemetry.addData("current ramp position:", shooter.calculateRampPositionOdometry(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
+            telemetry.addLine("------------------------------------------------------");
 
             telemetry.addData("drivetrain is far:", drivetrain.isFarOdometry(follower.getPose()));
             telemetry.addData("current target rpm close:", shooter.calculateShooterVelocityRPMOdometryClose(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
