@@ -166,7 +166,7 @@ public class productionOpmodeManualVersion extends LinearOpMode {
                 indicatorLight.setIndicatorLight(IndicatorLight.INDICATOR_LIGHT_GREEN);
             }
             else {
-                indicatorLight.setIndicatorLight(IndicatorLight.INDICATOR_LIGHT_RED);
+                indicatorLight.setIndicatorLight(IndicatorLight.INDICATOR_LIGHT_PURPLE);
             }
 
 //            telemetry.addData("intake current time:", intake.currentTime);

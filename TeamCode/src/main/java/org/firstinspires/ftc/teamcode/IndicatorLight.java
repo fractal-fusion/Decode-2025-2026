@@ -8,8 +8,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class IndicatorLight {
     private OpMode opMode;
     private Servo indicatorLight;
-    public static double INDICATOR_LIGHT_RED = 0.722;
+    public static double INDICATOR_LIGHT_PURPLE = 0.722;
     public static double INDICATOR_LIGHT_GREEN = 0.500;
+    public static double INDICATOR_LIGHT_ORANGE = 0.350;
     private double currentColor = 0.0;
 
     public IndicatorLight(OpMode linearopmode){
