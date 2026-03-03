@@ -37,7 +37,7 @@ public class leftCloseAutoFromCloseGateGoldenFish extends LinearOpMode {
     public static double AUTO_Y_OFFSET = 0;
     public static double INTAKE_X_OFFSET = 0;
     public static double RELEASE_BALLS_Y = 70.2;
-    public static double COLLECT_BALLS_Y = 59.6 + 1; //TODO: check if this is right auto position
+    public static double COLLECT_BALLS_Y = 60 + 1; //TODO: check if this is right auto position
     public static double COLLECT_HEADING = 33;
     public static double SCORE_HEADING_OFFSET = -0.5; //score heading offset since center of goals are not exactly 45 degrees
     public static double SCORE_HEADING_PRELOAD_TOLERANCE = 0.1;
@@ -56,7 +56,7 @@ public class leftCloseAutoFromCloseGateGoldenFish extends LinearOpMode {
     private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop, goToWallHumanPlayer, grabPickupHumanPlayer, scorePickupHumanPlayer, goToReleaseBalls, collectBalls, moveBackCollectBalls, scoreCollectBalls, goToPark; //define path chains (muliple paths interpolated)
 
     private final Pose startPose  = new Pose(129, 115+AUTO_Y_OFFSET, Math.toRadians(180)).mirror(); // Start Pose of our robot
-    private final Pose scorePose = new Pose(85, 83, scoreHeading).mirror();
+    private final Pose scorePose = new Pose(90, 94, scoreHeading).mirror();
     private final Pose scorePreloadPose = new Pose(90, 94, Math.toRadians(SCORE_HEADING_PRELOAD)).mirror();
     private final Pose grabPickupTopPose = new Pose(127.5 + INTAKE_X_OFFSET, 85, Math.toRadians(0)).mirror();
     private final Pose grabPickupTopPoseControlPoint1 = new Pose(80, 81).mirror();
@@ -85,7 +85,6 @@ public class leftCloseAutoFromCloseGateGoldenFish extends LinearOpMode {
                 .addPath(new BezierCurve(scorePose, grabPickupTopPoseControlPoint1, grabPickupTopPose))
 //                    .addPath(new BezierLine(scorePose, grabPickupTopPose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), grabPickupTopPose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
-                .setNoDeceleration()
 //                .addPoseCallback(new Pose(126, 84), intake::holdFlicker, 0.5)
                 .build();
         goToReleaseBalls = follower.pathBuilder()
@@ -95,7 +94,6 @@ public class leftCloseAutoFromCloseGateGoldenFish extends LinearOpMode {
                 .build();
         scorePickupTop = follower.pathBuilder()
                 .addPath(new BezierLine(grabPickupTopPose, scorePose))
-                .setNoDeceleration()
                 .setLinearHeadingInterpolation(grabPickupTopPose.getHeading(), scorePose.getHeading())
                 .build();
         grabPickupMiddle = follower.pathBuilder()
