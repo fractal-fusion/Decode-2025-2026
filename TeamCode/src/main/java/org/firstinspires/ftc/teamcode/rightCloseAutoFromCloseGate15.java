@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Config
-@Autonomous(name="Red Close Auto From Gate", group="Robot")
+@Autonomous(name="Red Close Auto From Gate 15", group="Robot")
 @SuppressWarnings("FieldCanBeLocal")
 public class rightCloseAutoFromCloseGate15 extends LinearOpMode {
     Drivetrain drivetrain;
