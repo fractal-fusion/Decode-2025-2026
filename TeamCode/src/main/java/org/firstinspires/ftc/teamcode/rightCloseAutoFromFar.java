@@ -158,7 +158,7 @@ public class rightCloseAutoFromFar extends LinearOpMode {
                     }
                     else{
                         if (pathTimer.getElapsedTimeSeconds() > FIRST_INTAKE_DELAY_TIME) {
-                            intake.turnOnIntakeAuto();
+                            intake.turnOnIntakeAutoFar();
                         }
 
                         if (shooter.ballsShot >= 3 || opmodeTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_FAR_SHOOT_TIME) {
@@ -204,7 +204,7 @@ public class rightCloseAutoFromFar extends LinearOpMode {
                     }
                     else{
                         if (pathTimer.getElapsedTimeSeconds() > FOLLOWING_INTAKE_DELAY_TIME) {
-                            intake.turnOnIntakeAuto();
+                            intake.turnOnIntakeAutoFar();
                         }
 
                         if (shooter.ballsShot >= 3 || opmodeTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_FAR_SHOOT_TIME) {
@@ -250,7 +250,7 @@ public class rightCloseAutoFromFar extends LinearOpMode {
                     }
                     else{
                         if (pathTimer.getElapsedTimeSeconds() > FOLLOWING_INTAKE_DELAY_TIME) {
-                            intake.turnOnIntakeAuto();
+                            intake.turnOnIntakeAutoFar();
                         }
 
                         if (shooter.ballsShot >= 3 || opmodeTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_FAR_SHOOT_TIME) {
@@ -296,7 +296,7 @@ public class rightCloseAutoFromFar extends LinearOpMode {
                     }
                     else{
                         if (pathTimer.getElapsedTimeSeconds() > FOLLOWING_INTAKE_DELAY_TIME) {
-                            intake.turnOnIntakeAuto();
+                            intake.turnOnIntakeAutoFar();
                         }
 
                         if (shooter.ballsShot >= 3 || opmodeTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_FAR_SHOOT_TIME) {
