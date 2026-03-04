@@ -12,8 +12,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Config
-@Autonomous(name="Red Close Auto From Close Gate", group="Robot")
 @Disabled
+@Autonomous(name="Red Close Auto From Close Gate 18", group="Robot")
 @SuppressWarnings("FieldCanBeLocal")
 public class rightCloseAutoFromCloseGate18 extends LinearOpMode {
     Drivetrain drivetrain;
@@ -57,7 +57,7 @@ public class rightCloseAutoFromCloseGate18 extends LinearOpMode {
     private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop, goToWallHumanPlayer, grabPickupHumanPlayer, scorePickupHumanPlayer, goToReleaseBalls, collectBalls, moveBackCollectBalls, scoreCollectBalls, goToPark; //define path chains (muliple paths interpolated)
 
     private final Pose startPose = new Pose(129, 115+AUTO_Y_OFFSET, Math.toRadians(180)); // Start Pose of our robot
-    private final Pose scorePose = new Pose(83, 76, scoreHeading);
+    private final Pose scorePose = new Pose(86, 76, scoreHeading);
     private final Pose scoreTopPose = new Pose(81, 99, scoreHeading);
     private final Pose scorePreloadPose = new Pose(90, 94, Math.toRadians(SCORE_HEADING_PRELOAD));
     private final Pose grabPickupTopPose = new Pose(127 + INTAKE_X_OFFSET, 84, Math.toRadians(0));
@@ -95,8 +95,8 @@ public class rightCloseAutoFromCloseGate18 extends LinearOpMode {
 //                .setLinearHeadingInterpolation(grabPickupMiddlePose.getHeading(), releaseBallsPose.getHeading())
 //                .build();
         scorePickupTop = follower.pathBuilder()
-                .addPath(new BezierLine(grabPickupTopPose, scorePose))
-                .setLinearHeadingInterpolation(grabPickupTopPose.getHeading(), scorePose.getHeading())
+                .addPath(new BezierLine(grabPickupTopPose, scoreTopPose))
+                .setLinearHeadingInterpolation(grabPickupTopPose.getHeading(), scoreTopPose.getHeading())
                 .build();
         grabPickupMiddle = follower.pathBuilder()
                 .addPath(new BezierCurve(scorePose, grabPickupMiddlePoseControlPoint1, grabPickupMiddlePose))
@@ -545,25 +545,25 @@ public class rightCloseAutoFromCloseGate18 extends LinearOpMode {
                             shooter.ballsShot = 18;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                             turnOffShooterAuto();
-                            setPathState(20);
+                            setPathState(-1);
                         }
                     }
                 }
                 break;
-            case 20:
-                if(!follower.isBusy()){
-                    follower.followPath(goToPark);
-                    setPathState(-1);
-//                    if (init){
-//                        intake.turnOffIntake();
-//                        init = false;
-//                    }
-//                    else{
-//                        follower.followPath(goToPark);
-//                        setPathState(-1);
-//                    }
-                }
-                break;
+//            case 20:
+//                if(!follower.isBusy()){
+//                    follower.followPath(goToPark);
+//                    setPathState(-1);
+////                    if (init){
+////                        intake.turnOffIntake();
+////                        init = false;
+////                    }
+////                    else{
+////                        follower.followPath(goToPark);
+////                        setPathState(-1);
+////                    }
+//                }
+//                break;
         } //run state machine
     }
 

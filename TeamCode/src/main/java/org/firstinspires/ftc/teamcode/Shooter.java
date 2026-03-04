@@ -44,9 +44,9 @@ public class Shooter{
 
     public static double CLOSE_RAMP_SCORE_POSITION = 0.02;
     public static double CLOSE_TARGET_RPM = 3350;
-    public static double CLOSE_AUTO_TARGET_RPM = 3100;
-    public static double CLOSE_AUTO_TARGET_RPM_PRELOAD = CLOSE_AUTO_TARGET_RPM - 50;
-    public static double CLOSE_AUTO_TARGET_RPM_EDGE = 3200;
+    public static double CLOSE_AUTO_TARGET_RPM = 3050;
+    public static double CLOSE_AUTO_TARGET_RPM_PRELOAD = CLOSE_AUTO_TARGET_RPM;
+    public static double CLOSE_AUTO_TARGET_RPM_EDGE = 3250;
     public static double CLOSE_AUTO_TARGET_RPM_PARK = 3050;
 
     public static double CLOSE_DEBOUNCE = 0.4;

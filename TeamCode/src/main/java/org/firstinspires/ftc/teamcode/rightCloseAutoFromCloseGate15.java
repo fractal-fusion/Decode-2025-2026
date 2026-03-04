@@ -51,11 +51,12 @@ public class rightCloseAutoFromCloseGate15 extends LinearOpMode {
     private double scorePickupBottomTime = 0.0;
     private double scorePickupHumanPlayerTime = 0.0;
     public double scoreHeading = Math.toRadians(45 + SCORE_HEADING_OFFSET);
-
+    public double edgeScoreHeading = Math.toRadians(48 + SCORE_HEADING_OFFSET);
     private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop, goToWallHumanPlayer, grabPickupHumanPlayer, scorePickupHumanPlayer, goToReleaseBalls, collectBalls, moveBackCollectBalls, scoreCollectBalls, goToPark; //define path chains (muliple paths interpolated)
 
     private final Pose startPose = new Pose(129, 115+AUTO_Y_OFFSET, Math.toRadians(180)); // Start Pose of our robot
     private final Pose scorePose = new Pose(90, 94, scoreHeading);
+    private final Pose edgeScorePose = new Pose(86.6, 76, edgeScoreHeading); //TODO: MAKE MIDDLE USE EDGE, TWEAK ALL INIT SHOOTERS TO BE RIGHT VELOCITY
     private final Pose scorePreloadPose = new Pose(90, 94, Math.toRadians(SCORE_HEADING_PRELOAD));
     private final Pose grabPickupTopPose = new Pose(127 + INTAKE_X_OFFSET, 84, Math.toRadians(0));
     private final Pose grabPickupTopPoseControlPoint1 = new Pose(80, 81);
@@ -65,9 +66,9 @@ public class rightCloseAutoFromCloseGate15 extends LinearOpMode {
     private final Pose collectBallsPoseControlPoint1 = new Pose(80, 72);
     private final Pose moveBackCollectBallsPose = new Pose(134, COLLECT_BALLS_Y-3, Math.toRadians(COLLECT_HEADING));
     private final Pose scoreCollectBallsPoseControlPoint1 = new Pose(80, 69.341);
-    private final Pose grabPickupMiddlePose = new Pose(132 + INTAKE_X_OFFSET, 58, Math.toRadians(0));
+    private final Pose grabPickupMiddlePose = new Pose(132 + INTAKE_X_OFFSET, 54, Math.toRadians(0));
     private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(80, 54);
-    private final Pose scorePickupMiddlePoseControlPoint1 = new Pose(80, 69.341);
+//    private final Pose scorePickupMiddlePoseControlPoint1 = new Pose(80, 69.341);
     private final Pose grabPickupBottomPose = new Pose(132.5 + INTAKE_X_OFFSET, 36, Math.toRadians(0));
     private final Pose grabPickupBottomPoseControlPoint1 = new Pose(80, 24);
     private final Pose goToWallHumanPlayerPose = new Pose(WALL_HUMAN_PLAYER_X, 45, Math.toRadians(315));
@@ -101,17 +102,17 @@ public class rightCloseAutoFromCloseGate15 extends LinearOpMode {
 //                .addPoseCallback(new Pose(130, 58), intake::holdFlicker, 0.5)
                 .build();
         scorePickupMiddle = follower.pathBuilder()
-                .addPath(new BezierCurve(grabPickupMiddlePose, scorePickupMiddlePoseControlPoint1, scorePose))
-                .setLinearHeadingInterpolation(grabPickupMiddlePose.getHeading(), scorePose.getHeading())
+                .addPath(new BezierLine(grabPickupMiddlePose, edgeScorePose))
+                .setLinearHeadingInterpolation(grabPickupMiddlePose.getHeading(), edgeScorePose.getHeading())
                 .build();
         grabPickupBottom = follower.pathBuilder()
-                .addPath(new BezierCurve(scorePose, grabPickupBottomPoseControlPoint1, grabPickupBottomPose))
-                .setLinearHeadingInterpolation(scorePose.getHeading(), grabPickupBottomPose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
+                .addPath(new BezierCurve(edgeScorePose, grabPickupBottomPoseControlPoint1, grabPickupBottomPose))
+                .setLinearHeadingInterpolation(edgeScorePose.getHeading(), grabPickupBottomPose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
 //                .addPoseCallback(new Pose(130, 36), intake::holdFlicker, 0.5)
                 .build();
         scorePickupBottom = follower.pathBuilder()
-                .addPath(new BezierLine(grabPickupBottomPose, scorePose))
-                .setLinearHeadingInterpolation(grabPickupBottomPose.getHeading(), scorePose.getHeading())
+                .addPath(new BezierLine(grabPickupBottomPose, edgeScorePose))
+                .setLinearHeadingInterpolation(grabPickupBottomPose.getHeading(), edgeScorePose.getHeading())
                 .build();
         goToWallHumanPlayer = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, goToWallHumanPlayerPose))
@@ -129,8 +130,8 @@ public class rightCloseAutoFromCloseGate15 extends LinearOpMode {
                 .setLinearHeadingInterpolation(grabPickupHumanPlayerPose.getHeading(), scorePose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
                 .build();
         collectBalls = follower.pathBuilder()
-                .addPath(new BezierCurve(scorePose, collectBallsPoseControlPoint1, collectBallsPose))
-                .setLinearHeadingInterpolation(scorePose.getHeading(), collectBallsPose.getHeading())
+                .addPath(new BezierLine(edgeScorePose, collectBallsPose))
+                .setLinearHeadingInterpolation(edgeScorePose.getHeading(), collectBallsPose.getHeading())
                 .setTimeoutConstraint(250)
                 .build();
         moveBackCollectBalls = follower.pathBuilder()
@@ -139,8 +140,8 @@ public class rightCloseAutoFromCloseGate15 extends LinearOpMode {
                 .setNoDeceleration()
                 .build();
         scoreCollectBalls = follower.pathBuilder()
-                .addPath(new BezierCurve(moveBackCollectBallsPose, scoreCollectBallsPoseControlPoint1, scorePose))
-                .setConstantHeadingInterpolation(scorePose.getHeading())
+                .addPath(new BezierCurve(moveBackCollectBallsPose, scoreCollectBallsPoseControlPoint1, edgeScorePose))
+                .setConstantHeadingInterpolation(edgeScorePose.getHeading())
                 .build();
         goToPark = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, parkPose))
@@ -246,7 +247,7 @@ public class rightCloseAutoFromCloseGate15 extends LinearOpMode {
 
                             shooter.ballsShot = 3;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
-//                            turnOffShooterAuto(); commented out to reduce power draw from turning shooter off and on
+//                            turnOffShooterAuto();
                             setPathState(2); //end
                         }
                     }
@@ -268,6 +269,8 @@ public class rightCloseAutoFromCloseGate15 extends LinearOpMode {
                 if (!follower.isBusy()) {
                     if (init){
                         intake.turnOffIntake();
+                        initializeBurstCloseEdge(); //prestart shooter, shooter already on
+                        turnOnShooterAuto();
                         shooter.setGatePosition(Shooter.GATE_OPEN_POSITION);
                         init = false;
                     }
@@ -331,7 +334,7 @@ public class rightCloseAutoFromCloseGate15 extends LinearOpMode {
                 if (!follower.isBusy()) {
                     if (init){
 //                        intake.turnOffIntake();
-                        initializeBurstClose(); //prestart shooter
+                        initializeBurstCloseEdge(); //prestart shooter
                         turnOnShooterAuto();
                         shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                         init = false;
@@ -391,7 +394,7 @@ public class rightCloseAutoFromCloseGate15 extends LinearOpMode {
                     }
                     else{
                         follower.followPath(scorePickupBottom, true);
-                        initializeBurstClose(); //prestart shooter
+                        initializeBurstCloseEdge(); //prestart shooter
                         turnOnShooterAuto();
                         setPathState(11);
                     }
@@ -442,10 +445,16 @@ public class rightCloseAutoFromCloseGate15 extends LinearOpMode {
                 break;
             case 13: //move to score position for top row
                 if (!follower.isBusy()) {
-                    follower.followPath(scorePickupTop, true);
-                    initializeBurstClose(); //prestart shooter
-                    turnOnShooterAuto();
-                    setPathState(14);
+                    if (init){
+//                        intake.turnOffIntake();
+                        init = false;
+                    }
+                    else {
+                        follower.followPath(scorePickupTop, true);
+                        initializeBurstClose(); //prestart shooter
+                        turnOnShooterAuto();
+                        setPathState(14);
+                    }
                 }
                 break;
             case 14: //score top row
@@ -503,6 +512,19 @@ public class rightCloseAutoFromCloseGate15 extends LinearOpMode {
     public void initializeBurstClosePreload(){
         shooter.setCurrentShooterClosedSeconds(Shooter.CLOSE_DEBOUNCE);
         shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM_PRELOAD);
+        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
+        shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
+    }
+
+    public void initializeBurstCloseEdge(){
+        shooter.setCurrentShooterClosedSeconds(Shooter.CLOSE_DEBOUNCE);
+        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM_EDGE);
+        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
+        shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
+    }
+    public void initializeBurstPark(){
+        shooter.setCurrentShooterClosedSeconds(Shooter.CLOSE_DEBOUNCE);
+        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM_PARK);
         shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
         shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
     }
