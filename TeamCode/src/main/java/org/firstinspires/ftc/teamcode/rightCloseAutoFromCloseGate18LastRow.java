@@ -58,7 +58,7 @@ public class rightCloseAutoFromCloseGate18LastRow extends LinearOpMode {
     private final Pose startPose = new Pose(129, 115+AUTO_Y_OFFSET, Math.toRadians(180)); // Start Pose of our robot
     private final Pose scorePose = new Pose(90, 94, scoreHeading);
     private final Pose scoreParkPose = new Pose(86.5, 99, Math.toRadians(SCORE_HEADING_PARK));
-    private final Pose edgeScorePose = new Pose(86.6, 76, edgeScoreHeading); //TODO: MAKE MIDDLE USE EDGE, TWEAK ALL INIT SHOOTERS TO BE RIGHT VELOCITY
+    private final Pose edgeScorePose = new Pose(86.6, 76, edgeScoreHeading);
     private final Pose scorePreloadPose = new Pose(90, 94, Math.toRadians(SCORE_HEADING_PRELOAD));
     private final Pose grabPickupTopPose = new Pose(127 + INTAKE_X_OFFSET, 84, Math.toRadians(0));
     private final Pose grabPickupTopPoseControlPoint1 = new Pose(83.033, 75.4);

@@ -37,11 +37,12 @@ public class rightCloseAutoFromCloseGateGoldenFish extends LinearOpMode {
     public static double AUTO_Y_OFFSET = 0;
     public static double INTAKE_X_OFFSET = 0;
     public static double RELEASE_BALLS_Y = 70.2;
-    public static double COLLECT_BALLS_Y = 59.6;
+    public static double COLLECT_BALLS_Y = 60;
     public static double COLLECT_HEADING = 33;
     public static double SCORE_HEADING_OFFSET = -0.5; //score heading offset since center of goals are not exactly 45 degrees
     public static double SCORE_HEADING_PRELOAD_TOLERANCE = 0.1;
     public static double SCORE_HEADING_PRELOAD = 44.5;
+    public static double SCORE_HEADING_PARK = 33.5;
     public static double MAX_POWER = 1;
     public static double INTAKE_HUMAN_PLAYER_MAX_POWER = 0.45;
 
@@ -52,28 +53,30 @@ public class rightCloseAutoFromCloseGateGoldenFish extends LinearOpMode {
     private double scorePickupBottomTime = 0.0;
     private double scorePickupHumanPlayerTime = 0.0;
     public double scoreHeading = Math.toRadians(45 + SCORE_HEADING_OFFSET);
-
+    public double edgeScoreHeading = Math.toRadians(48 + SCORE_HEADING_OFFSET);
     private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop, goToWallHumanPlayer, grabPickupHumanPlayer, scorePickupHumanPlayer, goToReleaseBalls, collectBalls, moveBackCollectBalls, scoreCollectBalls, goToPark; //define path chains (muliple paths interpolated)
 
     private final Pose startPose = new Pose(129, 115+AUTO_Y_OFFSET, Math.toRadians(180)); // Start Pose of our robot
-    private final Pose scorePose = new Pose(90,94, scoreHeading);
+    private final Pose scorePose = new Pose(90, 94, scoreHeading);
+    private final Pose scoreParkPose = new Pose(86.5, 99, Math.toRadians(SCORE_HEADING_PARK));
+    private final Pose edgeScorePose = new Pose(86.6, 76, edgeScoreHeading);
     private final Pose scorePreloadPose = new Pose(90, 94, Math.toRadians(SCORE_HEADING_PRELOAD));
-    private final Pose grabPickupTopPose = new Pose(127.5 + INTAKE_X_OFFSET, 85, Math.toRadians(0));
-    private final Pose grabPickupTopPoseControlPoint1 = new Pose(80, 81);
-    private final Pose releaseBallsPose = new Pose(126, RELEASE_BALLS_Y, Math.toRadians(0));
+    private final Pose grabPickupTopPose = new Pose(127 + INTAKE_X_OFFSET, 84, Math.toRadians(0));
+    private final Pose grabPickupTopPoseControlPoint1 = new Pose(83.033, 75.4);
+    private final Pose releaseBallsPose = new Pose(128.5, RELEASE_BALLS_Y, Math.toRadians(0));
     private final Pose releaseBallsPoseControlPoint1 = new Pose(98.141, 66.904);
-    private final Pose collectBallsPose = new Pose(134.5, COLLECT_BALLS_Y, Math.toRadians(COLLECT_HEADING));
+    private final Pose collectBallsPose = new Pose(134, COLLECT_BALLS_Y, Math.toRadians(COLLECT_HEADING));
     private final Pose collectBallsPoseControlPoint1 = new Pose(80, 72);
     private final Pose moveBackCollectBallsPose = new Pose(134, COLLECT_BALLS_Y-3, Math.toRadians(COLLECT_HEADING));
     private final Pose scoreCollectBallsPoseControlPoint1 = new Pose(80, 69.341);
-    private final Pose grabPickupMiddlePose = new Pose(132 + INTAKE_X_OFFSET, 58, Math.toRadians(0));
+    private final Pose grabPickupMiddlePose = new Pose(132 + INTAKE_X_OFFSET, 54, Math.toRadians(0));
     private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(80, 54);
-    private final Pose scorePickupMiddlePoseControlPoint1 = new Pose(80, 69.341);
+//    private final Pose scorePickupMiddlePoseControlPoint1 = new Pose(80, 69.341);
     private final Pose grabPickupBottomPose = new Pose(132.5 + INTAKE_X_OFFSET, 36, Math.toRadians(0));
     private final Pose grabPickupBottomPoseControlPoint1 = new Pose(80, 24);
     private final Pose goToWallHumanPlayerPose = new Pose(WALL_HUMAN_PLAYER_X, 45, Math.toRadians(315));
     private final Pose grabPickupHumanPlayerPose = new Pose(INTAKE_HUMAN_PLAYER_X, 5, Math.toRadians(270));
-    private final Pose parkPose = new Pose(83,101, Math.toRadians(0));
+    private final Pose parkPose = new Pose(84,99, Math.toRadians(0));
 
     public void buildPaths() {
         scorePreload = follower.pathBuilder()
@@ -94,7 +97,6 @@ public class rightCloseAutoFromCloseGateGoldenFish extends LinearOpMode {
                 .build();
         scorePickupTop = follower.pathBuilder()
                 .addPath(new BezierLine(grabPickupTopPose, scorePose))
-//                .setNoDeceleration()
                 .setLinearHeadingInterpolation(grabPickupTopPose.getHeading(), scorePose.getHeading())
                 .build();
         grabPickupMiddle = follower.pathBuilder()
@@ -103,17 +105,17 @@ public class rightCloseAutoFromCloseGateGoldenFish extends LinearOpMode {
 //                .addPoseCallback(new Pose(130, 58), intake::holdFlicker, 0.5)
                 .build();
         scorePickupMiddle = follower.pathBuilder()
-                .addPath(new BezierCurve(grabPickupMiddlePose, scorePickupMiddlePoseControlPoint1, scorePose))
-                .setLinearHeadingInterpolation(grabPickupMiddlePose.getHeading(), scorePose.getHeading())
+                .addPath(new BezierLine(grabPickupMiddlePose, edgeScorePose))
+                .setLinearHeadingInterpolation(grabPickupMiddlePose.getHeading(), edgeScorePose.getHeading())
                 .build();
         grabPickupBottom = follower.pathBuilder()
-                .addPath(new BezierCurve(scorePose, grabPickupBottomPoseControlPoint1, grabPickupBottomPose))
-                .setLinearHeadingInterpolation(scorePose.getHeading(), grabPickupBottomPose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
+                .addPath(new BezierCurve(edgeScorePose, grabPickupBottomPoseControlPoint1, grabPickupBottomPose))
+                .setLinearHeadingInterpolation(edgeScorePose.getHeading(), grabPickupBottomPose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
 //                .addPoseCallback(new Pose(130, 36), intake::holdFlicker, 0.5)
                 .build();
         scorePickupBottom = follower.pathBuilder()
-                .addPath(new BezierLine(grabPickupBottomPose, scorePose))
-                .setLinearHeadingInterpolation(grabPickupBottomPose.getHeading(), scorePose.getHeading())
+                .addPath(new BezierLine(grabPickupBottomPose, edgeScorePose))
+                .setLinearHeadingInterpolation(grabPickupBottomPose.getHeading(), edgeScorePose.getHeading())
                 .build();
         goToWallHumanPlayer = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, goToWallHumanPlayerPose))
@@ -130,9 +132,9 @@ public class rightCloseAutoFromCloseGateGoldenFish extends LinearOpMode {
                 .setLinearHeadingInterpolation(grabPickupHumanPlayerPose.getHeading(), scorePose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
                 .build();
         collectBalls = follower.pathBuilder()
-                .addPath(new BezierCurve(scorePose, collectBallsPoseControlPoint1, collectBallsPose))
-                .setLinearHeadingInterpolation(scorePose.getHeading(), collectBallsPose.getHeading())
-                .setTimeoutConstraint(250)
+                .addPath(new BezierLine(edgeScorePose, collectBallsPose))
+                .setLinearHeadingInterpolation(edgeScorePose.getHeading(), collectBallsPose.getHeading())
+                .setTimeoutConstraint(300)
                 .build();
         moveBackCollectBalls = follower.pathBuilder()
                 .addPath(new BezierLine(collectBallsPose, moveBackCollectBallsPose))
@@ -140,12 +142,11 @@ public class rightCloseAutoFromCloseGateGoldenFish extends LinearOpMode {
                 .setNoDeceleration()
                 .build();
         scoreCollectBalls = follower.pathBuilder()
-                .addPath(new BezierCurve(moveBackCollectBallsPose, scoreCollectBallsPoseControlPoint1, scorePose))
-                .setConstantHeadingInterpolation(scorePose.getHeading())
+                .addPath(new BezierCurve(moveBackCollectBallsPose, scoreCollectBallsPoseControlPoint1, edgeScorePose))
+                .setConstantHeadingInterpolation(edgeScorePose.getHeading())
                 .build();
         goToPark = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, parkPose))
-                .setNoDeceleration()
                 .setLinearHeadingInterpolation(scorePose.getHeading(), parkPose.getHeading())
                 .build();
     }
@@ -270,7 +271,7 @@ public class rightCloseAutoFromCloseGateGoldenFish extends LinearOpMode {
             case 3: //release preload and top row balls
                 if (!follower.isBusy()){
                     if (init){
-                        initializeBurstClose(); //prestart shooter
+                        initializeBurstCloseEdge(); //prestart shooter
                         turnOnShooterAuto();
                         init = false;
                     }
@@ -349,7 +350,7 @@ public class rightCloseAutoFromCloseGateGoldenFish extends LinearOpMode {
                 if (!follower.isBusy()) {
                     if (init){
 //                        intake.turnOffIntake();
-                        initializeBurstClose(); //prestart shooter
+                        initializeBurstCloseEdge(); //prestart shooter
                         turnOnShooterAuto();
                         shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                         init = false;
@@ -414,7 +415,7 @@ public class rightCloseAutoFromCloseGateGoldenFish extends LinearOpMode {
                 if (!follower.isBusy()) {
                     if (init){
 //                        intake.turnOffIntake();
-                        initializeBurstClose(); //prestart shooter
+                        initializeBurstCloseEdge(); //prestart shooter
                         turnOnShooterAuto();
                         shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                         init = false;
@@ -529,6 +530,19 @@ public class rightCloseAutoFromCloseGateGoldenFish extends LinearOpMode {
     public void initializeBurstClosePreload(){
         shooter.setCurrentShooterClosedSeconds(Shooter.CLOSE_DEBOUNCE);
         shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM_PRELOAD);
+        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
+        shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
+    }
+
+    public void initializeBurstCloseEdge(){
+        shooter.setCurrentShooterClosedSeconds(Shooter.CLOSE_DEBOUNCE);
+        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM_EDGE);
+        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
+        shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
+    }
+    public void initializeBurstPark(){
+        shooter.setCurrentShooterClosedSeconds(Shooter.CLOSE_DEBOUNCE);
+        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM_PARK);
         shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
         shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
     }
