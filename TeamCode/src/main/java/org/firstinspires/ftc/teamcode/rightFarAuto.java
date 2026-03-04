@@ -11,9 +11,9 @@ import com.pedropathing.util.Timer;
 
 
 @Config
-@Autonomous(name="Red Close Auto From Far", group="Robot")
+@Autonomous(name="Red Far Auto", group="Robot")
 @SuppressWarnings("FieldCanBeLocal")
-public class rightCloseAutoFromFar extends LinearOpMode {
+public class rightFarAuto extends LinearOpMode {
     Drivetrain drivetrain;
     Shooter shooter;
     Intake intake;
@@ -40,15 +40,15 @@ public class rightCloseAutoFromFar extends LinearOpMode {
     private double scorePickupTopTime = 0.0;
     private double scorePickupMiddleTime = 0.0;
     private double scorePickupBottomTime = 0.0;
-    public double scoreHeading = 70;
+    public double scoreHeading = 67;
 
     private PathChain scorePreload, collectHumanPlayer, scoreHumanPlayer, goToPark; //define path chains (muliple paths interpolated)
 
     private final Pose startPose = new Pose(89.5, 8+AUTO_Y_OFFSET, Math.toRadians(90)); // Start Pose of our robot
     private final Pose scorePose =  new Pose(83,14, Math.toRadians(scoreHeading));
-    private final Pose collectHumanPlayerPose = new Pose(127, 8, Math.toRadians(0));
-    private final Pose moveBackHumanPlayerPose = new Pose(120, 8, Math.toRadians(0));
-    private final Pose parkPose = new Pose(100,70, Math.toRadians(0));
+    private final Pose collectHumanPlayerPose = new Pose(131, 8, Math.toRadians(0));
+    private final Pose moveBackHumanPlayerPose = new Pose(127, 8, Math.toRadians(0));
+    private final Pose parkPose = new Pose(100,14, Math.toRadians(0));
 
     public void buildPaths() {
         scorePreload = follower.pathBuilder()
@@ -58,15 +58,15 @@ public class rightCloseAutoFromFar extends LinearOpMode {
         collectHumanPlayer = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, collectHumanPlayerPose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), collectHumanPlayerPose.getHeading())
-                .setTimeoutConstraint(100)
+                .setTimeoutConstraint(250)
 
                 .addPath(new BezierLine(collectHumanPlayerPose, moveBackHumanPlayerPose))
                 .setConstantHeadingInterpolation(collectHumanPlayerPose.getHeading())
-                .setTimeoutConstraint(100)
+                .setTimeoutConstraint(250)
 
                 .addPath(new BezierLine(moveBackHumanPlayerPose, collectHumanPlayerPose))
                 .setConstantHeadingInterpolation(collectHumanPlayerPose.getHeading())
-                .setTimeoutConstraint(100)
+                .setTimeoutConstraint(250)
 
                 .build();
         scoreHumanPlayer = follower.pathBuilder()
@@ -161,7 +161,7 @@ public class rightCloseAutoFromFar extends LinearOpMode {
                             intake.turnOnIntakeAutoFar();
                         }
 
-                        if (shooter.ballsShot >= 3 || opmodeTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_FAR_SHOOT_TIME) {
+                        if (pathTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_FAR_SHOOT_TIME) {
                             scorePreloadTime = opmodeTimer.getElapsedTimeSeconds();
 
                             shooter.ballsShot = 3;
@@ -175,6 +175,7 @@ public class rightCloseAutoFromFar extends LinearOpMode {
             case 2: // intake human player
                 if (!follower.isBusy()) {
                     if (init){
+                        shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                         intake.turnOnIntakeAuto();
                         init = false;
                     }
@@ -207,7 +208,7 @@ public class rightCloseAutoFromFar extends LinearOpMode {
                             intake.turnOnIntakeAutoFar();
                         }
 
-                        if (shooter.ballsShot >= 3 || opmodeTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_FAR_SHOOT_TIME) {
+                        if (pathTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_FAR_SHOOT_TIME) {
                             scorePreloadTime = opmodeTimer.getElapsedTimeSeconds();
 
                             shooter.ballsShot = 6;
@@ -221,6 +222,7 @@ public class rightCloseAutoFromFar extends LinearOpMode {
             case 5: // intake human player
                 if (!follower.isBusy()) {
                     if (init){
+                        shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                         intake.turnOnIntakeAuto();
                         init = false;
                     }
@@ -253,7 +255,7 @@ public class rightCloseAutoFromFar extends LinearOpMode {
                             intake.turnOnIntakeAutoFar();
                         }
 
-                        if (shooter.ballsShot >= 3 || opmodeTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_FAR_SHOOT_TIME) {
+                        if (shooter.ballsShot >= 9 || pathTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_FAR_SHOOT_TIME) {
                             scorePreloadTime = opmodeTimer.getElapsedTimeSeconds();
 
                             shooter.ballsShot = 9;
@@ -267,6 +269,7 @@ public class rightCloseAutoFromFar extends LinearOpMode {
             case 8: // intake human player
                 if (!follower.isBusy()) {
                     if (init){
+                        shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                         intake.turnOnIntakeAuto();
                         init = false;
                     }
@@ -299,12 +302,12 @@ public class rightCloseAutoFromFar extends LinearOpMode {
                             intake.turnOnIntakeAutoFar();
                         }
 
-                        if (shooter.ballsShot >= 3 || opmodeTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_FAR_SHOOT_TIME) {
+                        if (pathTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_FAR_SHOOT_TIME) {
                             scorePreloadTime = opmodeTimer.getElapsedTimeSeconds();
 
                             shooter.ballsShot = 12;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
-//                            turnOffShooterAuto(); don't turn off shooter to keep moment of intertia and speed
+                            turnOffShooterAuto(); //turn off shooter for last cycle
                             setPathState(11); //end
                         }
                     }
@@ -328,7 +331,7 @@ public class rightCloseAutoFromFar extends LinearOpMode {
 
     public void initializeBurstFar(){
         shooter.setCurrentShooterClosedSeconds(Shooter.FAR_DEBOUNCE);
-        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.FAR_TARGET_RPM);
+        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.FAR_AUTO_TARGET_RPM);
         shooter.setRampPosition(Shooter.FAR_RAMP_SCORE_POSITION);
         shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_FAR);
     }

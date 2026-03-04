@@ -10,5 +10,5 @@ public class AutoOverrideTimes {
     public static double OVERRIDE_HUMAN_PLAYER_PICKUP_TIME = 2.3;
     public static double OVERRIDE_HUMAN_PLAYER_TIME = AUTO_SHOOT_PATH_TIME + 1.35;
 
-    public static double OVERRIDE_FAR_SHOOT_TIME = AUTO_SHOOT_PATH_TIME + 1.5;
+    public static double OVERRIDE_FAR_SHOOT_TIME = AUTO_SHOOT_PATH_TIME + 1.7;
 }

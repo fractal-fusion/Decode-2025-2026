@@ -36,7 +36,8 @@ public class Shooter{
     public static double RAMP_CYCLE_POSITION = 0.2;
     public static double FAR_RAMP_SCORE_POSITION = 0;
     public static double FAR_TARGET_RPM = 4250;
-    public static double FAR_AUTO_TARGET_RPM = 4350; //untested
+
+    public static double FAR_AUTO_TARGET_RPM = 4200; //untested
     public static double FAR_DEBOUNCE = 3.0; //untested
 
     public static double FAR_TARGET_RPM_TICKS_PER_SECOND = FAR_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
