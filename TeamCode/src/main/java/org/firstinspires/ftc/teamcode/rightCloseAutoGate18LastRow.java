@@ -36,7 +36,7 @@ public class rightCloseAutoGate18LastRow extends LinearOpMode {
     public static double AUTO_Y_OFFSET = 0;
     public static double INTAKE_X_OFFSET = 0;
 //    public static double RELEASE_BALLS_Y = 74.2;
-    public static double COLLECT_BALLS_Y = 59.6;
+    public static double COLLECT_BALLS_Y = 60;
     public static double COLLECT_HEADING = 33;
     public static double SCORE_HEADING_OFFSET = -0.5; //score heading offset since center of goals are not exactly 45 degrees
     public static double SCORE_HEADING_PRELOAD_TOLERANCE = 0.1;
@@ -68,10 +68,10 @@ public class rightCloseAutoGate18LastRow extends LinearOpMode {
     private final Pose collectBallsPoseControlPoint1 = new Pose(80, 72);
     private final Pose moveBackCollectBallsPose = new Pose(134, COLLECT_BALLS_Y-3, Math.toRadians(COLLECT_HEADING));
     private final Pose scoreCollectBallsPoseControlPoint1 = new Pose(80, 69.341);
-    private final Pose grabPickupMiddlePose = new Pose(132 + INTAKE_X_OFFSET, 54, Math.toRadians(0));
+    private final Pose grabPickupMiddlePose = new Pose(130 + INTAKE_X_OFFSET, 54, Math.toRadians(0));
     private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(80, 54);
 //    private final Pose scorePickupMiddlePoseControlPoint1 = new Pose(80, 69.341);
-    private final Pose grabPickupBottomPose = new Pose(132.5 + INTAKE_X_OFFSET, 36, Math.toRadians(0));
+    private final Pose grabPickupBottomPose = new Pose(130 + INTAKE_X_OFFSET, 36, Math.toRadians(0));
     private final Pose grabPickupBottomPoseControlPoint1 = new Pose(80, 24);
     private final Pose goToWallHumanPlayerPose = new Pose(WALL_HUMAN_PLAYER_X, 45, Math.toRadians(315));
     private final Pose grabPickupHumanPlayerPose = new Pose(INTAKE_HUMAN_PLAYER_X, 5, Math.toRadians(270));
@@ -142,7 +142,7 @@ public class rightCloseAutoGate18LastRow extends LinearOpMode {
                 .setNoDeceleration()
                 .build();
         scoreCollectBalls = follower.pathBuilder()
-                .addPath(new BezierCurve(moveBackCollectBallsPose, scoreCollectBallsPoseControlPoint1, edgeScorePose))
+                .addPath(new BezierLine(collectBallsPose, edgeScorePose))
                 .setConstantHeadingInterpolation(edgeScorePose.getHeading())
                 .build();
         goToPark = follower.pathBuilder()

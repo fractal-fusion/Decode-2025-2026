@@ -30,14 +30,14 @@ public class rightCloseAutoGateGoldenFish extends LinearOpMode {
 //    public static double INTAKE_HUMAN_PLAYER_FLICKER_TIME = 3;
 
     public static double RELEASE_BALLS_WAIT_TIME = 0.05; //time to wait at the chamber
-    public static double COLLECT_BALLS_WAIT_TIME = 0.8; //time to wait at the chamber
-    public static double SECOND_COLLECT_BALLS_WAIT_TIME = 0.8; //time to wait at the chamber
+    public static double COLLECT_BALLS_WAIT_TIME = 0.2; //time to wait at the chamber
+    public static double SECOND_COLLECT_BALLS_WAIT_TIME = 0.2; //time to wait at the chamber
     public static double COLLECT_ALL_BALLS_WAIT_TIME = 0;
     public static double HEADING_INTERPOLATION_END_PERCENTAGE = 0.65;
     public static double AUTO_Y_OFFSET = 0;
     public static double INTAKE_X_OFFSET = 0;
     public static double RELEASE_BALLS_Y = 70.2;
-    public static double COLLECT_BALLS_Y = 59.6;
+    public static double COLLECT_BALLS_Y = 60;
     public static double COLLECT_HEADING = 33;
     public static double SCORE_HEADING_OFFSET = -0.5; //score heading offset since center of goals are not exactly 45 degrees
     public static double SCORE_HEADING_PRELOAD_TOLERANCE = 0.1;
@@ -96,8 +96,8 @@ public class rightCloseAutoGateGoldenFish extends LinearOpMode {
                 .setLinearHeadingInterpolation(grabPickupMiddlePose.getHeading(), releaseBallsPose.getHeading())
                 .build();
         scorePickupTop = follower.pathBuilder()
-                .addPath(new BezierLine(grabPickupTopPose, scorePose))
-                .setLinearHeadingInterpolation(grabPickupTopPose.getHeading(), scorePose.getHeading())
+                .addPath(new BezierLine(grabPickupTopPose, scoreParkPose))
+                .setLinearHeadingInterpolation(grabPickupTopPose.getHeading(), scoreParkPose.getHeading())
                 .build();
         grabPickupMiddle = follower.pathBuilder()
                 .addPath(new BezierCurve(scorePose, grabPickupMiddlePoseControlPoint1, grabPickupMiddlePose))
@@ -142,7 +142,7 @@ public class rightCloseAutoGateGoldenFish extends LinearOpMode {
                 .setNoDeceleration()
                 .build();
         scoreCollectBalls = follower.pathBuilder()
-                .addPath(new BezierLine(moveBackCollectBallsPose, edgeScorePose))
+                .addPath(new BezierLine(collectBallsPose, edgeScorePose))
                 .setConstantHeadingInterpolation(edgeScorePose.getHeading())
                 .build();
         goToPark = follower.pathBuilder()
@@ -470,7 +470,7 @@ public class rightCloseAutoGateGoldenFish extends LinearOpMode {
             case 16: //move to score position for top row
                 if (!follower.isBusy()) {
                     follower.followPath(scorePickupTop, true);
-                    initializeBurstClose(); //prestart shooter
+                    initializeBurstPark(); //prestart shooter
                     turnOnShooterAuto();
                     setPathState(17);
                 }
@@ -498,7 +498,7 @@ public class rightCloseAutoGateGoldenFish extends LinearOpMode {
                             shooter.ballsShot = 6;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                             turnOffShooterAuto();
-                            setPathState(18);
+                            setPathState(-1);
                         }
                     }
                 }
