@@ -58,7 +58,8 @@ public class Shooter{
     public static double TARGET_RPM_TOLERANCE_RPM_CLOSE = 100;
     public static double TARGET_RPM_TOLERANCE_RPM_FAR = 30;
     public static double REGRESSION_RPM_OFFSET_LIMELIGHT = 25;
-    public static double REGRESSION_RPM_OFFSET_ODOMETRY = 25;
+    public static double REGRESSION_RPM_OFFSET_ODOMETRY_CLOSE = 25;
+    public static double REGRESSION_RPM_OFFSET_ODOMETRY_FAR = -50;
     public static double REGRESSION_RESTING_RPM = 3000;
     public double targetRPMToleranceRPM = TARGET_RPM_TOLERANCE_RPM_CLOSE; //initially set to the tolerance for close
     public double testShootRPM = 0;
@@ -224,14 +225,14 @@ public class Shooter{
     }
 
     public double calculateShooterVelocityRPMOdometryClose(double distance){
-        return Range.clip(-0.0000333119*Math.pow(distance, 4) + 0.0144551*Math.pow(distance, 3) - 1.97818*Math.pow(distance, 2) + 121.23395*distance + 289.22354, 2600, 4450) + REGRESSION_RPM_OFFSET_ODOMETRY; //TODO: tune this
+        return Range.clip(-0.0000333119*Math.pow(distance, 4) + 0.0144551*Math.pow(distance, 3) - 1.97818*Math.pow(distance, 2) + 121.23395*distance + 289.22354, 2600, 4450) + REGRESSION_RPM_OFFSET_ODOMETRY_CLOSE;
     }
     public double calculateShooterVelocityRPMOdometryFar(double distance){
-        return Range.clip(-0.00569463*Math.pow(distance, 3) + 1.80372*Math.pow(distance, 2) - 167.57901*distance + 8139.81553, 4150, 4400); //TODO: tune this
+        return Range.clip(-0.00569463*Math.pow(distance, 3) + 1.80372*Math.pow(distance, 2) - 167.57901*distance + 8139.81553, 4150, 4400) + REGRESSION_RPM_OFFSET_ODOMETRY_FAR;
     }
 
     public double calculateRampPositionOdometry(double distance){
-        return Range.clip(0.00000000425734*Math.pow(distance, 4) - 0.00000154569*Math.pow(distance, 3) + 0.000204416*Math.pow(distance, 2) - 0.0116699*distance + 0.262481, 0, 0.15); //TODO: tune this
+        return Range.clip(0.00000000425734*Math.pow(distance, 4) - 0.00000154569*Math.pow(distance, 3) + 0.000204416*Math.pow(distance, 2) - 0.0116699*distance + 0.262481, 0, 0.15);
     }
 
     public void toggleShooterClose(){
