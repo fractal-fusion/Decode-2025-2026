@@ -1,19 +1,19 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.pedropathing.geometry.BezierCurve;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Config
-@Autonomous(name="Blue Close Auto From Close HP", group="Robot")
+@Autonomous(name="Red Close Auto From Gate 18", group="Robot")
 @SuppressWarnings("FieldCanBeLocal")
-public class leftCloseAutoFromCloseHumanPlayer extends LinearOpMode {
+public class leftCloseAutoGate18LastRow extends LinearOpMode {
     Drivetrain drivetrain;
     Shooter shooter;
     Intake intake;
@@ -23,20 +23,25 @@ public class leftCloseAutoFromCloseHumanPlayer extends LinearOpMode {
     private Pose currentPose;
     private int pathState = 0; //finite state machine variable
     private boolean init = true;
-    public static double INTAKE_DELAY_TIME = 0.05;
-    public static double INTAKE_DELAY_TIME_PRELOAD = 0.1;
+    public static double INTAKE_DELAY_TIME = 0.015;
+    public static double INTAKE_DELAY_TIME_PRELOAD = 0.05;
     public static double WALL_HUMAN_PLAYER_X = 128;
     public static double INTAKE_HUMAN_PLAYER_X = 134.8;
 //    public static double INTAKE_HUMAN_PLAYER_FLICKER_TIME = 3;
 
     public static double RELEASE_BALLS_WAIT_TIME = 0.05; //time to wait at the chamber
+    public static double SECOND_RELEASE_BALLS_WAIT_TIME = 0.1; //time to wait at the chamber
+    public static double COLLECT_ALL_BALLS_WAIT_TIME = 0;
     public static double HEADING_INTERPOLATION_END_PERCENTAGE = 0.65;
     public static double AUTO_Y_OFFSET = 0;
     public static double INTAKE_X_OFFSET = 0;
-    public static double RELEASE_BALLS_Y = 74.2;
+//    public static double RELEASE_BALLS_Y = 74.2;
+    public static double COLLECT_BALLS_Y = 60 + 1;
+    public static double COLLECT_HEADING = 33;
     public static double SCORE_HEADING_OFFSET = -0.5; //score heading offset since center of goals are not exactly 45 degrees
     public static double SCORE_HEADING_PRELOAD_TOLERANCE = 0.1;
     public static double SCORE_HEADING_PRELOAD = 44.5;
+    public static double SCORE_HEADING_PARK = 33.5;
     public static double MAX_POWER = 1;
     public static double INTAKE_HUMAN_PLAYER_MAX_POWER = 0.45;
 
@@ -47,23 +52,28 @@ public class leftCloseAutoFromCloseHumanPlayer extends LinearOpMode {
     private double scorePickupBottomTime = 0.0;
     private double scorePickupHumanPlayerTime = 0.0;
     public double scoreHeading = Math.toRadians(45 + SCORE_HEADING_OFFSET);
-
-    private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop, goToWallHumanPlayer, grabPickupHumanPlayer, scorePickupHumanPlayer, goToReleaseBalls, goToPark; //define path chains (muliple paths interpolated)
+    public double edgeScoreHeading = Math.toRadians(48 + SCORE_HEADING_OFFSET);
+    private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop, goToWallHumanPlayer, grabPickupHumanPlayer, scorePickupHumanPlayer, goToReleaseBalls, collectBalls, moveBackCollectBalls, scoreCollectBalls, goToPark; //define path chains (muliple paths interpolated)
 
     private final Pose startPose = new Pose(129, 115+AUTO_Y_OFFSET, Math.toRadians(180)).mirror(); // Start Pose of our robot
     private final Pose scorePose = new Pose(90, 94, scoreHeading).mirror();
+    private final Pose scoreParkPose = new Pose(86.5, 99, Math.toRadians(SCORE_HEADING_PARK)).mirror();
+    private final Pose edgeScorePose = new Pose(86.6, 76, edgeScoreHeading).mirror();
     private final Pose scorePreloadPose = new Pose(90, 94, Math.toRadians(SCORE_HEADING_PRELOAD)).mirror();
     private final Pose grabPickupTopPose = new Pose(127 + INTAKE_X_OFFSET, 84, Math.toRadians(0)).mirror();
-    private final Pose grabPickupTopPoseControlPoint1 = new Pose(80, 81).mirror();
-    private final Pose releaseBallsPose = new Pose(128.5, RELEASE_BALLS_Y, Math.toRadians(0)).mirror();
+    private final Pose grabPickupTopPoseControlPoint1 = new Pose(83.033, 75.4).mirror();
+//    private final Pose releaseBallsPose = new Pose(128.5, RELEASE_BALLS_Y, Math.toRadians(0));
     private final Pose releaseBallsPoseControlPoint1 = new Pose(98.141, 66.904).mirror();
-    private final Pose grabPickupMiddlePose = new Pose(132 + INTAKE_X_OFFSET, 58, Math.toRadians(0)).mirror();
+    private final Pose collectBallsPose = new Pose(134, COLLECT_BALLS_Y, Math.toRadians(COLLECT_HEADING)).mirror();
+    private final Pose collectBallsPoseControlPoint1 = new Pose(80, 72).mirror();
+    private final Pose moveBackCollectBallsPose = new Pose(134, COLLECT_BALLS_Y-3, Math.toRadians(COLLECT_HEADING)).mirror();
+    private final Pose scoreCollectBallsPoseControlPoint1 = new Pose(80, 69.341).mirror();
+    private final Pose grabPickupMiddlePose = new Pose(132 + INTAKE_X_OFFSET, 54, Math.toRadians(0)).mirror();
     private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(80, 54).mirror();
-    private final Pose scorePickupMiddlePoseControlPoint1 = new Pose(102.793, 69.341).mirror();
+//    private final Pose scorePickupMiddlePoseControlPoint1 = new Pose(80, 69.341);
     private final Pose grabPickupBottomPose = new Pose(132.5 + INTAKE_X_OFFSET, 36, Math.toRadians(0)).mirror();
     private final Pose grabPickupBottomPoseControlPoint1 = new Pose(80, 24).mirror();
     private final Pose goToWallHumanPlayerPose = new Pose(WALL_HUMAN_PLAYER_X, 45, Math.toRadians(315)).mirror();
-    private final Pose alignWallHumanPlayerPose = new Pose(INTAKE_HUMAN_PLAYER_X-0.5, 45, Math.toRadians(270)).mirror();
     private final Pose grabPickupHumanPlayerPose = new Pose(INTAKE_HUMAN_PLAYER_X, 5, Math.toRadians(270)).mirror();
     private final Pose parkPose = new Pose(100,70, Math.toRadians(0)).mirror();
 
@@ -79,14 +89,14 @@ public class leftCloseAutoFromCloseHumanPlayer extends LinearOpMode {
                 .setLinearHeadingInterpolation(scorePose.getHeading(), grabPickupTopPose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
 //                .addPoseCallback(new Pose(126, 84), intake::holdFlicker, 0.5)
                 .build();
-        goToReleaseBalls = follower.pathBuilder()
-                .addPath(new BezierCurve(grabPickupMiddlePose, releaseBallsPoseControlPoint1, releaseBallsPose))
-//                .setVelocityConstraint(1)
-                .setLinearHeadingInterpolation(grabPickupMiddlePose.getHeading(), releaseBallsPose.getHeading())
-                .build();
+//        goToReleaseBalls = follower.pathBuilder()
+//                .addPath(new BezierCurve(grabPickupMiddlePose, releaseBallsPoseControlPoint1, releaseBallsPose))
+////                .setVelocityConstraint(1)
+//                .setLinearHeadingInterpolation(grabPickupMiddlePose.getHeading(), releaseBallsPose.getHeading())
+//                .build();
         scorePickupTop = follower.pathBuilder()
-                .addPath(new BezierLine(grabPickupTopPose, scorePose))
-                .setLinearHeadingInterpolation(grabPickupTopPose.getHeading(), scorePose.getHeading())
+                .addPath(new BezierLine(grabPickupTopPose, scoreParkPose))
+                .setLinearHeadingInterpolation(grabPickupTopPose.getHeading(), scoreParkPose.getHeading())
                 .build();
         grabPickupMiddle = follower.pathBuilder()
                 .addPath(new BezierCurve(scorePose, grabPickupMiddlePoseControlPoint1, grabPickupMiddlePose))
@@ -94,17 +104,17 @@ public class leftCloseAutoFromCloseHumanPlayer extends LinearOpMode {
 //                .addPoseCallback(new Pose(130, 58), intake::holdFlicker, 0.5)
                 .build();
         scorePickupMiddle = follower.pathBuilder()
-                .addPath(new BezierCurve(grabPickupMiddlePose, scorePickupMiddlePoseControlPoint1, scorePose))
-                .setLinearHeadingInterpolation(grabPickupMiddlePose.getHeading(), scorePose.getHeading())
+                .addPath(new BezierLine(grabPickupMiddlePose, edgeScorePose))
+                .setLinearHeadingInterpolation(grabPickupMiddlePose.getHeading(), edgeScorePose.getHeading())
                 .build();
         grabPickupBottom = follower.pathBuilder()
-                .addPath(new BezierCurve(scorePose, grabPickupBottomPoseControlPoint1, grabPickupBottomPose))
-                .setLinearHeadingInterpolation(scorePose.getHeading(), grabPickupBottomPose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
+                .addPath(new BezierCurve(edgeScorePose, grabPickupBottomPoseControlPoint1, grabPickupBottomPose))
+                .setLinearHeadingInterpolation(edgeScorePose.getHeading(), grabPickupBottomPose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
 //                .addPoseCallback(new Pose(130, 36), intake::holdFlicker, 0.5)
                 .build();
         scorePickupBottom = follower.pathBuilder()
-                .addPath(new BezierLine(grabPickupBottomPose, scorePose))
-                .setLinearHeadingInterpolation(grabPickupBottomPose.getHeading(), scorePose.getHeading())
+                .addPath(new BezierLine(grabPickupBottomPose, edgeScorePose))
+                .setLinearHeadingInterpolation(grabPickupBottomPose.getHeading(), edgeScorePose.getHeading())
                 .build();
         goToWallHumanPlayer = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, goToWallHumanPlayerPose))
@@ -112,16 +122,28 @@ public class leftCloseAutoFromCloseHumanPlayer extends LinearOpMode {
                 .setLinearHeadingInterpolation(scorePose.getHeading(), goToWallHumanPlayerPose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
                 .build();
         grabPickupHumanPlayer = follower.pathBuilder()
-                .addPath(new BezierLine(goToWallHumanPlayerPose, alignWallHumanPlayerPose))
-                .setConstantHeadingInterpolation(grabPickupHumanPlayerPose.getHeading())
-                .addPath(new BezierLine(alignWallHumanPlayerPose, grabPickupHumanPlayerPose))
-                .setConstantHeadingInterpolation(grabPickupHumanPlayerPose.getHeading())
+                .addPath(new BezierLine(goToWallHumanPlayerPose, grabPickupHumanPlayerPose))
+                .setLinearHeadingInterpolation(goToWallHumanPlayerPose.getHeading(), grabPickupHumanPlayerPose.getHeading())
                 .setNoDeceleration()
 //                .addTemporalCallback(INTAKE_HUMAN_PLAYER_FLICKER_TIME, intake::holdFlicker)
                 .build();
         scorePickupHumanPlayer = follower.pathBuilder()
                 .addPath(new BezierLine(grabPickupHumanPlayerPose, scorePose))
                 .setLinearHeadingInterpolation(grabPickupHumanPlayerPose.getHeading(), scorePose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
+                .build();
+        collectBalls = follower.pathBuilder()
+                .addPath(new BezierLine(edgeScorePose, collectBallsPose))
+                .setLinearHeadingInterpolation(edgeScorePose.getHeading(), collectBallsPose.getHeading())
+                .setTimeoutConstraint(300)
+                .build();
+        moveBackCollectBalls = follower.pathBuilder()
+                .addPath(new BezierLine(collectBallsPose, moveBackCollectBallsPose))
+                .setLinearHeadingInterpolation(collectBallsPose.getHeading(), moveBackCollectBallsPose.getHeading())
+                .setNoDeceleration()
+                .build();
+        scoreCollectBalls = follower.pathBuilder()
+                .addPath(new BezierCurve(moveBackCollectBallsPose, scoreCollectBallsPoseControlPoint1, edgeScorePose))
+                .setConstantHeadingInterpolation(edgeScorePose.getHeading())
                 .build();
         goToPark = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, parkPose))
@@ -197,12 +219,11 @@ public class leftCloseAutoFromCloseHumanPlayer extends LinearOpMode {
                 //hold the flicker in
                 if (init){
                     //intake.setFlickerPosition(Intake.FLICKER_HOLD_POSITION);
-                    shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
                     init = false;
                 }
                 else{ //move to scoring position
                     follower.followPath(scorePreload, true);
-                    intializeBurstClosePreload(); //prestart shooter
+                    initializeBurstClosePreload(); //prestart shooter
                     turnOnShooterAuto();
                     setPathState(1);
                 }
@@ -228,33 +249,40 @@ public class leftCloseAutoFromCloseHumanPlayer extends LinearOpMode {
 
                             shooter.ballsShot = 3;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
-//                            turnOffShooterAuto(); commented out to reduce power draw from turning shooter off and on
+//                            turnOffShooterAuto();
                             setPathState(2); //end
                         }
                     }
                 }
                 break;
-            case 2: // intake top row
+            case 2: // intake middle row
                 if (!follower.isBusy()) {
                     if (init){
                         //intake.setFlickerPosition(Intake.FLICKER_OPEN_POSITION);
                         init = false;
                     }
                     else{
-                        follower.followPath(grabPickupTop, true);
+                        follower.followPath(grabPickupMiddle, true);
                         setPathState(3);
                     }
                 }
                 break;
-            case 3: //move to score position for top row
+            case 3: //move to score position for middle row
                 if (!follower.isBusy()) {
-                    follower.followPath(scorePickupTop, true);
-                    intializeBurstClose(); //prestart shooter
-                    turnOnShooterAuto();
-                    setPathState(4);
+                    if (init){
+                        intake.turnOffIntake();
+                        initializeBurstCloseEdge(); //prestart shooter, shooter already on
+                        turnOnShooterAuto();
+                        shooter.setGatePosition(Shooter.GATE_OPEN_POSITION);
+                        init = false;
+                    }
+                    else{
+                        follower.followPath(scorePickupMiddle, true);
+                        setPathState(4);
+                    }
                 }
                 break;
-            case 4: //score top row
+            case 4: //score middle row
                 if (!follower.isBusy()) {
                     if(init){
                         shooter.ballsShot = 3;
@@ -271,8 +299,8 @@ public class leftCloseAutoFromCloseHumanPlayer extends LinearOpMode {
 
                         }
 
-                        if (pathTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_TOP_ROW_TIME) {
-                            scorePickupTopTime = opmodeTimer.getElapsedTimeSeconds();
+                        if (pathTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_MIDDLE_ROW_TIME) {
+                            scorePickupMiddleTime = opmodeTimer.getElapsedTimeSeconds();
 
                             shooter.ballsShot = 6;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
@@ -282,49 +310,44 @@ public class leftCloseAutoFromCloseHumanPlayer extends LinearOpMode {
                     }
                 }
                 break;
-            case 5: // intake middle row
-                if (!follower.isBusy()) {
-                    if (init){
-                        //intake.setFlickerPosition(Intake.FLICKER_OPEN_POSITION);
-
-                        init = false;
-                    }
-                    else{
-                        follower.followPath(grabPickupMiddle, true);
-                        setPathState(6);
-                    }
-                }
-                break;
-            case 6: //release preload and top row balls
+            case 5: //collect balls from gate
                 if (!follower.isBusy()){
                     if (init){
-                        intake.turnOffIntake();
-                        intializeBurstClose(); //prestart shooter
-                        turnOnShooterAuto();
+                        intake.turnOnIntakeAuto();
                         init = false;
                     }
-                    else{
-                        follower.followPath(goToReleaseBalls);
+                    else {
+                        follower.followPath(collectBalls, true);
                         if (pathTimer.getElapsedTimeSeconds() > RELEASE_BALLS_WAIT_TIME) {
-                            setPathState(7);
+                            setPathState(6);
                         }
                     }
                 }
                 break;
-            case 7: //move to score position for middle row
+            case 6: //collect all balls from gate
+                if (!follower.isBusy()){
+//                    follower.followPath(moveBackCollectBalls, 0.4, false);
+                    if (pathTimer.getElapsedTimeSeconds() > COLLECT_ALL_BALLS_WAIT_TIME) {
+                        setPathState(7);
+                    }
+                }
+                break;
+            case 7: //move to score position for collected balls
                 if (!follower.isBusy()) {
                     if (init){
-                        intake.turnOffIntake();
-                        shooter.setGatePosition(Shooter.GATE_OPEN_POSITION);
+//                        intake.turnOffIntake();
+                        initializeBurstCloseEdge(); //prestart shooter
+                        turnOnShooterAuto();
+                        shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                         init = false;
                     }
                     else{
-                        follower.followPath(scorePickupMiddle, true);
+                        follower.followPath(scoreCollectBalls, true);
                         setPathState(8);
                     }
                 }
                 break;
-            case 8: //score middle row
+            case 8: //score collected balls
                 if (!follower.isBusy()) {
                     if(init){
                         shooter.ballsShot = 6;
@@ -341,7 +364,7 @@ public class leftCloseAutoFromCloseHumanPlayer extends LinearOpMode {
 
                         }
 
-                        if (pathTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_MIDDLE_ROW_TIME) {
+                        if (pathTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_COLLECT_BALLS_TIME) {
                             scorePickupMiddleTime = opmodeTimer.getElapsedTimeSeconds();
 
                             shooter.ballsShot = 9;
@@ -352,7 +375,72 @@ public class leftCloseAutoFromCloseHumanPlayer extends LinearOpMode {
                     }
                 }
                 break;
-            case 9: // intake bottom row
+            case 9: //second collect balls from gate
+                if (!follower.isBusy()){
+                    if (init){
+                        intake.turnOnIntakeAuto();
+                        init = false;
+                    }
+                    else {
+                        follower.followPath(collectBalls, true);
+                        if (pathTimer.getElapsedTimeSeconds() > SECOND_RELEASE_BALLS_WAIT_TIME) {
+                            setPathState(10);
+                        }
+                    }
+                }
+                break;
+            case 10: //second  collect all balls from gate
+                if (!follower.isBusy()){
+//                    follower.followPath(moveBackCollectBalls, 0.4, false);
+                    if (pathTimer.getElapsedTimeSeconds() > COLLECT_ALL_BALLS_WAIT_TIME) {
+                        setPathState(11);
+                    }
+                }
+                break;
+            case 11: //second move to score position for collected balls
+                if (!follower.isBusy()) {
+                    if (init){
+//                        intake.turnOffIntake();
+                        initializeBurstCloseEdge(); //prestart shooter
+                        turnOnShooterAuto();
+                        shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
+                        init = false;
+                    }
+                    else{
+                        follower.followPath(scoreCollectBalls, true);
+                        setPathState(12);
+                    }
+                }
+                break;
+            case 12: //second score collected balls
+                if (!follower.isBusy()) {
+                    if(init){
+                        shooter.ballsShot = 9;
+//                            intializeBurstClose();
+//                            turnOnShooterAuto();
+                        shooter.setGatePosition(Shooter.GATE_OPEN_POSITION);
+
+                        init = false;
+                    }
+                    else{
+                        if (pathTimer.getElapsedTimeSeconds() > INTAKE_DELAY_TIME) {
+                            intake.turnOnIntakeAuto();
+                            //intake.setFlickerPosition(Intake.FLICKER_CLOSE_POSITION);
+
+                        }
+
+                        if (pathTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_COLLECT_BALLS_TIME) {
+                            scorePickupMiddleTime = opmodeTimer.getElapsedTimeSeconds();
+
+                            shooter.ballsShot = 12;
+                            shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
+                            turnOffShooterAuto();
+                            setPathState(13);
+                        }
+                    }
+                }
+                break;
+            case 13: // intake bottom row
                 if (!follower.isBusy()) {
                     if (init){
                         //intake.setFlickerPosition(Intake.FLICKER_OPEN_POSITION);
@@ -361,11 +449,11 @@ public class leftCloseAutoFromCloseHumanPlayer extends LinearOpMode {
                     }
                     else{
                         follower.followPath(grabPickupBottom, true);
-                        setPathState(10);
+                        setPathState(14);
                     }
                 }
                 break;
-            case 10: //move to score position for bottom row
+            case 14: //move to score position for bottom row
                 if (!follower.isBusy()) {
                     if (init){
                         intake.turnOffIntake();
@@ -373,16 +461,16 @@ public class leftCloseAutoFromCloseHumanPlayer extends LinearOpMode {
                     }
                     else{
                         follower.followPath(scorePickupBottom, true);
-                        intializeBurstClose(); //prestart shooter
+                        initializeBurstCloseEdge(); //prestart shooter
                         turnOnShooterAuto();
-                        setPathState(11);
+                        setPathState(15);
                     }
                 }
                 break;
-            case 11: //score bottom row
+            case 15: //score bottom row
                 if (!follower.isBusy()) {
                     if(init){
-                        shooter.ballsShot = 9;
+                        shooter.ballsShot = 12;
 
 //                            intializeBurstClose();
 //                            turnOnShooterAuto();
@@ -400,57 +488,46 @@ public class leftCloseAutoFromCloseHumanPlayer extends LinearOpMode {
                         if (pathTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_BOTTOM_ROW_TIME) {
                             scorePickupBottomTime = opmodeTimer.getElapsedTimeSeconds();
 
-                            shooter.ballsShot = 12;
+                            shooter.ballsShot = 15;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                             turnOffShooterAuto();
                             intake.turnOffIntake();
-                            setPathState(12);
+                            setPathState(16);
                         }
                     }
                 }
                 break;
-            case 12: //go to wall human player
-                if (!follower.isBusy()) {
-                    if (init){
-                        //intake.setFlickerPosition(Intake.FLICKER_OPEN_POSITION);
-
-                        init = false;
-                    }
-                    else{
-                        follower.followPath(goToWallHumanPlayer, false);
-                        setPathState(13);
-                    }
-                }
-                break;
-            case 13: //pickup human player
+            case 16: // intake top row
                 if (!follower.isBusy()) {
                     if (init){
                         intake.turnOnIntakeAuto();
-
+                        //intake.setFlickerPosition(Intake.FLICKER_OPEN_POSITION);
                         init = false;
                     }
                     else{
-                        follower.followPath(grabPickupHumanPlayer, INTAKE_HUMAN_PLAYER_MAX_POWER, false);
-                        setPathState(14);
+                        follower.followPath(grabPickupTop, true);
+                        setPathState(17);
                     }
                 }
                 break;
-            case 14: //move to score position for human player
-                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_HUMAN_PLAYER_PICKUP_TIME) {
+            case 17: //move to score position for top row
+                if (!follower.isBusy()) {
                     if (init){
+//                        intake.turnOffIntake();
                         init = false;
                     }
-                    else{
-                        follower.followPath(scorePickupHumanPlayer, true);
-                        intializeBurstClose(); //prestart shooter
+                    else {
+                        follower.followPath(scorePickupTop, true);
+                        initializeBurstPark(); //prestart shooter
                         turnOnShooterAuto();
-                        setPathState(15);
+                        setPathState(18);
                     }
                 }
                 break;
-            case 15: //score human player
+            case 18: //score top row
                 if (!follower.isBusy()) {
                     if(init){
+                        shooter.ballsShot = 18;
 //                            intializeBurstClose();
 //                            turnOnShooterAuto();
                         shooter.setGatePosition(Shooter.GATE_OPEN_POSITION);
@@ -464,17 +541,18 @@ public class leftCloseAutoFromCloseHumanPlayer extends LinearOpMode {
 
                         }
 
-                        if (pathTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_HUMAN_PLAYER_TIME) {
-                            scorePickupHumanPlayerTime = opmodeTimer.getElapsedTimeSeconds();
+                        if (pathTimer.getElapsedTimeSeconds() > AutoOverrideTimes.OVERRIDE_TOP_ROW_TIME) {
+                            scorePickupTopTime = opmodeTimer.getElapsedTimeSeconds();
 
+                            shooter.ballsShot = 18;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                             turnOffShooterAuto();
-                            setPathState(16);
+                            setPathState(-1);
                         }
                     }
                 }
                 break;
-            case 16:
+            case 19:
                 if(!follower.isBusy()){
                     follower.followPath(goToPark);
                     setPathState(-1);
@@ -491,17 +569,30 @@ public class leftCloseAutoFromCloseHumanPlayer extends LinearOpMode {
         } //run state machine
     }
 
-    public void intializeBurstClose(){
+    public void initializeBurstClose(){
         shooter.setCurrentShooterClosedSeconds(Shooter.CLOSE_DEBOUNCE);
         shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM);
-//        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
+        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
         shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
     }
 
-    public void intializeBurstClosePreload(){
+    public void initializeBurstClosePreload(){
         shooter.setCurrentShooterClosedSeconds(Shooter.CLOSE_DEBOUNCE);
         shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM_PRELOAD);
-//        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
+        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
+        shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
+    }
+
+    public void initializeBurstCloseEdge(){
+        shooter.setCurrentShooterClosedSeconds(Shooter.CLOSE_DEBOUNCE);
+        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM_EDGE);
+        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
+        shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
+    }
+    public void initializeBurstPark(){
+        shooter.setCurrentShooterClosedSeconds(Shooter.CLOSE_DEBOUNCE);
+        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM_PARK);
+        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
         shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
     }
 
@@ -519,6 +610,7 @@ public class leftCloseAutoFromCloseHumanPlayer extends LinearOpMode {
 
     public void turnOffShooterAuto(){
         shooter.turnOffShooter();
+        shooter.setRampPosition(0);
         shooter.on = false;
     }
 

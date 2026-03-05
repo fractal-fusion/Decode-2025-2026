@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 @Config
 @Autonomous(name="Red Close Auto From Close Gate GoldenFish", group="Robot")
 @SuppressWarnings("FieldCanBeLocal")
-public class rightCloseAutoFromCloseGateGoldenFish extends LinearOpMode {
+public class rightCloseAutoGateGoldenFish extends LinearOpMode {
     Drivetrain drivetrain;
     Shooter shooter;
     Intake intake;
@@ -142,7 +142,7 @@ public class rightCloseAutoFromCloseGateGoldenFish extends LinearOpMode {
                 .setNoDeceleration()
                 .build();
         scoreCollectBalls = follower.pathBuilder()
-                .addPath(new BezierCurve(moveBackCollectBallsPose, scoreCollectBallsPoseControlPoint1, edgeScorePose))
+                .addPath(new BezierLine(moveBackCollectBallsPose, edgeScorePose))
                 .setConstantHeadingInterpolation(edgeScorePose.getHeading())
                 .build();
         goToPark = follower.pathBuilder()

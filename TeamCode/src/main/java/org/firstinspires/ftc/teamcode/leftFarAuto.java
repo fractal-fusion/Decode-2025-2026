@@ -1,19 +1,19 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
 @Config
-@Autonomous(name="Red Far Auto", group="Robot")
+@Autonomous(name="Blue Far Auto", group="Robot")
 @SuppressWarnings("FieldCanBeLocal")
-public class rightFarAuto extends LinearOpMode {
+public class leftFarAuto extends LinearOpMode {
     Drivetrain drivetrain;
     Shooter shooter;
     Intake intake;
@@ -44,11 +44,11 @@ public class rightFarAuto extends LinearOpMode {
 
     private PathChain scorePreload, collectHumanPlayer, scoreHumanPlayer, goToPark; //define path chains (muliple paths interpolated)
 
-    private final Pose startPose = new Pose(89.5, 8+AUTO_Y_OFFSET, Math.toRadians(90)); // Start Pose of our robot
-    private final Pose scorePose =  new Pose(83,14, Math.toRadians(scoreHeading));
-    private final Pose collectHumanPlayerPose = new Pose(131, 8, Math.toRadians(0));
-    private final Pose moveBackHumanPlayerPose = new Pose(127, 8, Math.toRadians(0));
-    private final Pose parkPose = new Pose(100,14, Math.toRadians(0));
+    private final Pose startPose = new Pose(89.5, 8+AUTO_Y_OFFSET, Math.toRadians(90)).mirror(); // Start Pose of our robot
+    private final Pose scorePose =  new Pose(83,14, Math.toRadians(scoreHeading)).mirror();
+    private final Pose collectHumanPlayerPose = new Pose(131, 8, Math.toRadians(0)).mirror();
+    private final Pose moveBackHumanPlayerPose = new Pose(127, 8, Math.toRadians(0)).mirror();
+    private final Pose parkPose = new Pose(100,14, Math.toRadians(0)).mirror();
 
     public void buildPaths() {
         scorePreload = follower.pathBuilder()
@@ -112,7 +112,7 @@ public class rightFarAuto extends LinearOpMode {
             follower.update(); //update follower
             currentPose = follower.getPose(); //update current pose
 
-            PoseManager.initializeTeleopPoses(PoseManager.Team.RED, currentPose);
+            PoseManager.initializeTeleopPoses(PoseManager.Team.BLUE, currentPose);
 
             updateStateMachine();
 
