@@ -106,7 +106,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
                     drivetrain.integralTimer.reset();
                 }
                 else {
-                    drivetrain.updateIntegralSum(drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose), drivetrain.integralTimer.seconds());
+                    drivetrain.updateIntegralSum(-drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose), drivetrain.integralTimer.seconds());
                 }
 
                 drivetrain.holdPose = follower.getPose();
