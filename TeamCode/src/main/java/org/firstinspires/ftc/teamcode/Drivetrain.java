@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -27,7 +28,13 @@ public class Drivetrain {
     //constants used for tuning auto alignment
     public static double AUTO_ALIGN_MAX_SPEED = 0.8; //auto alignment speed is clipped to minimum negative this and maximum positive this (bilateral tolerance)
     public static double AUTO_ALIGN_GAIN_LIMELIGHT = 0.0175; //converts tx from limelight to power
-    public static double AUTO_ALIGN_GAIN_ODO = 0.65; //converts tx from limelight to power
+    public static double AUTO_ALIGN_GAIN_ODO = 0.65; //converts odometry bearing to power
+    public static double AUTO_ALIGN_INTEGRAL_ODO = 0.005;
+    public static double ODO_HEADING_VALID_RANGE = 1.5;
+
+    public ElapsedTime integralTimer = new ElapsedTime();
+
+    public double integralSum = 0;
 
     public static double AUTO_ALIGN_DRIVE_POWER_MULTIPLIER_MIDPOINT = 0.45; //half of max power
     public static double IS_FAR_THRESHOLD_Y = 40; //less than this Y value is considered far
@@ -139,7 +146,11 @@ public class Drivetrain {
     }
 
     public double calculateAutoAlignPowerOdo(double bearing) {
-        return Range.clip(bearing * AUTO_ALIGN_GAIN_ODO, -AUTO_ALIGN_MAX_SPEED, AUTO_ALIGN_MAX_SPEED);
+        return Range.clip(bearing * AUTO_ALIGN_GAIN_ODO + integralSum * AUTO_ALIGN_INTEGRAL_ODO, -AUTO_ALIGN_MAX_SPEED, AUTO_ALIGN_MAX_SPEED);
+    }
+
+    public void updateIntegralSum(double bearing, double seconds) {
+        integralSum += bearing * seconds;
     }
 
     public double calculateOdoGoalBearing(Pose robotPose, Pose goalPose) {
