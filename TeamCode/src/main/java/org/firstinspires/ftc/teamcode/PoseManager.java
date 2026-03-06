@@ -11,8 +11,8 @@ public class PoseManager {
         RED
     }
 
-    public static double RED_FAR_SHOOTING_HEADING = 70;
-    public static double RED_LEVER_HEADING = 40.5;
+    public static double RED_FAR_SHOOTING_HEADING = 67;
+    public static double RED_LEVER_HEADING = 33;
 //    public static double BLUE_FAR_SHOOTING_HEADING = 70 + 45;
 //    public static double BLUE_LEVER_HEADING = RED_LEVER_HEADING + 90;
 
@@ -24,7 +24,7 @@ public class PoseManager {
     public static Pose BLUE_GOAL_DISTANCE_POSITION = RED_GOAL_DISTANCE_POSITION.mirror();
 
     public static double RED_GOAL_AUTOALIGN_X = 140;
-    public static double RED_GOAL_AUTOALIGN_Y = 137;
+    public static double RED_GOAL_AUTOALIGN_Y = 140;
 
     public static Pose RED_GOAL_AUTOALIGN_POSITION = new Pose(RED_GOAL_AUTOALIGN_X, RED_GOAL_AUTOALIGN_Y);
     public static Pose BLUE_GOAL_AUTOALIGN_POSITION = new Pose(RED_GOAL_AUTOALIGN_X, RED_GOAL_AUTOALIGN_Y).mirror();
