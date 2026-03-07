@@ -29,7 +29,7 @@ public class PoseManager {
     public static Pose RED_GOAL_AUTOALIGN_POSITION = new Pose(RED_GOAL_AUTOALIGN_X, RED_GOAL_AUTOALIGN_Y);
     public static Pose BLUE_GOAL_AUTOALIGN_POSITION = new Pose(RED_GOAL_AUTOALIGN_X, RED_GOAL_AUTOALIGN_Y).mirror();
 
-    public static Pose RED_LEVER_POSITION = new Pose(134.5,60.8, Math.toRadians(RED_LEVER_HEADING));
+    public static Pose RED_LEVER_POSITION = new Pose(134.5,59.5, Math.toRadians(RED_LEVER_HEADING));
     public static Pose BLUE_LEVER_POSITION = RED_LEVER_POSITION.mirror();
 
     public static Pose RED_FAR_POSITION = new Pose(83,14, Math.toRadians(RED_FAR_SHOOTING_HEADING));
