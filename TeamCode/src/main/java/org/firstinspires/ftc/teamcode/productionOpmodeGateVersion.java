@@ -101,6 +101,14 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             }
             else if (gamepad1.a) {
                 drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPowerOdo(-drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose)));
+
+                if (drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose) >= -Drivetrain.ODO_HEADING_VALID_RANGE && drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose) <= Drivetrain.ODO_HEADING_VALID_RANGE){
+                    drivetrain.integralTimer.reset();
+                }
+                else {
+                    drivetrain.updateIntegralSum(-drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose), drivetrain.integralTimer.seconds());
+                }
+
                 drivetrain.holdPose = follower.getPose();
             }
             else if (gamepad1.x) {
@@ -258,7 +266,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
 
             telemetry.addData("current robot pose:", follower.getPose());
             telemetry.addData("camera robot pose:", limelight.getRobotPose());
-            telemetry.addData("current robot odo angle:", drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalPose));
+            telemetry.addData("current robot odo bearing:", drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalPose));
             telemetry.addData("current inches from goal:", drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose));
             telemetry.addLine("------------------------------------------------------");
 
