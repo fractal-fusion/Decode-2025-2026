@@ -30,9 +30,9 @@ public class Shooter{
     public static double PITCH_SCORE_POSITION = 0.0; //flatten pitch so balls can pass for scoring
     public static double PITCH_INTAKE_POSITION = 0.054;
     public static double PITCH_CYCLE_POSITION = 0.18;
-    public static double RAMP_LEFT_SERVO_OFFSET = 0.02; //offset for ramp since the left servo is a little off
+    public static double RAMP_SERVO_OFFSET = 0.02; //offset for ramp since the servo teeth are a little off
     public static double GATE_OPEN_POSITION = 0;
-    public static double GATE_CLOSED_POSITION = 0.14;
+    public static double GATE_CLOSED_POSITION = 0.15;
     public static double RAMP_CYCLE_POSITION = 0.2;
     public static double FAR_RAMP_SCORE_POSITION = 0;
     public static double FAR_TARGET_RPM = 4250;
@@ -120,7 +120,7 @@ public class Shooter{
 
         TESTSERVO = opMode.hardwareMap.get(Servo.class, testServo);
 
-        shooterLeft.setDirection(DcMotor.Direction.REVERSE); //reverse shooter right left so positive is out
+        shooterRight.setDirection(DcMotor.Direction.REVERSE); //reverse shooter right left so positive is out
 
 //        shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //        shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); //slow down the motor faster
@@ -129,9 +129,9 @@ public class Shooter{
         shooterLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //reset encoders on initialization
 
 //        shooterPitchRight.setDirection(Servo.Direction.REVERSE);
-        shooterRamp.setDirection(Servo.Direction.REVERSE); //reverse servos used for rotation so positive is rotate up
+        shooterRamp.setDirection(Servo.Direction.FORWARD); //reverse servos used for rotation so positive is rotate up
 
-        shooterGate.setDirection(Servo.Direction.FORWARD); //reverse gate servo so open position is zero and positive closes inwards
+        shooterGate.setDirection(Servo.Direction.REVERSE); //reverse gate servo so open position is zero and positive closes inwards
 
         setRampPosition(0); //zero ramp servoes on initialization
 
@@ -175,7 +175,7 @@ public class Shooter{
     }
 
     public void setRampPosition(double position){
-        shooterRamp.setPosition(position);
+        shooterRamp.setPosition(position + RAMP_SERVO_OFFSET);
 //        shooterRampLeft.setPosition(position);
     }
 
@@ -445,9 +445,9 @@ public class Shooter{
     public void testControlServo(Gamepad gamepad){ //method to test individual servos
 
         if(currentGamepad.right_bumper && !previousGamepad.right_bumper){
-            testPosition += 0.05;
+            testPosition += 0.01;
         } else if (currentGamepad.left_bumper && !previousGamepad.left_bumper) {
-            testPosition -= 0.05;
+            testPosition -= 0.01;
         }
 
         testPosition = Math.max(0, Math.min(testPosition, 1));

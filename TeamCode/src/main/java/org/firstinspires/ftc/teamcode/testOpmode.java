@@ -27,7 +27,7 @@ public class testOpmode extends LinearOpMode {
             shooter.updateGamepad(gamepad1);
 
 //            drivetrain.drive(gamepad1);
-            drivetrain.testWheel();
+//            drivetrain.testWheel();
 
             shooter.testShoot(gamepad1);
 
