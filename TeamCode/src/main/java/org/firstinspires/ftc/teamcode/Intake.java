@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.util.Range;
 
 @Config
 public class Intake {
-    public DcMotor driver;
-    public DcMotor intake;
+    public DcMotor intakeBack;
+    public DcMotor intakeFront;
 //    public Servo flicker;
     private OpMode opMode;
 
@@ -42,21 +42,21 @@ public class Intake {
         this.opMode = linearOpMode;
         timer = new ElapsedTime();
 
-        driver = opMode.hardwareMap.get(DcMotor.class, "driver");
-        intake = opMode.hardwareMap.get(DcMotor.class, "intake");
+        intakeBack = opMode.hardwareMap.get(DcMotor.class, "intakeback");
+        intakeFront = opMode.hardwareMap.get(DcMotor.class, "intakefront");
 //        flicker = opMode.hardwareMap.get(Servo.class, "flicker");
 
         //intake.setDirection(DcMotor.Direction.REVERSE); // reverse direction so positive is intake, negative is outtake
-        intake.setDirection(DcMotor.Direction.FORWARD);
-        driver.setDirection(DcMotor.Direction.REVERSE);
+        intakeFront.setDirection(DcMotor.Direction.FORWARD);
+        intakeBack.setDirection(DcMotor.Direction.REVERSE);
 
 //        flicker.setDirection(Servo.Direction.REVERSE); //reverse flicker servo so increasing to position 1 is flick inside
 //        flicker.setPosition(initPosition); //open flicker on initialization
     }
 
     public void turnOnIntake(){
-        intake.setPower(1);
-        driver.setPower(driverPower);
+        intakeFront.setPower(driverPower);
+        intakeBack.setPower(driverPower);
     }
 
     public void setDriverPower(double power){
@@ -67,27 +67,27 @@ public class Intake {
         return Range.clip(0.1 * ta + 0.7, 0.8, 1);
     }
     public void turnOnIntakeAuto(){
-        intake.setPower(1);
-        driver.setPower(AUTO_DRIVER_POWER_CLOSE);
+        intakeFront.setPower(AUTO_DRIVER_POWER_CLOSE);
+        intakeBack.setPower(AUTO_DRIVER_POWER_CLOSE);
     }
 
     public void turnOnIntakeAutoFar(){
-        intake.setPower(1);
-        driver.setPower(AUTO_DRIVER_POWER_FAR);
+        intakeFront.setPower(AUTO_DRIVER_POWER_FAR);
+        intakeBack.setPower(AUTO_DRIVER_POWER_FAR);
     }
-    public void turnOnDriverSlow(){
-        intake.setPower(0);
-        driver.setPower(0.5);
-    }
+//    public void turnOnDriverSlow(){
+//        intakeFront.setPower(0);
+//        intakeBack.setPower(0.5);
+//    }
 
     public void turnOnOuttake(){
-        intake.setPower(-1);
-        driver.setPower(-1);
+        intakeFront.setPower(-1);
+        intakeBack.setPower(-1);
     }
 
     public void turnOffIntake(){
-        intake.setPower(0);
-        driver.setPower(0);
+        intakeFront.setPower(0);
+        intakeBack.setPower(0);
     }
 
 //    public void resetFlickerOpenTimer(){ //turn on flicker and turn it off after a certain amount of time

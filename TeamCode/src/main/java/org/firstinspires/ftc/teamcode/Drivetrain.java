@@ -7,6 +7,7 @@ import com.pedropathing.math.Vector;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.Range;
@@ -19,6 +20,8 @@ public class Drivetrain {
     public DcMotor backLeft;
     public DcMotor frontRight;
     public DcMotor backRight;
+    public DcMotor testWheel;
+    public static String testWheelHardwareMapName = "frontright";
     public IMU imu;
 
     //botHeading used for field centric drive
@@ -53,6 +56,9 @@ public class Drivetrain {
         backLeft = opMode.hardwareMap.get(DcMotor.class, "backleft");
         frontRight = opMode.hardwareMap.get(DcMotor.class, "frontright");
         backRight = opMode.hardwareMap.get(DcMotor.class, "backright");
+
+        testWheel = opMode.hardwareMap.get(DcMotor.class, testWheelHardwareMapName);
+
         imu = opMode.hardwareMap.get(IMU.class, "imu");
 
 
@@ -62,12 +68,12 @@ public class Drivetrain {
         // adjust the orientation parameters
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.FORWARD,
-                RevHubOrientationOnRobot.UsbFacingDirection.LEFT));
+                RevHubOrientationOnRobot.UsbFacingDirection.UP));
         // actually set the parameters
         imu.initialize(parameters);
 
         frontRight.setDirection(DcMotor.Direction.REVERSE);
-        backRight.setDirection(DcMotor.Direction.REVERSE);
+        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     public void resetIMU() {
@@ -78,6 +84,9 @@ public class Drivetrain {
         botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
     }
 
+    public void testWheel(){
+        testWheel.setPower(0.25);
+    }
     //main mecanum drive function
     public void drive(Gamepad gamepad)
     {

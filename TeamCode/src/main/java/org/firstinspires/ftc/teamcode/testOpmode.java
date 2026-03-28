@@ -26,7 +26,8 @@ public class testOpmode extends LinearOpMode {
         while (opModeIsActive()) {
             shooter.updateGamepad(gamepad1);
 
-            drivetrain.drive(gamepad1);
+//            drivetrain.drive(gamepad1);
+            drivetrain.testWheel();
 
             shooter.testShoot(gamepad1);
 
@@ -35,14 +36,14 @@ public class testOpmode extends LinearOpMode {
             telemetry.addData("shooter power:", shooter.on);
 
             if (gamepad1.a) {
-                intake.intake.setPower(1);
-                intake.driver.setPower(1);
+                intake.intakeFront.setPower(1);
+                intake.intakeBack.setPower(1);
             } else if (gamepad1.b) {
-                intake.intake.setPower(-1);
-                intake.driver.setPower(-1);
+                intake.intakeFront.setPower(-1);
+                intake.intakeBack.setPower(-1);
             } else {
-                intake.intake.setPower(0);
-                intake.driver.setPower(0);
+                intake.intakeFront.setPower(0);
+                intake.intakeBack.setPower(0);
             }
             if (gamepad1.dpad_right) {
 //                intake.setFlickerPosition(.6);
@@ -51,10 +52,12 @@ public class testOpmode extends LinearOpMode {
 //                intake.setFlickerPosition(0);
             }
 
-//            shooter.testControlServo(gamepad1);
-            shooter.testControlRampPosition(gamepad1);
+            shooter.testControlServo(gamepad1);
+//            shooter.testControlRampPosition(gamepad1);
 //            shooter.testControlPitchPosition(gamepad1);
 //            colorDetector.telemetryColors();
+
+            telemetry.update();
         }
     }
 }

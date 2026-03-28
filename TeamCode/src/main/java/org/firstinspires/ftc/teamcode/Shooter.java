@@ -16,10 +16,10 @@ public class Shooter{
     public Gamepad previousGamepad = new Gamepad();
     public DcMotor shooterLeft;
     public DcMotor shooterRight;
-    public Servo shooterRampRight;
-    public Servo shooterRampLeft;
-    public Servo shooterPitchRight;
-    public Servo shooterPitchLeft;
+    public Servo shooterRamp;
+//    public Servo shooterRampLeft;
+//    public Servo shooterPitchRight;
+//    public Servo shooterPitchLeft;
     public Servo shooterGate;
     private OpMode opMode;
 
@@ -111,10 +111,10 @@ public class Shooter{
         shooterLeft = opMode.hardwareMap.get(DcMotor.class, "shooterleft");
         shooterRight = opMode.hardwareMap.get(DcMotor.class, "shooterright");
 
-        shooterRampRight = opMode.hardwareMap.get(Servo.class, "rampright" );
-        shooterRampLeft = opMode.hardwareMap.get(Servo.class, "rampleft" );
-        shooterPitchRight = opMode.hardwareMap.get(Servo.class, "pitchright" );
-        shooterPitchLeft = opMode.hardwareMap.get(Servo.class, "pitchleft" );
+        shooterRamp = opMode.hardwareMap.get(Servo.class, "ramp" );
+//        shooterRampLeft = opMode.hardwareMap.get(Servo.class, "rampleft" );
+//        shooterPitchRight = opMode.hardwareMap.get(Servo.class, "pitchright" );
+//        shooterPitchLeft = opMode.hardwareMap.get(Servo.class, "pitchleft" );
 
         shooterGate = opMode.hardwareMap.get(Servo.class, "gate");
 
@@ -128,10 +128,10 @@ public class Shooter{
         shooterRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         shooterLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //reset encoders on initialization
 
-        shooterPitchRight.setDirection(Servo.Direction.REVERSE);
-        shooterRampRight.setDirection(Servo.Direction.REVERSE); //reverse servos used for rotation so positive is rotate up
+//        shooterPitchRight.setDirection(Servo.Direction.REVERSE);
+        shooterRamp.setDirection(Servo.Direction.REVERSE); //reverse servos used for rotation so positive is rotate up
 
-        shooterGate.setDirection(Servo.Direction.REVERSE); //reverse gate servo so open position is zero and positive closes inwards
+        shooterGate.setDirection(Servo.Direction.FORWARD); //reverse gate servo so open position is zero and positive closes inwards
 
         setRampPosition(0); //zero ramp servoes on initialization
 
@@ -175,13 +175,13 @@ public class Shooter{
     }
 
     public void setRampPosition(double position){
-        shooterRampRight.setPosition(position);
-        shooterRampLeft.setPosition(position + RAMP_LEFT_SERVO_OFFSET);
+        shooterRamp.setPosition(position);
+//        shooterRampLeft.setPosition(position);
     }
 
     public void setPitchPosition(double position){
-        shooterPitchRight.setPosition(position);
-        shooterPitchLeft.setPosition(position);
+//        shooterPitchRight.setPosition(position);
+//        shooterPitchLeft.setPosition(position);
     }
 
     public void setGatePosition(double position){
@@ -391,11 +391,11 @@ public class Shooter{
 
         testRampPosition = Math.max(0, Math.min(testRampPosition, 0.15));
 
-        shooterRampRight.setPosition(testRampPosition);
-        shooterRampLeft.setPosition(testRampPosition + RAMP_LEFT_SERVO_OFFSET);
+        shooterRamp.setPosition(testRampPosition);
+//        shooterRampLeft.setPosition(testRampPosition + RAMP_LEFT_SERVO_OFFSET);
 
-        opMode.telemetry.addData("servoposRight", shooterRampRight.getPosition());
-        opMode.telemetry.addData("servoposLeft", shooterRampLeft.getPosition());
+        opMode.telemetry.addData("rampPosition", shooterRamp.getPosition());
+//        opMode.telemetry.addData("servoposLeft", shooterRampLeft.getPosition());
 //        opMode.telemetry.update();
     }
 
@@ -408,12 +408,12 @@ public class Shooter{
         }
 
         testPitchPosition = Math.max(0, Math.min(testPitchPosition, 1));
-
-        shooterPitchRight.setPosition(testPitchPosition);
-        shooterPitchLeft.setPosition(testPitchPosition);
-
-        opMode.telemetry.addData("servoposRight", shooterPitchRight.getPosition());
-        opMode.telemetry.addData("servoposLeft", shooterPitchLeft.getPosition());
+//
+//        shooterPitchRight.setPosition(testPitchPosition);
+//        shooterPitchLeft.setPosition(testPitchPosition);
+//
+//        opMode.telemetry.addData("servoposRight", shooterPitchRight.getPosition());
+//        opMode.telemetry.addData("servoposLeft", shooterPitchLeft.getPosition());
 //        opMode.telemetry.update();
     }
 
