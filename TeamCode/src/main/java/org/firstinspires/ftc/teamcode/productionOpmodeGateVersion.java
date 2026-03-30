@@ -178,26 +178,24 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             //constantly update shooter velocity for close regression
             //DYNAMIC FAR AND CLOSE
             if(shooter.on){
+                //reduce driver speed if too close or too far to goal inside close zone
+                if(drivetrain.ifSlowDriverOdometry(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose))) {
+                    intake.setDriverPower(Intake.DRIVER_CLOSE_SLOW_SHOOTING_POWER);
+                }
+                else {
+                    intake.setDriverPower(Intake.DRIVER_CLOSE_SHOOTING_POWER);
+                }
+
                 shooter.updateShooterVelocity();
                 if (!drivetrain.isFarOdometry(follower.getPose())){ //only update ramp regression when close and shooter is on
                     //sotm
                     shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPMOdometryClose(drivetrain.calculateOdoGoalDistance(follower.getPose(), drivetrain.calculateVirtualGoalPose(follower, drivetrain.calculateAirTime(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)), PoseManager.currentGoalPose))));
-//                    shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPMOdometryClose(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
                     shooter.setRampPosition(shooter.calculateRampPositionOdometry(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
                     shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
-
-                    //reduce driver speed if too close or too far to goal inside close zone
-                    if(drivetrain.ifSlowDriverOdometry(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose))) {
-                        intake.setDriverPower(Intake.DRIVER_CLOSE_SLOW_SHOOTING_POWER);
-                    }
-                    else {
-                        intake.setDriverPower(Intake.DRIVER_CLOSE_SHOOTING_POWER);
-                    }
-
                 }
                 else{
-                    shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPMOdometryFar(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
-                    shooter.setRampPosition(Shooter.FAR_RAMP_SCORE_POSITION);
+                    shooter.setCurrentTargetRPMTicksPerSecond(shooter.calculateShooterVelocityRPMOdometryClose(drivetrain.calculateOdoGoalDistance(follower.getPose(), drivetrain.calculateVirtualGoalPose(follower, drivetrain.calculateAirTime(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)), PoseManager.currentGoalPose))));
+                    shooter.setRampPosition(shooter.calculateRampPositionOdometry(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
                     shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_FAR);
                 }
             }
