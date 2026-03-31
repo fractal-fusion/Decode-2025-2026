@@ -152,7 +152,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
                 intake.turnOffIntake();
                 shooter.cycling = false;
                 if (!shooter.on) { //make sure shooter is off after cycling and not shooting
-                    shooter.turnOffShooter();
+                    shooter.turnOffShooterRestingRpm();
                     shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
 //                    shooter.setRampPosition(0);
                 }

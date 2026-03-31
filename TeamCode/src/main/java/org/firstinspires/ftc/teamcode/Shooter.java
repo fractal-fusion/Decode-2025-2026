@@ -58,8 +58,8 @@ public class Shooter{
     public static double TARGET_RPM_TOLERANCE_RPM_CLOSE = 100;
     public static double TARGET_RPM_TOLERANCE_RPM_FAR = 30;
     public static double REGRESSION_RPM_OFFSET_LIMELIGHT = 25;
-    public static double REGRESSION_RPM_OFFSET_ODOMETRY_CLOSE = -50;
-    public static double REGRESSION_RPM_OFFSET_ODOMETRY_FAR = -50;
+    public static double REGRESSION_RPM_OFFSET_ODOMETRY_CLOSE = 0;
+    public static double REGRESSION_RPM_OFFSET_ODOMETRY_FAR = 0;
     public static double REGRESSION_RESTING_RPM = 2800;
     public double targetRPMToleranceRPM = TARGET_RPM_TOLERANCE_RPM_CLOSE; //initially set to the tolerance for close
     public double testShootRPM = 0;
@@ -178,8 +178,8 @@ public class Shooter{
         shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        ((DcMotorEx) shooterRight).setVelocity(REGRESSION_RESTING_RPM);
-        ((DcMotorEx) shooterLeft).setVelocity(REGRESSION_RESTING_RPM);
+        ((DcMotorEx) shooterRight).setVelocity(REGRESSION_RESTING_RPM * RPM_TO_TICKS_PER_SECOND);
+        ((DcMotorEx) shooterLeft).setVelocity(REGRESSION_RESTING_RPM * RPM_TO_TICKS_PER_SECOND);
     }
 
     public void setRampPosition(double position){
@@ -233,14 +233,14 @@ public class Shooter{
     }
 
     public double calculateShooterVelocityRPMOdometryClose(double distance){
-        return Range.clip(-0.000000000205781*Math.pow(distance, 4) + 0.00000281102*Math.pow(distance, 3) - 0.0142983*Math.pow(distance, 2) + 32.14816*distance - 26912.734, 2630, 4000) + REGRESSION_RPM_OFFSET_ODOMETRY_CLOSE;
+        return Range.clip(-0.00000575831*Math.pow(distance, 4) - 0.000224343*Math.pow(distance, 3) + 0.350468*Math.pow(distance, 2) - 21.75167*distance + 2974.05976, 2630, 4000) + REGRESSION_RPM_OFFSET_ODOMETRY_CLOSE;
     }
     public double calculateShooterVelocityRPMOdometryFar(double distance){
         return Range.clip(-0.00569463*Math.pow(distance, 3) + 1.80372*Math.pow(distance, 2) - 167.57901*distance + 8139.81553, 4150, 4400) + REGRESSION_RPM_OFFSET_ODOMETRY_FAR;
     }
 
     public double calculateRampPositionOdometry(double distance){
-        return Range.clip(-5341832.15*Math.pow(distance, 4) + 1445513.68*Math.pow(distance, 3) - 120317.329*Math.pow(distance, 2) + 3588.90148*distance + 36.19048, 0, 0.31);
+        return Range.clip(0.00000000654174*Math.pow(distance, 4) - 0.00000233713*Math.pow(distance, 3) + 0.000282243*Math.pow(distance, 2) - 0.0118112*distance + 0.153522, 0, 0.31);
     }
 
     public void toggleShooterClose(){
@@ -261,7 +261,7 @@ public class Shooter{
         }
         else {
             setRampPosition(0);
-            turnOffShooterRestingRpm();
+            turnOffShooterRestingRpm(); //will get overridden in teleop
         }
     }
     public void toggleShooterFar(){
@@ -284,7 +284,7 @@ public class Shooter{
         }
         else {
             setRampPosition(0);
-            turnOffShooterRestingRpm();
+            turnOffShooterRestingRpm(); //will get overridden in teleop
         }
     }
 
