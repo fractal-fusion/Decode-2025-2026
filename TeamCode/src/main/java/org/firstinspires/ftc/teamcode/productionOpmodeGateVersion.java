@@ -102,12 +102,13 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             else if (gamepad1.a) {
                 drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPowerOdo(-drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose)));
 
-                if (drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose) >= -Drivetrain.ODO_HEADING_VALID_RANGE && drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose) <= Drivetrain.ODO_HEADING_VALID_RANGE){
-                    drivetrain.integralTimer.reset();
-                }
-                else {
-                    drivetrain.updateIntegralSum(-drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose), drivetrain.integralTimer.seconds());
-                }
+                //untested integral sum
+//                if (drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose) >= -Drivetrain.ODO_HEADING_VALID_RANGE && drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose) <= Drivetrain.ODO_HEADING_VALID_RANGE){
+//                    drivetrain.integralTimer.reset();
+//                }
+//                else {
+//                    drivetrain.updateIntegralSum(-drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose), drivetrain.integralTimer.seconds());
+//                }
 
                 drivetrain.holdPose = follower.getPose();
             }

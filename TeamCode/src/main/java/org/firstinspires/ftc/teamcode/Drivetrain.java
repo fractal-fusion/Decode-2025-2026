@@ -164,12 +164,12 @@ public class Drivetrain {
     }
 
     public double calculateAutoAlignPowerOdo(double bearing) {
-        return Range.clip(bearing * AUTO_ALIGN_GAIN_ODO + integralSum * AUTO_ALIGN_INTEGRAL_ODO, -AUTO_ALIGN_MAX_SPEED, AUTO_ALIGN_MAX_SPEED);
+        return Range.clip(bearing * AUTO_ALIGN_GAIN_ODO, -AUTO_ALIGN_MAX_SPEED, AUTO_ALIGN_MAX_SPEED);
     }
 
-    public void updateIntegralSum(double bearing, double seconds) {
-        integralSum += bearing * seconds;
-    }
+//    public void updateIntegralSum(double bearing, double seconds) {
+//        integralSum += bearing * seconds;
+//    }
 
     public double calculateOdoGoalBearing(Pose robotPose, Pose goalPose) {
         double vectorY = goalPose.getY() - robotPose.getY();
