@@ -227,7 +227,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             }
 
 //            telemetry.addData("intake current time:", intake.currentTime);
-            telemetry.addData("shooter target velocity: ", shooter.currentTargetRPMTicksPerSecond);
+            telemetry.addData("shooter target velocity: ", shooter.currentTargetRPMTicksPerSecond * Shooter.RPM_TO_TICKS_PER_SECOND);
             telemetry.addData("shooter left velocity:", shooter.shooterLeftGetVelocity() * Shooter.TICKS_PER_SECOND_TO_RPM);
             telemetry.addData("shooter right velocity:", shooter.shooterRightGetVelocity() * Shooter.TICKS_PER_SECOND_TO_RPM);
             telemetry.addData("shooter at velocity:", shooter.shooterAtTargetVelocity());

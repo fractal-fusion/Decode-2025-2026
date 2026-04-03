@@ -141,12 +141,16 @@ public class Drivetrain {
         double xpower = gamepad.left_stick_x * (maxSpeedMultiplier + 0.01); //multiplied by an extra 0.1 to counter imperfect strafing
         double rotationpower = rotation;
 
+        double rotX = xpower * Math.cos(-botHeading) - ypower * Math.sin(-botHeading); //always offset the robot's heading to only move in the four cardinal directions
+        double rotY = xpower * Math.sin(-botHeading) + ypower * Math.cos(-botHeading);
+        rotX = rotX * 1.1; //counter imperfect strafing
+
         //solve for power
         double denominator = Math.max(Math.abs(ypower) + Math.abs(xpower) + Math.abs(rotationpower), 1);
-        double frontLeftPower = (ypower + xpower + rotationpower) / denominator;
-        double backLeftPower = (ypower - xpower + rotationpower) / denominator;
-        double frontRightPower = (ypower - xpower - rotationpower) / denominator;
-        double backRightPower = (ypower + xpower - rotationpower) / denominator;
+        double frontLeftPower = (rotY + rotX + rotationpower) / denominator;
+        double backLeftPower = (rotY - rotX + rotationpower) / denominator;
+        double frontRightPower = (rotY - rotX - rotationpower) / denominator;
+        double backRightPower = (rotY + rotX - rotationpower) / denominator;
 
         //multiply calculated power with the speed control to obtain final power for the motors
         frontLeft.setPower(frontLeftPower);
