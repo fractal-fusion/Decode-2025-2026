@@ -66,6 +66,13 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             //update the gamepad2 states of the intake object for the rising edge detector to work
             intake.updateGamepad(gamepad2);
 
+            //automatic relocalization
+            if (limelight.isValidResult() && drivetrain.isSlowForRelocalization(follower)){
+                if (!new Pose().roughlyEquals(limelight.getRobotPose(), 1) && !limelight.isFar){ //recalibrate pose using limelight
+                    follower.setPose(limelight.getRobotPose());
+                }
+            }
+
             //drivetrain controls (field centric drive + autoalignment)
             if (gamepad1.right_bumper){
                 if (!drivetrain.isFollowing){
@@ -272,6 +279,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             telemetry.addData("current ramp position:", shooter.calculateRampPositionOdometry(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
             telemetry.addLine("------------------------------------------------------");
 
+            telemetry.addData("drivetrain velocity", follower.getVelocity().getMagnitude());
             telemetry.addData("drivetrain is far:", drivetrain.isFarOdometry(follower.getPose()));
             telemetry.addData("current target rpm close:", shooter.calculateShooterVelocityRPMOdometryClose(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
             telemetry.addData("current target rpm far:", shooter.calculateShooterVelocityRPMOdometryFar(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));

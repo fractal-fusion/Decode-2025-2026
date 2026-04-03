@@ -37,6 +37,7 @@ public class Drivetrain {
     public static double AUTO_ALIGN_GAIN_ODO = 0.65; //converts odometry bearing to power
     public static double AUTO_ALIGN_INTEGRAL_ODO = 0.005;
     public static double ODO_HEADING_VALID_RANGE = 1.5;
+    public static double RELOCALIZATION_VELOCITY_THRESHOLD = 0.01;
 
     public ElapsedTime integralTimer = new ElapsedTime();
 
@@ -202,6 +203,10 @@ public class Drivetrain {
 
     public boolean isFarOdometry(Pose currentPose){
         return currentPose.getY() < IS_FAR_THRESHOLD_Y;
+    }
+
+    public boolean isSlowForRelocalization(Follower follower){
+        return follower.getVelocity().getMagnitude() < RELOCALIZATION_VELOCITY_THRESHOLD;
     }
 
     public boolean ifSlowDriverOdometry(double distance){

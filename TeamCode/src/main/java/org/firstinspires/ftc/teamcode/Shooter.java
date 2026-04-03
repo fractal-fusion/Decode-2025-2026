@@ -69,7 +69,7 @@ public class Shooter{
     public boolean on = false; //boolean for on or off shooter
     public boolean cycling = false; //boolean for cycling or not
     public boolean passedThreshold = false; //boolean for once the shooter reaches velocity
-    public static double LOWER_THRESHOLD_RPM_OFFSET = TARGET_RPM_TOLERANCE_RPM_CLOSE;
+    public static double LOWER_THRESHOLD_RPM_OFFSET = TARGET_RPM_TOLERANCE_RPM_CLOSE; //set to close since passed threshold will be set to false regardless of close rpm offset if its "at" lower threshold;
     public int ballsShot = 0;
     private boolean wasAboveThreshold = false; //boolean for keeping track of balls shot
     private ElapsedTime shooterClosedTimer;

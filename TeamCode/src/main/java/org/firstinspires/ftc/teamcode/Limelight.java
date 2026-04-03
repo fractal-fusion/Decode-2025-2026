@@ -33,6 +33,10 @@ public class Limelight {
     private final int PGP_id = 22;
     private final int PPG_id = 23;
 
+    LowPassFilter xFilter = new LowPassFilter(0.5);
+    LowPassFilter yFilter = new LowPassFilter(0.5);
+
+
     public static double HEADING_FAR_RANGE_THRESHOLD = 0.61; //TODO: need to retune this
     public static double HEADING_OFFSET_CLOSE = 2.5; //offset for autoalign
     public static double HEADING_OFFSET_FAR = 0.5;
@@ -113,16 +117,27 @@ public class Limelight {
         }
     }
 
+    public boolean isValidResult(){
+        LLResult result = limelight.getLatestResult();
+        return result != null && result.isValid();
+    }
+
     public Pose getRobotPose(){
         LLResult result = limelight.getLatestResult();
 
         if (result != null && result.isValid()) {
-            Pose3D limelightPose = result.getBotpose();
-            Position limelightPoseInches = limelightPose.getPosition().toUnit(DistanceUnit.INCH);
+            Pose3D limelightPoseM1 = result.getBotpose();
+            Pose3D limelightPoseM2 = result.getBotpose_MT2();
+
+
+            Position limelightPoseInches = limelightPoseM2.getPosition().toUnit(DistanceUnit.INCH);
             double x = limelightPoseInches.y + 72;
             double y = -limelightPoseInches.x + 72;
-            double yaw = Math.toRadians(limelightPose.getOrientation().getYaw() - 90);
-            return new Pose(x, y, yaw);
+
+            limelight.updateRobotOrientation(limelightPoseM1.getOrientation().getYaw());
+
+            double yaw = Math.toRadians(limelightPoseM1.getOrientation().getYaw() - 90);
+            return new Pose(xFilter.filter(x), yFilter.filter(y), yaw);
 
         }
 
@@ -132,4 +147,18 @@ public class Limelight {
 //    public void setHeadingOffset(double offset){
 //        headingOffset = offset;
 //    }
+    private static class LowPassFilter {
+        private double filterGain;
+        private double smoothedValue = 0;
+
+        public LowPassFilter(double gain){
+            this.filterGain = gain;
+        }
+
+        public double filter(double newValue){
+            smoothedValue = (filterGain * newValue) + ((1 - filterGain) * smoothedValue);
+            return smoothedValue;
+        }
+}
+
 }
