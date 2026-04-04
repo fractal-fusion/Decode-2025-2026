@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -25,6 +26,12 @@ public class Drivetrain {
     public DcMotor frontRight;
     public DcMotor backRight;
     public DcMotor testWheel;
+    public Servo tiltLeft;
+    public Servo tiltRight;
+    public static double TILT_RIGHT_SERVO_OFFSET = 0; //offset for tilt since the servo teeth are a little off
+    public static double TILT_OFF_POSITION = 0;
+    public static double TILT_ON_POSITION = 0.2;
+
     public static String testWheelHardwareMapName = "frontright";
     public IMU imu;
 
@@ -38,7 +45,6 @@ public class Drivetrain {
     public static double AUTO_ALIGN_INTEGRAL_ODO = 0.005;
     public static double ODO_HEADING_VALID_RANGE = 1.5;
     public static double RELOCALIZATION_VELOCITY_THRESHOLD = 0.01;
-
     public ElapsedTime integralTimer = new ElapsedTime();
 
     public double integralSum = 0;
@@ -52,6 +58,7 @@ public class Drivetrain {
     public Gamepad previousGamepad = new Gamepad();
     public boolean grounded = false;
     public boolean isFollowing = false; //follower.isbusy doesn't work so this boolean will make sure hold pose or follow path is only called once
+    public boolean tilted = false;
     public Pose holdPose = new Pose();
 //    private Follower follower;
 
@@ -67,6 +74,14 @@ public class Drivetrain {
         backLeft = opMode.hardwareMap.get(DcMotor.class, "backleft");
         frontRight = opMode.hardwareMap.get(DcMotor.class, "frontright");
         backRight = opMode.hardwareMap.get(DcMotor.class, "backright");
+
+//        tiltLeft = opMode.hardwareMap.get(Servo.class, "tiltleft");
+//        tiltRight = opMode.hardwareMap.get(Servo.class, "tiltright");
+//
+//        tiltLeft.setDirection(Servo.Direction.FORWARD);
+//        tiltRight.setDirection(Servo.Direction.FORWARD);
+//
+//        setTiltPosition(0);
 
         testWheel = opMode.hardwareMap.get(DcMotor.class, testWheelHardwareMapName);
 
@@ -160,6 +175,11 @@ public class Drivetrain {
         backRight.setPower(backRightPower);
     }
 
+//    public void setTiltPosition(double position) {
+//        tiltLeft.setPosition(position);
+//        tiltRight.setPosition(position + TILT_RIGHT_SERVO_OFFSET);
+//    }
+
     public double calculateAutoAlignPowerLimelight(double bearing) {
         return Range.clip(bearing * AUTO_ALIGN_GAIN_LIMELIGHT, -AUTO_ALIGN_MAX_SPEED, AUTO_ALIGN_MAX_SPEED);
     }
@@ -231,6 +251,20 @@ public class Drivetrain {
 //        else {
 //            holdPose = follower.getPose();
 //            follower.breakFollowing();
+//        }
+//    }
+//
+//    public void toggleTilt(Gamepad gamepad) {
+//        if (currentGamepad.right_bumper && !previousGamepad.right_bumper) {
+//            tilted = !tilted;
+//        }
+//
+//        //control the tilt based on the boolean
+//        if (tilted) {
+//            setTiltPosition(TILT_ON_POSITION);
+//        }
+//        else {
+//            setTiltPosition(TILT_OFF_POSITION);
 //        }
 //    }
 //

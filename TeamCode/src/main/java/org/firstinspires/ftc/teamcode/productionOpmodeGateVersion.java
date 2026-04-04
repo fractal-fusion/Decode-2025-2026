@@ -61,10 +61,13 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             follower.update();
             //update the imu with the rotation of the robot
             drivetrain.updateIMU();
+            //update the gamepad2 states of the drivetrain object for the rising edge detector to work
+            drivetrain.updateGamepad(gamepad1);
             //update the gamepad2 states of the shooter object for the rising edge detector to work
             shooter.updateGamepad(gamepad2);
             //update the gamepad2 states of the intake object for the rising edge detector to work
             intake.updateGamepad(gamepad2);
+
 
             //automatic relocalization
             if (limelight.isValidResult() && drivetrain.isSlowForRelocalization(follower)){
@@ -132,6 +135,8 @@ public class productionOpmodeGateVersion extends LinearOpMode {
 
                 drivetrain.drive(gamepad1);
             }
+            //toggle tilt
+//            drivetrain.toggleTilt(gamepad1);
 
             //mechanism intake control
             if(gamepad2.a) {
