@@ -62,7 +62,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             //update the imu with the rotation of the robot
             drivetrain.updateIMU();
             //update the gamepad2 states of the drivetrain object for the rising edge detector to work
-            drivetrain.updateGamepad(gamepad1);
+//            drivetrain.updateGamepad(gamepad1);
             //update the gamepad2 states of the shooter object for the rising edge detector to work
             shooter.updateGamepad(gamepad2);
             //update the gamepad2 states of the intake object for the rising edge detector to work
