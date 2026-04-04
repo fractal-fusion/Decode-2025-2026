@@ -41,10 +41,10 @@ public class Drivetrain {
     //constants used for tuning auto alignment
     public static double AUTO_ALIGN_MAX_SPEED = 0.8; //auto alignment speed is clipped to minimum negative this and maximum positive this (bilateral tolerance)
     public static double AUTO_ALIGN_GAIN_LIMELIGHT = 0.0175; //converts tx from limelight to power
-    public static double AUTO_ALIGN_GAIN_ODO = 0.65; //converts odometry bearing to power
+    public static double AUTO_ALIGN_GAIN_ODO = 0.8; //converts odometry bearing to power
     public static double AUTO_ALIGN_INTEGRAL_ODO = 0.005;
     public static double ODO_HEADING_VALID_RANGE = 1.5;
-    public static double RELOCALIZATION_VELOCITY_THRESHOLD = 0.01;
+    public static double RELOCALIZATION_VELOCITY_THRESHOLD = 0.008;
     public ElapsedTime integralTimer = new ElapsedTime();
 
     public double integralSum = 0;

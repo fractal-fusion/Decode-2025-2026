@@ -70,7 +70,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
 
 
             //automatic relocalization
-            if (limelight.isValidResult() && drivetrain.isSlowForRelocalization(follower)){
+            if (limelight.isValidResult() && drivetrain.isSlowForRelocalization(follower) && !drivetrain.isFarOdometry(follower.getPose())){
                 if (!new Pose().roughlyEquals(limelight.getRobotPose(), 1) && !limelight.isFar){ //recalibrate pose using limelight
                     follower.setPose(limelight.getRobotPose());
                 }
