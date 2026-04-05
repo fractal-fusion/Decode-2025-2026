@@ -50,7 +50,7 @@ public class Drivetrain {
     public double integralSum = 0;
 
     public static double AUTO_ALIGN_DRIVE_POWER_MULTIPLIER_MIDPOINT = 0.45; //half of max power
-    public static double IS_FAR_THRESHOLD_Y = 40; //less than this Y value is considered far
+    public static double IS_FAR_THRESHOLD_Y = 60; //less than this Y value is considered far
 
     public static double FUTURE_VELOCITY_TIME = 0.15;
 

@@ -23,8 +23,8 @@ public class PoseManager {
     public static Pose RED_GOAL_DISTANCE_POSITION = new Pose(130, 130);
     public static Pose BLUE_GOAL_DISTANCE_POSITION = RED_GOAL_DISTANCE_POSITION.mirror();
 
-    public static double RED_GOAL_AUTOALIGN_X = 140;
-    public static double RED_GOAL_AUTOALIGN_Y = 140;
+    public static double RED_GOAL_AUTOALIGN_X = 135;
+    public static double RED_GOAL_AUTOALIGN_Y = 135;
 
     public static Pose RED_GOAL_AUTOALIGN_POSITION = new Pose(RED_GOAL_AUTOALIGN_X, RED_GOAL_AUTOALIGN_Y);
     public static Pose BLUE_GOAL_AUTOALIGN_POSITION = new Pose(RED_GOAL_AUTOALIGN_X, RED_GOAL_AUTOALIGN_Y).mirror();

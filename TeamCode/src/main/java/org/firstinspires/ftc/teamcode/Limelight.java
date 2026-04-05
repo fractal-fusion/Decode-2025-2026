@@ -33,8 +33,8 @@ public class Limelight {
     private final int PGP_id = 22;
     private final int PPG_id = 23;
 
-    LowPassFilter xFilter = new LowPassFilter(0.5);
-    LowPassFilter yFilter = new LowPassFilter(0.5);
+    LowPassFilter xFilter = new LowPassFilter(0.1);
+    LowPassFilter yFilter = new LowPassFilter(0.1);
 
 
     public static double HEADING_FAR_RANGE_THRESHOLD = 0.61; //TODO: need to retune this
