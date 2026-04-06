@@ -36,9 +36,10 @@ public class Limelight {
     public static double HEADING_VALID_RANGE = 5; //valid heading range for regression and shooting to be 100% accurate
 
     public Timer relocalizationTimer;
-    public static double RELOCALIZATION_INTERVAL_SECONDS = 10;
-    private ArrayList<Pose> SamplePoses = new ArrayList<>();
-    public static double MAX_RELOCALIZATION_SAMPLES;
+    public static double RELOCALIZATION_INTERVAL_SECONDS = 5;
+    public ArrayList<Pose> SamplePoses = new ArrayList<>();
+    public static int MAX_RELOCALIZATION_SAMPLES = 4;
+    public static int RELOCALIZATION_SAMPLE_THRESHOLD = 3; //how many samples is enough to relocalize
     public static double RELOCALIZATION_OUTLIER_THRESHOLD_INCHES = 8;
 
     public boolean isFar;
@@ -124,7 +125,7 @@ public class Limelight {
     }
 
     public boolean isReadyToRelocalize(){
-        return relocalizationTimer.getElapsedTimeSeconds() > RELOCALIZATION_INTERVAL_SECONDS && SamplePoses.size() == MAX_RELOCALIZATION_SAMPLES;
+        return relocalizationTimer.getElapsedTimeSeconds() > RELOCALIZATION_INTERVAL_SECONDS && SamplePoses.size() >= RELOCALIZATION_SAMPLE_THRESHOLD;
     }
 
     public Pose getSamplePose(){
@@ -186,7 +187,7 @@ public class Limelight {
             sinSum += Math.sin(filteredPose.getHeading());
             cosSum += Math.cos(filteredPose.getHeading());
         }
-        Pose averagePose = new Pose(xSum/filteredPoses.size(), ySum/filteredPoses.size(), Math.atan2(sinSum, cosSum)/filteredPoses.size());
+        Pose averagePose = new Pose(xSum/filteredPoses.size(), ySum/filteredPoses.size(), Math.atan2(sinSum/filteredPoses.size(), cosSum/filteredPoses.size()));
 
         if (filteredPoses.isEmpty()) {
             return new Pose(); //return nothing to prevent divide by zero
@@ -207,6 +208,10 @@ public class Limelight {
 
     public void clearSamplePoses(){
         SamplePoses.clear();
+    }
+
+    public void resetRelocalizationTimer(){
+        relocalizationTimer.resetTimer();
     }
 
 //    public void setHeadingOffset(double offset){

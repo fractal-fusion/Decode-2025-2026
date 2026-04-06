@@ -75,6 +75,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
                 if (limelight.isReadyToRelocalize()){
                     if (!new Pose().roughlyEquals(limelight.getFilteredPose(), 1)){ //recalibrate pose using limelight
                         follower.setPose(limelight.getFilteredPose());
+                        limelight.resetRelocalizationTimer();
                     }
                 }
                 else {
@@ -297,6 +298,11 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             telemetry.addData("drivetrain is far:", drivetrain.isFarOdometry(follower.getPose()));
             telemetry.addData("current target rpm close:", shooter.calculateShooterVelocityRPMOdometryClose(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
             telemetry.addData("current target rpm far:", shooter.calculateShooterVelocityRPMOdometryFar(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)));
+            telemetry.addLine("------------------------------------------------------");
+
+            telemetry.addData("current relocalization timer", limelight.relocalizationTimer.getElapsedTimeSeconds());
+            telemetry.addData("can relocalize", limelight.isReadyToRelocalize());
+            telemetry.addData("current samples", limelight.SamplePoses.size());
 
             Drawing.drawDebug(follower);
 
