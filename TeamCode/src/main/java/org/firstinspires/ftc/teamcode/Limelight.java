@@ -1,27 +1,20 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.pedropathing.ftc.FTCCoordinates;
-import com.pedropathing.ftc.InvertedFTCCoordinates;
-import com.pedropathing.geometry.PedroCoordinates;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.util.Timer;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.Collections;
 
 @Config
 public class Limelight {
@@ -33,14 +26,20 @@ public class Limelight {
     private final int PGP_id = 22;
     private final int PPG_id = 23;
 
-    LowPassFilter xFilter = new LowPassFilter(0.1);
-    LowPassFilter yFilter = new LowPassFilter(0.1);
+    LowPassFilter xFilter = new LowPassFilter(0.5);
+    LowPassFilter yFilter = new LowPassFilter(0.5);
 
 
     public static double HEADING_FAR_RANGE_THRESHOLD = 0.61; //TODO: need to retune this
     public static double HEADING_OFFSET_CLOSE = 2.5; //offset for autoalign
     public static double HEADING_OFFSET_FAR = 0.5;
     public static double HEADING_VALID_RANGE = 5; //valid heading range for regression and shooting to be 100% accurate
+
+    public Timer relocalizationTimer;
+    public static double RELOCALIZATION_INTERVAL_SECONDS = 10;
+    private ArrayList<Pose> SamplePoses = new ArrayList<>();
+    public static double MAX_RELOCALIZATION_SAMPLES;
+    public static double RELOCALIZATION_OUTLIER_THRESHOLD_INCHES = 8;
 
     public boolean isFar;
 
@@ -55,6 +54,8 @@ public class Limelight {
         limelight.setPollRateHz(100);
         limelight.pipelineSwitch(0);
         limelight.start();
+
+        relocalizationTimer = new Timer();
     }
     public void telemetryAprilTag() {
         LLResult result = limelight.getLatestResult();
@@ -122,7 +123,11 @@ public class Limelight {
         return result != null && result.isValid();
     }
 
-    public Pose getRobotPose(){
+    public boolean isReadyToRelocalize(){
+        return relocalizationTimer.getElapsedTimeSeconds() > RELOCALIZATION_INTERVAL_SECONDS && SamplePoses.size() == MAX_RELOCALIZATION_SAMPLES;
+    }
+
+    public Pose getSamplePose(){
         LLResult result = limelight.getLatestResult();
 
         if (result != null && result.isValid()) {
@@ -142,6 +147,66 @@ public class Limelight {
         }
 
         return new Pose();
+    }
+
+    public Pose getFilteredPose(){
+
+        //obtain all x and y values
+        ArrayList<Double> poseXValues = new ArrayList<>();
+        ArrayList<Double> poseYValues = new ArrayList<>();
+        for (Pose samplePose : SamplePoses) {
+            poseXValues.add(samplePose.getX());
+            poseYValues.add(samplePose.getY());
+        }
+
+        //find medians
+        Collections.sort(poseXValues);
+        Collections.sort(poseYValues);
+
+        double medianX = poseXValues.get(Math.floorDiv(poseXValues.size(), 2));
+        double medianY = poseYValues.get(Math.floorDiv(poseYValues.size(), 2));
+
+        //filter poses
+        ArrayList<Pose> filteredPoses = new ArrayList<>();
+
+        for (Pose samplePose : SamplePoses) {
+            if (Math.abs(samplePose.getX() - medianX) <= RELOCALIZATION_OUTLIER_THRESHOLD_INCHES && Math.abs(samplePose.getY() - medianY) <= RELOCALIZATION_OUTLIER_THRESHOLD_INCHES) {
+                filteredPoses.add(samplePose);
+            }
+        }
+
+        //calculate average
+        double xSum = 0;
+        double ySum = 0;
+        double sinSum = 0;
+        double cosSum = 0;
+        for (Pose filteredPose : filteredPoses) {
+            xSum += filteredPose.getX();
+            ySum += filteredPose.getY();
+            sinSum += Math.sin(filteredPose.getHeading());
+            cosSum += Math.cos(filteredPose.getHeading());
+        }
+        Pose averagePose = new Pose(xSum/filteredPoses.size(), ySum/filteredPoses.size(), Math.atan2(sinSum, cosSum)/filteredPoses.size());
+
+        if (filteredPoses.isEmpty()) {
+            return new Pose(); //return nothing to prevent divide by zero
+        }
+
+        return averagePose;
+    }
+
+    public void updateFilteredPoseSamples(){
+        if (SamplePoses.size() < MAX_RELOCALIZATION_SAMPLES){
+            SamplePoses.add(getSamplePose());
+        }
+        else{
+            SamplePoses.remove(0);
+            SamplePoses.add(getSamplePose());
+        }
+    }
+
+    public void clearSamplePoses(){
+        SamplePoses.clear();
     }
 
 //    public void setHeadingOffset(double offset){

@@ -55,8 +55,8 @@ public class productionOpmodeManualVersion extends LinearOpMode {
                 drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPowerLimelight(limelight.getBearing()));
                 drivetrain.holdPose = follower.getPose();
 
-                if (!new Pose().roughlyEquals(limelight.getRobotPose(), 1)){ //recalibrate pose using limelight TODO: relocalize limelight
-                    follower.setPose(limelight.getRobotPose());
+                if (!new Pose().roughlyEquals(limelight.getSamplePose(), 1)){ //recalibrate pose using limelight TODO: relocalize limelight
+                    follower.setPose(limelight.getSamplePose());
                 }
             }
             else if (gamepad1.a) {
@@ -206,7 +206,7 @@ public class productionOpmodeManualVersion extends LinearOpMode {
 
             telemetry.addLine("------------------------------------------------------");
             telemetry.addData("current robot pose:", follower.getPose());
-            telemetry.addData("camera robot pose:", limelight.getRobotPose());
+            telemetry.addData("camera robot pose:", limelight.getSamplePose());
             telemetry.addData("current robot odo angle:", drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalPose));
             telemetry.addData("current inches from goal:", drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose));
 
