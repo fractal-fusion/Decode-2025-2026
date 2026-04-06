@@ -41,8 +41,8 @@ public class Drivetrain {
     //constants used for tuning auto alignment
     public static double AUTO_ALIGN_MAX_SPEED = 0.8; //auto alignment speed is clipped to minimum negative this and maximum positive this (bilateral tolerance)
     public static double AUTO_ALIGN_GAIN_LIMELIGHT = 0.0175; //converts tx from limelight to power
-    public static double AUTO_ALIGN_GAIN_ODO = 0.8; //converts odometry bearing to power
-    public static double AUTO_ALIGN_DEADZONE_ODO = 0.05; //less than this stop applying micro power which shifts the robot
+    public static double AUTO_ALIGN_GAIN_ODO = 0.85; //converts odometry bearing to power
+    public static double AUTO_ALIGN_DEADZONE_ODO = 0.09; //less than this stop applying micro power which shifts the robot
     public static double AUTO_ALIGN_INTEGRAL_ODO = 0.005;
     public static double ODO_HEADING_VALID_RANGE = 1.5;
     public static double RELOCALIZATION_VELOCITY_THRESHOLD = 0.1;
@@ -51,7 +51,7 @@ public class Drivetrain {
     public double integralSum = 0;
 
     public static double AUTO_ALIGN_DRIVE_POWER_MULTIPLIER_MIDPOINT = 0.45; //half of max power
-    public static double IS_FAR_THRESHOLD_Y = 60; //less than this Y value is considered far
+    public static double IS_FAR_THRESHOLD_Y = 40; //less than this Y value is considered far
 
     public static double FUTURE_VELOCITY_TIME = 0.15;
 
@@ -186,7 +186,7 @@ public class Drivetrain {
     }
 
     public double calculateAutoAlignPowerOdo(double bearing) {
-        if (Math.abs(bearing - AUTO_ALIGN_DEADZONE_ODO) > AUTO_ALIGN_DEADZONE_ODO){ //send power when not between -deadzone or +deadzone
+        if (Math.abs(bearing) > AUTO_ALIGN_DEADZONE_ODO){ //send power when not between -deadzone or +deadzone
             return Range.clip(bearing * AUTO_ALIGN_GAIN_ODO, -AUTO_ALIGN_MAX_SPEED, AUTO_ALIGN_MAX_SPEED);
 
         }

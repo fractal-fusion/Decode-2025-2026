@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.util.Timer;
 import com.qualcomm.hardware.limelightvision.LLResult;
@@ -38,8 +39,8 @@ public class Limelight {
     public Timer relocalizationTimer;
     public static double RELOCALIZATION_INTERVAL_SECONDS = 5;
     public ArrayList<Pose> SamplePoses = new ArrayList<>();
-    public static int MAX_RELOCALIZATION_SAMPLES = 4;
-    public static int RELOCALIZATION_SAMPLE_THRESHOLD = 3; //how many samples is enough to relocalize
+    public static int MAX_RELOCALIZATION_SAMPLES = 6;
+    public static int RELOCALIZATION_SAMPLE_THRESHOLD = 5; //how many samples is enough to relocalize
     public static double RELOCALIZATION_OUTLIER_THRESHOLD_INCHES = 8;
 
     public boolean isFar;
@@ -150,7 +151,7 @@ public class Limelight {
         return new Pose();
     }
 
-    public Pose getFilteredPose(){
+    public Pose getFilteredPose(Follower follower){
 
         //obtain all x and y values
         ArrayList<Double> poseXValues = new ArrayList<>();
@@ -187,7 +188,7 @@ public class Limelight {
             sinSum += Math.sin(filteredPose.getHeading());
             cosSum += Math.cos(filteredPose.getHeading());
         }
-        Pose averagePose = new Pose(xSum/filteredPoses.size(), ySum/filteredPoses.size(), Math.atan2(sinSum/filteredPoses.size(), cosSum/filteredPoses.size()));
+        Pose averagePose = new Pose(xSum/filteredPoses.size(), ySum/filteredPoses.size(), follower.getHeading());
 
         if (filteredPoses.isEmpty()) {
             return new Pose(); //return nothing to prevent divide by zero

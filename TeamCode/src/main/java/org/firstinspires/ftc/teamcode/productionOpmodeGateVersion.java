@@ -68,13 +68,12 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             //update the gamepad2 states of the intake object for the rising edge detector to work
             intake.updateGamepad(gamepad2);
 
-
             //automatic relocalization
-            if (limelight.isValidResult() && drivetrain.isSlowForRelocalization(follower)){
+            if (limelight.isValidResult() && drivetrain.isSlowForRelocalization(follower) && !drivetrain.isFarOdometry(follower.getPose())){
 
                 if (limelight.isReadyToRelocalize()){
-                    if (!new Pose().roughlyEquals(limelight.getFilteredPose(), 1)){ //recalibrate pose using limelight
-                        follower.setPose(limelight.getFilteredPose());
+                    if (!new Pose().roughlyEquals(limelight.getFilteredPose(follower), 1)){ //recalibrate pose using limelight
+                        follower.setPose(limelight.getFilteredPose(follower));
                         limelight.resetRelocalizationTimer();
                     }
                 }

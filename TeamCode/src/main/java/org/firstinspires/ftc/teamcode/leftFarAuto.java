@@ -117,7 +117,7 @@ public class leftFarAuto extends LinearOpMode {
             updateStateMachine();
 
             shooter.update();
-            shooter.controlShooterGate();
+//            shooter.controlShooterGate();
 
             telemetry.addData("shooter left velocity:", shooter.shooterLeftGetVelocity() * Shooter.TICKS_PER_SECOND_TO_RPM);
             telemetry.addData("shooter right velocity:", shooter.shooterRightGetVelocity() * Shooter.TICKS_PER_SECOND_TO_RPM);
