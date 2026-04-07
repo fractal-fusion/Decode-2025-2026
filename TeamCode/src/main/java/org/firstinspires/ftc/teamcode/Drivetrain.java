@@ -1,20 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-import static org.firstinspires.ftc.teamcode.Tuning.follower;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.math.Vector;
+import com.pedropathing.util.Timer;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -42,13 +38,27 @@ public class Drivetrain {
     public static double AUTO_ALIGN_MAX_SPEED = 0.8; //auto alignment speed is clipped to minimum negative this and maximum positive this (bilateral tolerance)
     public static double AUTO_ALIGN_GAIN_LIMELIGHT = 0.0175; //converts tx from limelight to power
     public static double AUTO_ALIGN_GAIN_ODO = 0.85; //converts odometry bearing to power
-    public static double AUTO_ALIGN_DEADZONE_ODO = 0.09; //less than this stop applying micro power which shifts the robot
+    public static double SECONDARY_PID_THRESHOLD = 0.2; //less than this stop applying micro power which shifts the robot
     public static double AUTO_ALIGN_INTEGRAL_ODO = 0.005;
     public static double ODO_HEADING_VALID_RANGE = 1.5;
     public static double RELOCALIZATION_VELOCITY_THRESHOLD = 0.1;
-    public ElapsedTime integralTimer = new ElapsedTime();
 
+    public static double P = 0.8;
+    public static double I = 0;
+    public static double D = 0;
+
+    public static double SECONDARY_P = 2;
+    public static double SECONDARY_I = 0;
+    public static double SECONDARY_D = 0;
+    public Timer headingPIDTimer = new Timer();
+    public Timer secondaryHeadingPIDTimer = new Timer();
     public double integralSum = 0;
+
+    public double lastError = 0;
+
+    public double secondaryIntegralSum = 0;
+
+    public double secondaryLastError = 0;
 
     public static double AUTO_ALIGN_DRIVE_POWER_MULTIPLIER_MIDPOINT = 0.45; //half of max power
     public static double IS_FAR_THRESHOLD_Y = 40; //less than this Y value is considered far
@@ -185,12 +195,33 @@ public class Drivetrain {
         return Range.clip(bearing * AUTO_ALIGN_GAIN_LIMELIGHT, -AUTO_ALIGN_MAX_SPEED, AUTO_ALIGN_MAX_SPEED);
     }
 
-    public double calculateAutoAlignPowerOdo(double bearing) {
-        if (Math.abs(bearing) > AUTO_ALIGN_DEADZONE_ODO){ //send power when not between -deadzone or +deadzone
-            return Range.clip(bearing * AUTO_ALIGN_GAIN_ODO, -AUTO_ALIGN_MAX_SPEED, AUTO_ALIGN_MAX_SPEED);
+    public double calculateAutoAlignPowerOdo(double error) {
+        if (Math.abs(error) > SECONDARY_PID_THRESHOLD){ //send power when not between -deadzone or +deadzone
+            double derivative = error - lastError;
 
+            integralSum = integralSum + (error * headingPIDTimer.getElapsedTimeSeconds());
+
+            double power = (P * error) + (I * integralSum) + (D * derivative);
+
+            lastError = error;
+
+            headingPIDTimer.resetTimer();
+
+            return power;
         }
-        return 0;
+        else{
+            double derivative = error - secondaryLastError;
+
+            secondaryIntegralSum = secondaryIntegralSum + (error * secondaryHeadingPIDTimer.getElapsedTimeSeconds());
+
+            double power = (SECONDARY_P * error) + (SECONDARY_I * secondaryIntegralSum) + (SECONDARY_D * derivative);
+
+            secondaryLastError = error;
+
+            secondaryHeadingPIDTimer.resetTimer();
+
+            return power;
+        }
     }
 
 //    public void updateIntegralSum(double bearing, double seconds) {

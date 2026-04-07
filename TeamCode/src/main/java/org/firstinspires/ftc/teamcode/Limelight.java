@@ -37,7 +37,7 @@ public class Limelight {
     public static double HEADING_VALID_RANGE = 5; //valid heading range for regression and shooting to be 100% accurate
 
     public Timer relocalizationTimer;
-    public static double RELOCALIZATION_INTERVAL_SECONDS = 5;
+    public static double RELOCALIZATION_INTERVAL_SECONDS = 10;
     public ArrayList<Pose> SamplePoses = new ArrayList<>();
     public static int MAX_RELOCALIZATION_SAMPLES = 6;
     public static int RELOCALIZATION_SAMPLE_THRESHOLD = 5; //how many samples is enough to relocalize

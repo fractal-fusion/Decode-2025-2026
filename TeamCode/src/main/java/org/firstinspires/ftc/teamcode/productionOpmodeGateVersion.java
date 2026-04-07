@@ -119,22 +119,14 @@ public class productionOpmodeGateVersion extends LinearOpMode {
                 drivetrain.holdPose = follower.getPose();
             }
             else if (gamepad1.a) {
-                //pedro auto align
-                if(!drivetrain.isFollowing){
-                    follower.turnTo(drivetrain.calculateOdoGoalAngle(follower.getPose(), PoseManager.currentGoalAutoAlignPose));
-                    drivetrain.isFollowing = true;
-                }
+                //pedro auto align (BAD)
+//                if(!drivetrain.isFollowing){
+//                    follower.turnTo(drivetrain.calculateOdoGoalAngle(follower.getPose(), PoseManager.currentGoalAutoAlignPose));
+//                    drivetrain.isFollowing = true;
+//                }
 
                 //proportional drive auto align
-//                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPowerOdo(-drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose)));
-
-                //untested integral sum
-//                if (drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose) >= -Drivetrain.ODO_HEADING_VALID_RANGE && drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose) <= Drivetrain.ODO_HEADING_VALID_RANGE){
-//                    drivetrain.integralTimer.reset();
-//                }
-//                else {
-//                    drivetrain.updateIntegralSum(-drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose), drivetrain.integralTimer.seconds());
-//                }
+                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPowerOdo(-drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose)));
 
                 drivetrain.holdPose = follower.getPose();
             }
@@ -309,7 +301,9 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             telemetry.addData("current relocalization timer", limelight.relocalizationTimer.getElapsedTimeSeconds());
             telemetry.addData("can relocalize", limelight.isReadyToRelocalize());
             telemetry.addData("current samples", limelight.SamplePoses.size());
+            telemetry.addLine("------------------------------------------------------");
 
+            telemetry.addData("heading PID timer", drivetrain.headingPIDTimer.getElapsedTimeSeconds());
             Drawing.drawDebug(follower);
 
             telemetry.update();
