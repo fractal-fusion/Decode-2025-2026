@@ -121,7 +121,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             else if (gamepad1.a) {
                 //pedro auto align
                 if(!drivetrain.isFollowing){
-                    follower.turnTo(drivetrain.calculateOdoGoalAngle(follower.getPose(), PoseManager.currentRealGoalPose));
+                    follower.turnTo(drivetrain.calculateOdoGoalAngle(follower.getPose(), PoseManager.currentGoalAutoAlignPose));
                     drivetrain.isFollowing = true;
                 }
 
