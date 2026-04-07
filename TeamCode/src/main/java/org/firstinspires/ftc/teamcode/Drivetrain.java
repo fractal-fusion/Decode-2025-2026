@@ -197,6 +197,15 @@ public class Drivetrain {
 //        integralSum += bearing * seconds;
 //    }
 
+    public double calculateOdoGoalAngle(Pose robotPose, Pose goalPose) {
+        double vectorY = goalPose.getY() - robotPose.getY();
+        double vectorX = goalPose.getX() - robotPose.getX();
+
+        double angle = Math.atan2(vectorY, vectorX);
+        if (angle < 0) angle += Math.PI * 2;
+
+        return angle;
+    }
     public double calculateOdoGoalBearing(Pose robotPose, Pose goalPose) {
         double vectorY = goalPose.getY() - robotPose.getY();
         double vectorX = goalPose.getX() - robotPose.getX();

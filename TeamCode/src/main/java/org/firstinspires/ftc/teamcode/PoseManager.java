@@ -19,6 +19,10 @@ public class PoseManager {
     public static Pose currentPose = new Pose();
 //    public static Team currentTeam = Team.NONE;
 
+    //real coordinates for pedro calculation
+    public static Pose RED_GOAL_REAL_POSITION = new Pose(144, 144);
+    public static Pose BLUE_GOAL_REAL_POSITION = RED_GOAL_REAL_POSITION.mirror();
+
     //initialize where the team-specific poses actually are
     public static Pose RED_GOAL_DISTANCE_POSITION = new Pose(130, 130);
     public static Pose BLUE_GOAL_DISTANCE_POSITION = RED_GOAL_DISTANCE_POSITION.mirror();
@@ -40,7 +44,7 @@ public class PoseManager {
     public static Pose currentGoalAutoAlignPose = RED_GOAL_AUTOALIGN_POSITION;
     public static Pose currentLeverPose = RED_LEVER_POSITION;
     public static Pose currentFarPose = RED_FAR_POSITION;
-
+    public static Pose currentRealGoalPose = RED_GOAL_REAL_POSITION;
 
     //initalize and store the team-specific poses into the correct storage variables, as well as store the current pose
     public static void initializeTeleopPoses(Team team, Pose currentpose){
@@ -49,12 +53,14 @@ public class PoseManager {
             currentGoalAutoAlignPose = BLUE_GOAL_AUTOALIGN_POSITION;
             currentLeverPose = BLUE_LEVER_POSITION;
             currentFarPose = BLUE_FAR_POSITION;
+            currentRealGoalPose = BLUE_GOAL_REAL_POSITION;
         }
         else if (team == Team.RED) {
             currentGoalPose = RED_GOAL_DISTANCE_POSITION;
             currentGoalAutoAlignPose = RED_GOAL_AUTOALIGN_POSITION;
             currentLeverPose = RED_LEVER_POSITION;
             currentFarPose = RED_FAR_POSITION;
+            currentRealGoalPose = RED_GOAL_REAL_POSITION;
         }
 
         currentPose = currentpose;

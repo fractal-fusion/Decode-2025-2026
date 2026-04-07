@@ -119,7 +119,14 @@ public class productionOpmodeGateVersion extends LinearOpMode {
                 drivetrain.holdPose = follower.getPose();
             }
             else if (gamepad1.a) {
-                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPowerOdo(-drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose)));
+                //pedro auto align
+                if(!drivetrain.isFollowing){
+                    follower.turnTo(drivetrain.calculateOdoGoalAngle(follower.getPose(), PoseManager.currentRealGoalPose));
+                    drivetrain.isFollowing = true;
+                }
+
+                //proportional drive auto align
+//                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPowerOdo(-drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose)));
 
                 //untested integral sum
 //                if (drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose) >= -Drivetrain.ODO_HEADING_VALID_RANGE && drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose) <= Drivetrain.ODO_HEADING_VALID_RANGE){
