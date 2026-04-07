@@ -44,10 +44,10 @@ public class Shooter{
 
     public static double CLOSE_RAMP_SCORE_POSITION = 0.02;
     public static double CLOSE_TARGET_RPM = 3350;
-    public static double CLOSE_AUTO_TARGET_RPM = 3050;
+    public static double CLOSE_AUTO_TARGET_RPM = 2900;
     public static double CLOSE_AUTO_TARGET_RPM_PRELOAD = CLOSE_AUTO_TARGET_RPM;
-    public static double CLOSE_AUTO_TARGET_RPM_EDGE = 3250;
-    public static double CLOSE_AUTO_TARGET_RPM_PARK = 3050;
+    public static double CLOSE_AUTO_TARGET_RPM_EDGE = 3150;
+    public static double CLOSE_AUTO_TARGET_RPM_PARK = 3000;
 
     public static double CLOSE_DEBOUNCE = 0.4;
 
@@ -464,6 +464,52 @@ public class Shooter{
 
         opMode.telemetry.addData("servopos:", TESTSERVO.getPosition());
 //        opMode.telemetry.update();
+    }
+
+    public void turnOffShooterAuto(){
+        turnOffShooter();
+        setRampPosition(0);
+        on = false;
+    }
+
+    public void turnOnShooterAuto(){
+        turnOnShooter();
+        on = true;
+    }
+
+    public void initalizeBurstFar(){
+        setCurrentShooterClosedSeconds(FAR_DEBOUNCE);
+        setCurrentTargetRPMTicksPerSecond(FAR_TARGET_RPM);
+        setRampPosition(FAR_RAMP_SCORE_POSITION);
+        setTargetRPMToleranceRPM(TARGET_RPM_TOLERANCE_RPM_FAR);
+    }
+
+    public void initializeBurstPark(){
+        setCurrentShooterClosedSeconds(CLOSE_DEBOUNCE);
+        setCurrentTargetRPMTicksPerSecond(CLOSE_AUTO_TARGET_RPM_PARK);
+        setRampPosition(CLOSE_RAMP_SCORE_POSITION);
+        setTargetRPMToleranceRPM(TARGET_RPM_TOLERANCE_RPM_CLOSE);
+    }
+
+    public void initializeBurstCloseEdge(){
+        setCurrentShooterClosedSeconds(CLOSE_DEBOUNCE);
+        setCurrentTargetRPMTicksPerSecond(CLOSE_AUTO_TARGET_RPM_EDGE);
+        setRampPosition(CLOSE_RAMP_SCORE_POSITION);
+        setTargetRPMToleranceRPM(TARGET_RPM_TOLERANCE_RPM_CLOSE);
+    }
+
+    public void initializeBurstClosePreload(){
+        setCurrentShooterClosedSeconds(CLOSE_DEBOUNCE);
+        setCurrentTargetRPMTicksPerSecond(CLOSE_AUTO_TARGET_RPM_PRELOAD);
+        setRampPosition(CLOSE_RAMP_SCORE_POSITION);
+        setTargetRPMToleranceRPM(TARGET_RPM_TOLERANCE_RPM_CLOSE);
+    }
+
+    public void initializeBurstClose(){
+        setCurrentShooterClosedSeconds(CLOSE_DEBOUNCE);
+        setCurrentTargetRPMTicksPerSecond(CLOSE_AUTO_TARGET_RPM);
+        setRampPosition(CLOSE_RAMP_SCORE_POSITION);
+        setTargetRPMToleranceRPM(TARGET_RPM_TOLERANCE_RPM_CLOSE);
     }
 
 
