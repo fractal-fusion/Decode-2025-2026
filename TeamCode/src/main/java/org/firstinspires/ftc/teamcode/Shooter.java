@@ -42,7 +42,7 @@ public class Shooter{
 
     public static double FAR_TARGET_RPM_TICKS_PER_SECOND = FAR_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
 
-    public static double CLOSE_RAMP_SCORE_POSITION = 0.02;
+    public static double CLOSE_RAMP_SCORE_POSITION = 0.04;
     public static double CLOSE_TARGET_RPM = 3350;
     public static double CLOSE_AUTO_TARGET_RPM = 2900;
     public static double CLOSE_AUTO_TARGET_RPM_PRELOAD = CLOSE_AUTO_TARGET_RPM;

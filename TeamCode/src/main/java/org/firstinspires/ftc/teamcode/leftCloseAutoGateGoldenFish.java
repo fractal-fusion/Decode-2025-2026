@@ -331,7 +331,7 @@ public class leftCloseAutoGateGoldenFish extends LinearOpMode {
                         init = false;
                     }
                     else {
-                        follower.followPath(collectBalls, 0.7, true);
+                        follower.followPath(collectBalls, true);
                         if (pathTimer.getElapsedTimeSeconds() > COLLECT_BALLS_WAIT_TIME) {
                             setPathState(8);
                         }
@@ -396,7 +396,7 @@ public class leftCloseAutoGateGoldenFish extends LinearOpMode {
                         init = false;
                     }
                     else {
-                        follower.followPath(collectBalls, 0.7, true);
+                        follower.followPath(collectBalls, true);
                         if (pathTimer.getElapsedTimeSeconds() > SECOND_COLLECT_BALLS_WAIT_TIME) {
                             setPathState(12);
                         }

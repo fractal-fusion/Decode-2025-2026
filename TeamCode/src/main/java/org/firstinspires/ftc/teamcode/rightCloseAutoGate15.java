@@ -36,8 +36,8 @@ public class rightCloseAutoGate15 extends LinearOpMode {
     public static double AUTO_Y_OFFSET = 0;
     public static double INTAKE_X_OFFSET = 0;
 //    public static double RELEASE_BALLS_Y = 74.2;
-    public static double COLLECT_BALLS_Y = 60 + 1.7;
-    public static double COLLECT_HEADING = 33;
+    public static double COLLECT_BALLS_Y = 60 + 1;
+    public static double COLLECT_HEADING = 32;
     public static double SCORE_HEADING_OFFSET = -0.5; //score heading offset since center of goals are not exactly 45 degrees
     public static double SCORE_HEADING_PRELOAD_TOLERANCE = 0.1;
     public static double SCORE_HEADING_PRELOAD = 44.5;
@@ -54,7 +54,7 @@ public class rightCloseAutoGate15 extends LinearOpMode {
     public double edgeScoreHeading = Math.toRadians(48 + SCORE_HEADING_OFFSET);
     private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop, goToWallHumanPlayer, grabPickupHumanPlayer, scorePickupHumanPlayer, goToReleaseBalls, collectBalls, moveBackCollectBalls, scoreCollectBalls, goToPark; //define path chains (muliple paths interpolated)
 
-    private final Pose startPose = new Pose(129, 115+AUTO_Y_OFFSET, Math.toRadians(180)); // Start Pose of our robot
+    private final Pose startPose = new Pose(129, 116+AUTO_Y_OFFSET, Math.toRadians(180)); // Start Pose of our robot
     private final Pose scorePose = new Pose(90, 94, scoreHeading);
     private final Pose edgeScorePose = new Pose(86.6, 76, edgeScoreHeading);
     private final Pose scorePreloadPose = new Pose(90, 94, Math.toRadians(SCORE_HEADING_PRELOAD));
