@@ -223,8 +223,8 @@ public class leftCloseAutoGateGoldenFish extends LinearOpMode {
                 }
                 else{ //move to scoring position
                     follower.followPath(scorePreload, true);
-                    initializeBurstClosePreload(); //prestart shooter
-                    turnOnShooterAuto();
+                    shooter.initializeBurstClosePreload(); //prestart shooter
+                    shooter.turnOnShooterAuto();
                     setPathState(1);
                 }
                 break;
@@ -271,8 +271,8 @@ public class leftCloseAutoGateGoldenFish extends LinearOpMode {
             case 3: //release preload and top row balls
                 if (!follower.isBusy()){
                     if (init){
-                        initializeBurstCloseEdge(); //prestart shooter
-                        turnOnShooterAuto();
+                        shooter.initializeBurstCloseEdge(); //prestart shooter
+                        shooter.turnOnShooterAuto();
                         init = false;
                     }
                     else{
@@ -318,7 +318,7 @@ public class leftCloseAutoGateGoldenFish extends LinearOpMode {
 
                             shooter.ballsShot = 6;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
-                            turnOffShooterAuto();
+                            shooter.turnOffShooterAuto();
                             setPathState(7);
                         }
                     }
@@ -350,8 +350,8 @@ public class leftCloseAutoGateGoldenFish extends LinearOpMode {
                 if (!follower.isBusy()) {
                     if (init){
 //                        intake.turnOffIntake();
-                        initializeBurstCloseEdge(); //prestart shooter
-                        turnOnShooterAuto();
+                        shooter.initializeBurstCloseEdge(); //prestart shooter
+                        shooter.turnOnShooterAuto();
                         shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                         init = false;
                     }
@@ -383,7 +383,7 @@ public class leftCloseAutoGateGoldenFish extends LinearOpMode {
 
                             shooter.ballsShot = 9;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
-                            turnOffShooterAuto();
+                            shooter.turnOffShooterAuto();
                             setPathState(11);
                         }
                     }
@@ -415,8 +415,8 @@ public class leftCloseAutoGateGoldenFish extends LinearOpMode {
                 if (!follower.isBusy()) {
                     if (init){
 //                        intake.turnOffIntake();
-                        initializeBurstCloseEdge(); //prestart shooter
-                        turnOnShooterAuto();
+                        shooter.initializeBurstCloseEdge(); //prestart shooter
+                        shooter.turnOnShooterAuto();
                         shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                         init = false;
                     }
@@ -448,7 +448,7 @@ public class leftCloseAutoGateGoldenFish extends LinearOpMode {
 
                             shooter.ballsShot = 12;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
-                            turnOffShooterAuto();
+                            shooter.turnOffShooterAuto();
                             setPathState(15);
                         }
                     }
@@ -470,8 +470,8 @@ public class leftCloseAutoGateGoldenFish extends LinearOpMode {
             case 16: //move to score position for top row
                 if (!follower.isBusy()) {
                     follower.followPath(scorePickupTop, true);
-                    initializeBurstPark(); //prestart shooter
-                    turnOnShooterAuto();
+                    shooter.initializeBurstPark(); //prestart shooter
+                    shooter.turnOnShooterAuto();
                     setPathState(17);
                 }
                 break;
@@ -497,7 +497,7 @@ public class leftCloseAutoGateGoldenFish extends LinearOpMode {
 
                             shooter.ballsShot = 6;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
-                            turnOffShooterAuto();
+                            shooter.turnOffShooterAuto();
                             setPathState(-1);
                         }
                     }
@@ -518,51 +518,6 @@ public class leftCloseAutoGateGoldenFish extends LinearOpMode {
                 }
                 break;
         } //run state machine
-    }
-
-    public void initializeBurstClose(){
-        shooter.setCurrentShooterClosedSeconds(Shooter.CLOSE_DEBOUNCE);
-        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM);
-        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
-        shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
-    }
-
-    public void initializeBurstClosePreload(){
-        shooter.setCurrentShooterClosedSeconds(Shooter.CLOSE_DEBOUNCE);
-        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM_PRELOAD);
-        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
-        shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
-    }
-
-    public void initializeBurstCloseEdge(){
-        shooter.setCurrentShooterClosedSeconds(Shooter.CLOSE_DEBOUNCE);
-        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM_EDGE);
-        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
-        shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
-    }
-    public void initializeBurstPark(){
-        shooter.setCurrentShooterClosedSeconds(Shooter.CLOSE_DEBOUNCE);
-        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM_PARK);
-        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
-        shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
-    }
-
-    public void initalizeBurstFar(){
-        shooter.setCurrentShooterClosedSeconds(Shooter.FAR_DEBOUNCE);
-        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.FAR_TARGET_RPM);
-        shooter.setRampPosition(Shooter.FAR_RAMP_SCORE_POSITION);
-        shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_FAR);
-    }
-
-    public void turnOnShooterAuto(){
-        shooter.turnOnShooter();
-        shooter.on = true;
-    }
-
-    public void turnOffShooterAuto(){
-        shooter.turnOffShooter();
-        shooter.setRampPosition(0);
-        shooter.on = false;
     }
 
     public void setPathState(int pState) {

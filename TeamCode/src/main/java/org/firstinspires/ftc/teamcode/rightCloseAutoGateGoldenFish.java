@@ -318,7 +318,7 @@ public class rightCloseAutoGateGoldenFish extends LinearOpMode {
 
                             shooter.ballsShot = 6;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
-                            shooter.turnOffShooterAuto();
+//                            shooter.turnOffShooterAuto();
                             setPathState(7);
                         }
                     }
@@ -383,7 +383,7 @@ public class rightCloseAutoGateGoldenFish extends LinearOpMode {
 
                             shooter.ballsShot = 9;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
-                            shooter.turnOffShooterAuto();
+//                            shooter.turnOffShooterAuto();
                             setPathState(11);
                         }
                     }
@@ -448,7 +448,7 @@ public class rightCloseAutoGateGoldenFish extends LinearOpMode {
 
                             shooter.ballsShot = 12;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
-                            shooter.turnOffShooterAuto();
+//                            shooter.turnOffShooterAuto();
                             setPathState(15);
                         }
                     }
@@ -497,7 +497,7 @@ public class rightCloseAutoGateGoldenFish extends LinearOpMode {
 
                             shooter.ballsShot = 6;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
-                            shooter.turnOffShooterAuto();
+//                            shooter.turnOffShooterAuto();
                             setPathState(-1);
                         }
                     }

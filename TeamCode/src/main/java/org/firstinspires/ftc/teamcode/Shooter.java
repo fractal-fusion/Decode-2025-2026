@@ -477,7 +477,7 @@ public class Shooter{
         on = true;
     }
 
-    public void initalizeBurstFar(){
+    public void initializeBurstFar(){
         setCurrentShooterClosedSeconds(FAR_DEBOUNCE);
         setCurrentTargetRPMTicksPerSecond(FAR_TARGET_RPM);
         setRampPosition(FAR_RAMP_SCORE_POSITION);

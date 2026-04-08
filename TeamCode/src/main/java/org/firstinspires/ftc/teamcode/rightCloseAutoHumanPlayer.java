@@ -202,8 +202,8 @@ public class rightCloseAutoHumanPlayer extends LinearOpMode {
                 }
                 else{ //move to scoring position
                     follower.followPath(scorePreload, true);
-                    intializeBurstClosePreload(); //prestart shooter
-                    turnOnShooterAuto();
+                    shooter.initializeBurstClosePreload(); //prestart shooter
+                    shooter.turnOnShooterAuto();
                     setPathState(1);
                 }
                 break;
@@ -249,8 +249,8 @@ public class rightCloseAutoHumanPlayer extends LinearOpMode {
             case 3: //move to score position for top row
                 if (!follower.isBusy()) {
                     follower.followPath(scorePickupTop, true);
-                    intializeBurstClose(); //prestart shooter
-                    turnOnShooterAuto();
+                    shooter.initializeBurstClose(); //prestart shooter
+                    shooter.turnOnShooterAuto();
                     setPathState(4);
                 }
                 break;
@@ -276,7 +276,7 @@ public class rightCloseAutoHumanPlayer extends LinearOpMode {
 
                             shooter.ballsShot = 6;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
-                            turnOffShooterAuto();
+                            shooter.turnOffShooterAuto();
                             setPathState(5);
                         }
                     }
@@ -299,8 +299,8 @@ public class rightCloseAutoHumanPlayer extends LinearOpMode {
                 if (!follower.isBusy()){
                     if (init){
                         intake.turnOffIntake();
-                        intializeBurstClose(); //prestart shooter
-                        turnOnShooterAuto();
+                        shooter.initializeBurstClose(); //prestart shooter
+                        shooter.turnOnShooterAuto();
                         init = false;
                     }
                     else{
@@ -346,7 +346,7 @@ public class rightCloseAutoHumanPlayer extends LinearOpMode {
 
                             shooter.ballsShot = 9;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
-                            turnOffShooterAuto();
+                            shooter.turnOffShooterAuto();
                             setPathState(9);
                         }
                     }
@@ -373,8 +373,8 @@ public class rightCloseAutoHumanPlayer extends LinearOpMode {
                     }
                     else{
                         follower.followPath(scorePickupBottom, true);
-                        intializeBurstClose(); //prestart shooter
-                        turnOnShooterAuto();
+                        shooter.initializeBurstClose(); //prestart shooter
+                        shooter.turnOnShooterAuto();
                         setPathState(11);
                     }
                 }
@@ -402,7 +402,7 @@ public class rightCloseAutoHumanPlayer extends LinearOpMode {
 
                             shooter.ballsShot = 12;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
-                            turnOffShooterAuto();
+                            shooter.turnOffShooterAuto();
                             intake.turnOffIntake();
                             setPathState(12);
                         }
@@ -442,8 +442,8 @@ public class rightCloseAutoHumanPlayer extends LinearOpMode {
                     }
                     else{
                         follower.followPath(scorePickupHumanPlayer, true);
-                        intializeBurstClose(); //prestart shooter
-                        turnOnShooterAuto();
+                        shooter.initializeBurstClose(); //prestart shooter
+                        shooter.turnOnShooterAuto();
                         setPathState(15);
                     }
                 }
@@ -468,7 +468,7 @@ public class rightCloseAutoHumanPlayer extends LinearOpMode {
                             scorePickupHumanPlayerTime = opmodeTimer.getElapsedTimeSeconds();
 
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
-                            turnOffShooterAuto();
+                            shooter.turnOffShooterAuto();
                             setPathState(16);
                         }
                     }
@@ -489,37 +489,6 @@ public class rightCloseAutoHumanPlayer extends LinearOpMode {
                 }
                 break;
         } //run state machine
-    }
-
-    public void intializeBurstClose(){
-        shooter.setCurrentShooterClosedSeconds(Shooter.CLOSE_DEBOUNCE);
-        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM);
-//        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
-        shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
-    }
-
-    public void intializeBurstClosePreload(){
-        shooter.setCurrentShooterClosedSeconds(Shooter.CLOSE_DEBOUNCE);
-        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM_PRELOAD);
-//        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
-        shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
-    }
-
-    public void initalizeBurstFar(){
-        shooter.setCurrentShooterClosedSeconds(Shooter.FAR_DEBOUNCE);
-        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.FAR_TARGET_RPM);
-        shooter.setRampPosition(Shooter.FAR_RAMP_SCORE_POSITION);
-        shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_FAR);
-    }
-
-    public void turnOnShooterAuto(){
-        shooter.turnOnShooter();
-        shooter.on = true;
-    }
-
-    public void turnOffShooterAuto(){
-        shooter.turnOffShooter();
-        shooter.on = false;
     }
 
     public void setPathState(int pState) {

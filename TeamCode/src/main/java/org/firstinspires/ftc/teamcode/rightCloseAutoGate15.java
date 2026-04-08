@@ -221,8 +221,8 @@ public class rightCloseAutoGate15 extends LinearOpMode {
                 }
                 else{ //move to scoring position
                     follower.followPath(scorePreload, true);
-                    initializeBurstClosePreload(); //prestart shooter
-                    turnOnShooterAuto();
+                    shooter.initializeBurstClosePreload(); //prestart shooter
+                    shooter.turnOnShooterAuto();
                     setPathState(1);
                 }
                 break;
@@ -269,8 +269,8 @@ public class rightCloseAutoGate15 extends LinearOpMode {
                 if (!follower.isBusy()) {
                     if (init){
                         intake.turnOffIntake();
-                        initializeBurstCloseEdge(); //prestart shooter, shooter already on
-                        turnOnShooterAuto();
+                        shooter.initializeBurstCloseEdge(); //prestart shooter, shooter already on
+                        shooter.turnOnShooterAuto();
                         shooter.setGatePosition(Shooter.GATE_OPEN_POSITION);
                         init = false;
                     }
@@ -302,7 +302,7 @@ public class rightCloseAutoGate15 extends LinearOpMode {
 
                             shooter.ballsShot = 6;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
-                            turnOffShooterAuto();
+                            shooter.turnOffShooterAuto();
                             setPathState(5);
                         }
                     }
@@ -334,8 +334,8 @@ public class rightCloseAutoGate15 extends LinearOpMode {
                 if (!follower.isBusy()) {
                     if (init){
 //                        intake.turnOffIntake();
-                        initializeBurstCloseEdge(); //prestart shooter
-                        turnOnShooterAuto();
+                        shooter.initializeBurstCloseEdge(); //prestart shooter
+                        shooter.turnOnShooterAuto();
                         shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                         init = false;
                     }
@@ -367,7 +367,7 @@ public class rightCloseAutoGate15 extends LinearOpMode {
 
                             shooter.ballsShot = 9;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
-                            turnOffShooterAuto();
+                            shooter.turnOffShooterAuto();
                             setPathState(9);
                         }
                     }
@@ -394,8 +394,8 @@ public class rightCloseAutoGate15 extends LinearOpMode {
                     }
                     else{
                         follower.followPath(scorePickupBottom, true);
-                        initializeBurstCloseEdge(); //prestart shooter
-                        turnOnShooterAuto();
+                        shooter.initializeBurstCloseEdge(); //prestart shooter
+                        shooter.turnOnShooterAuto();
                         setPathState(11);
                     }
                 }
@@ -423,7 +423,7 @@ public class rightCloseAutoGate15 extends LinearOpMode {
 
                             shooter.ballsShot = 12;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
-                            turnOffShooterAuto();
+                            shooter.turnOffShooterAuto();
                             intake.turnOffIntake();
                             setPathState(12);
                         }
@@ -451,8 +451,8 @@ public class rightCloseAutoGate15 extends LinearOpMode {
                     }
                     else {
                         follower.followPath(scorePickupTop, true);
-                        initializeBurstClose(); //prestart shooter
-                        turnOnShooterAuto();
+                        shooter.initializeBurstClose(); //prestart shooter
+                        shooter.turnOnShooterAuto();
                         setPathState(14);
                     }
                 }
@@ -479,7 +479,7 @@ public class rightCloseAutoGate15 extends LinearOpMode {
 
                             shooter.ballsShot = 15;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
-                            turnOffShooterAuto();
+                            shooter.turnOffShooterAuto();
                             setPathState(15);
                         }
                     }
@@ -500,51 +500,6 @@ public class rightCloseAutoGate15 extends LinearOpMode {
                 }
                 break;
         } //run state machine
-    }
-
-    public void initializeBurstClose(){
-        shooter.setCurrentShooterClosedSeconds(Shooter.CLOSE_DEBOUNCE);
-        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM);
-        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
-        shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
-    }
-
-    public void initializeBurstClosePreload(){
-        shooter.setCurrentShooterClosedSeconds(Shooter.CLOSE_DEBOUNCE);
-        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM_PRELOAD);
-        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
-        shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
-    }
-
-    public void initializeBurstCloseEdge(){
-        shooter.setCurrentShooterClosedSeconds(Shooter.CLOSE_DEBOUNCE);
-        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM_EDGE);
-        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
-        shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
-    }
-    public void initializeBurstPark(){
-        shooter.setCurrentShooterClosedSeconds(Shooter.CLOSE_DEBOUNCE);
-        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM_PARK);
-        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
-        shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
-    }
-
-    public void initalizeBurstFar(){
-        shooter.setCurrentShooterClosedSeconds(Shooter.FAR_DEBOUNCE);
-        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.FAR_TARGET_RPM);
-        shooter.setRampPosition(Shooter.FAR_RAMP_SCORE_POSITION);
-        shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_FAR);
-    }
-
-    public void turnOnShooterAuto(){
-        shooter.turnOnShooter();
-        shooter.on = true;
-    }
-
-    public void turnOffShooterAuto(){
-        shooter.turnOffShooter();
-        shooter.setRampPosition(0);
-        shooter.on = false;
     }
 
     public void setPathState(int pState) {

@@ -146,8 +146,8 @@ public class rightFarAuto extends LinearOpMode {
                 }
                 else{ //move to scoring position
                     follower.followPath(scorePreload, true);
-                    initializeBurstFar(); //prestart shooter
-                    turnOnShooterAuto();
+                    shooter.initializeBurstFar(); //prestart shooter
+                    shooter.turnOnShooterAuto();
                     setPathState(1);
                 }
                 break;
@@ -309,7 +309,7 @@ public class rightFarAuto extends LinearOpMode {
 
                             shooter.ballsShot = 12;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
-                            turnOffShooterAuto(); //turn off shooter for last cycle
+                            shooter.turnOffShooterAuto(); //turn off shooter for last cycle
                             setPathState(11); //end
                         }
                     }
@@ -322,30 +322,6 @@ public class rightFarAuto extends LinearOpMode {
                 }
                 break;
         } //run state machine
-    }
-
-    public void intializeBurstClose(){
-        shooter.setCurrentShooterClosedSeconds(Shooter.CLOSE_DEBOUNCE);
-        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.CLOSE_AUTO_TARGET_RPM);
-//        shooter.setRampPosition(Shooter.CLOSE_RAMP_SCORE_POSITION);
-        shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_CLOSE);
-    }
-
-    public void initializeBurstFar(){
-        shooter.setCurrentShooterClosedSeconds(Shooter.FAR_DEBOUNCE);
-        shooter.setCurrentTargetRPMTicksPerSecond(Shooter.FAR_AUTO_TARGET_RPM);
-        shooter.setRampPosition(Shooter.FAR_RAMP_SCORE_POSITION);
-        shooter.setTargetRPMToleranceRPM(Shooter.TARGET_RPM_TOLERANCE_RPM_FAR);
-    }
-
-    public void turnOnShooterAuto(){
-        shooter.turnOnShooter();
-        shooter.on = true;
-    }
-
-    public void turnOffShooterAuto(){
-        shooter.turnOffShooter();
-        shooter.on = false;
     }
 
     public void setPathState(int pState) {

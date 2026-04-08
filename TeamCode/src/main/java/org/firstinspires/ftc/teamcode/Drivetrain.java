@@ -43,7 +43,7 @@ public class Drivetrain {
     public static double ODO_HEADING_VALID_RANGE = 1.5;
     public static double RELOCALIZATION_VELOCITY_THRESHOLD = 0.1;
 
-    public static double P = 0.8;
+    public static double P = 0.6;
     public static double I = 0;
     public static double D = 0;
 
