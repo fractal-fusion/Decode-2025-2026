@@ -309,7 +309,7 @@ public class rightFarAuto extends LinearOpMode {
 
                             shooter.ballsShot = 12;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
-                            shooter.turnOffShooterAuto(); //turn off shooter for last cycle
+//                            shooter.turnOffShooterAuto(); //turn off shooter for last cycle
                             setPathState(11); //end
                         }
                     }

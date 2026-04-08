@@ -53,7 +53,7 @@ public class leftCloseAutoHumanPlayer extends LinearOpMode {
     private final Pose startPose = new Pose(129, 115+AUTO_Y_OFFSET, Math.toRadians(180)).mirror(); // Start Pose of our robot
     private final Pose scorePose = new Pose(90, 94, scoreHeading).mirror();
     private final Pose scorePreloadPose = new Pose(90, 94, Math.toRadians(SCORE_HEADING_PRELOAD)).mirror();
-    private final Pose grabPickupTopPose = new Pose(127 + INTAKE_X_OFFSET, 84, Math.toRadians(0)).mirror();
+    private final Pose grabPickupTopPose = new Pose(127 + INTAKE_X_OFFSET, 82, Math.toRadians(0)).mirror();
     private final Pose grabPickupTopPoseControlPoint1 = new Pose(80, 81).mirror();
     private final Pose releaseBallsPose = new Pose(128.5, RELEASE_BALLS_Y, Math.toRadians(0)).mirror();
     private final Pose releaseBallsPoseControlPoint1 = new Pose(98.141, 66.904).mirror();
@@ -276,7 +276,7 @@ public class leftCloseAutoHumanPlayer extends LinearOpMode {
 
                             shooter.ballsShot = 6;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
-                            shooter.turnOffShooterAuto();
+//                            shooter.turnOffShooterAuto();
                             setPathState(5);
                         }
                     }
@@ -346,7 +346,7 @@ public class leftCloseAutoHumanPlayer extends LinearOpMode {
 
                             shooter.ballsShot = 9;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
-                            shooter.turnOffShooterAuto();
+//                            shooter.turnOffShooterAuto();
                             setPathState(9);
                         }
                     }
@@ -402,7 +402,7 @@ public class leftCloseAutoHumanPlayer extends LinearOpMode {
 
                             shooter.ballsShot = 12;
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
-                            shooter.turnOffShooterAuto();
+//                            shooter.turnOffShooterAuto();
                             intake.turnOffIntake();
                             setPathState(12);
                         }
@@ -468,7 +468,7 @@ public class leftCloseAutoHumanPlayer extends LinearOpMode {
                             scorePickupHumanPlayerTime = opmodeTimer.getElapsedTimeSeconds();
 
                             shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
-                            shooter.turnOffShooterAuto();
+//                            shooter.turnOffShooterAuto();
                             setPathState(16);
                         }
                     }

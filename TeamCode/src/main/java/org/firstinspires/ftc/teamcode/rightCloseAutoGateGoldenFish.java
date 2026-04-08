@@ -61,7 +61,7 @@ public class rightCloseAutoGateGoldenFish extends LinearOpMode {
     private final Pose scoreParkPose = new Pose(86.5, 99, Math.toRadians(SCORE_HEADING_PARK));
     private final Pose edgeScorePose = new Pose(86.6, 76, edgeScoreHeading);
     private final Pose scorePreloadPose = new Pose(90, 94, Math.toRadians(SCORE_HEADING_PRELOAD));
-    private final Pose grabPickupTopPose = new Pose(127 + INTAKE_X_OFFSET, 84, Math.toRadians(0));
+    private final Pose grabPickupTopPose = new Pose(127 + INTAKE_X_OFFSET, 82, Math.toRadians(0));
     private final Pose grabPickupTopPoseControlPoint1 = new Pose(83.033, 75.4);
     private final Pose releaseBallsPose = new Pose(128.5, RELEASE_BALLS_Y, Math.toRadians(0));
     private final Pose releaseBallsPoseControlPoint1 = new Pose(98.141, 66.904);
