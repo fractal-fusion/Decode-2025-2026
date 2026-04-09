@@ -34,15 +34,15 @@ public class Shooter{
     public static double GATE_OPEN_POSITION = 0;
     public static double GATE_CLOSED_POSITION = 0.18;
     public static double RAMP_CYCLE_POSITION = 0.2;
-    public static double FAR_RAMP_SCORE_POSITION = 0;
+    public static double FAR_RAMP_SCORE_POSITION = 0.12;
     public static double FAR_TARGET_RPM = 4250;
 
-    public static double FAR_AUTO_TARGET_RPM = 4200; //untested
+    public static double FAR_AUTO_TARGET_RPM = 3900;
     public static double FAR_DEBOUNCE = 3.0; //untested
 
     public static double FAR_TARGET_RPM_TICKS_PER_SECOND = FAR_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
 
-    public static double CLOSE_RAMP_SCORE_POSITION = 0.04;
+    public static double CLOSE_RAMP_SCORE_POSITION = 0.06;
     public static double CLOSE_TARGET_RPM = 3350;
     public static double CLOSE_AUTO_TARGET_RPM = 2900;
     public static double CLOSE_AUTO_TARGET_RPM_PRELOAD = CLOSE_AUTO_TARGET_RPM;
@@ -479,7 +479,7 @@ public class Shooter{
 
     public void initializeBurstFar(){
         setCurrentShooterClosedSeconds(FAR_DEBOUNCE);
-        setCurrentTargetRPMTicksPerSecond(FAR_TARGET_RPM);
+        setCurrentTargetRPMTicksPerSecond(FAR_AUTO_TARGET_RPM);
         setRampPosition(FAR_RAMP_SCORE_POSITION);
         setTargetRPMToleranceRPM(TARGET_RPM_TOLERANCE_RPM_FAR);
     }
