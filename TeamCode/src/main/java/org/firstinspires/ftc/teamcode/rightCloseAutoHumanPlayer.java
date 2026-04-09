@@ -202,6 +202,7 @@ public class rightCloseAutoHumanPlayer extends LinearOpMode {
                 }
                 else{ //move to scoring position
                     follower.followPath(scorePreload, true);
+                    intake.turnOnIntakeAuto();
                     shooter.initializeBurstClosePreload(); //prestart shooter
                     shooter.turnOnShooterAuto();
                     setPathState(1);

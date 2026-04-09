@@ -221,6 +221,7 @@ public class rightCloseAutoGate15 extends LinearOpMode {
                 }
                 else{ //move to scoring position
                     follower.followPath(scorePreload, true);
+                    intake.turnOnIntakeAuto();
                     shooter.initializeBurstClosePreload(); //prestart shooter
                     shooter.turnOnShooterAuto();
                     setPathState(1);
