@@ -42,12 +42,14 @@ public class Shooter{
 
     public static double FAR_TARGET_RPM_TICKS_PER_SECOND = FAR_TARGET_RPM * RPM_TO_TICKS_PER_SECOND;
 
-    public static double CLOSE_RAMP_SCORE_POSITION = 0.06;
+    public static double CLOSE_RAMP_SCORE_POSITION = 0.04;
+    public static double CLOSE_RAMP_EDGE_SCORE_POSITION = 0.075;
+
     public static double CLOSE_TARGET_RPM = 3350;
-    public static double CLOSE_AUTO_TARGET_RPM = 2800;
+    public static double CLOSE_AUTO_TARGET_RPM = 2820;
     public static double CLOSE_AUTO_TARGET_RPM_PRELOAD = CLOSE_AUTO_TARGET_RPM;
-    public static double CLOSE_AUTO_TARGET_RPM_EDGE = 2970;
-    public static double CLOSE_AUTO_TARGET_RPM_PARK = 2830;
+    public static double CLOSE_AUTO_TARGET_RPM_EDGE = 2990;
+    public static double CLOSE_AUTO_TARGET_RPM_PARK = 2860;
 
     public static double CLOSE_DEBOUNCE = 0.4;
 
@@ -494,7 +496,7 @@ public class Shooter{
     public void initializeBurstCloseEdge(){
         setCurrentShooterClosedSeconds(CLOSE_DEBOUNCE);
         setCurrentTargetRPMTicksPerSecond(CLOSE_AUTO_TARGET_RPM_EDGE);
-        setRampPosition(CLOSE_RAMP_SCORE_POSITION);
+        setRampPosition(CLOSE_RAMP_EDGE_SCORE_POSITION);
         setTargetRPMToleranceRPM(TARGET_RPM_TOLERANCE_RPM_CLOSE);
     }
 

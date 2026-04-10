@@ -221,7 +221,7 @@ public class rightCloseAutoGate15 extends LinearOpMode {
                 }
                 else{ //move to scoring position
                     follower.followPath(scorePreload, true);
-                    intake.turnOnIntakeAuto();
+//                    intake.turnOnIntakeAuto();
                     shooter.initializeBurstClosePreload(); //prestart shooter
                     shooter.turnOnShooterAuto();
                     setPathState(1);
@@ -334,7 +334,7 @@ public class rightCloseAutoGate15 extends LinearOpMode {
             case 7: //move to score position for collected balls
                 if (!follower.isBusy()) {
                     if (init){
-//                        intake.turnOffIntake();
+                        intake.turnOffIntake();
                         shooter.initializeBurstCloseEdge(); //prestart shooter
                         shooter.turnOnShooterAuto();
                         shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
@@ -447,7 +447,7 @@ public class rightCloseAutoGate15 extends LinearOpMode {
             case 13: //move to score position for top row
                 if (!follower.isBusy()) {
                     if (init){
-//                        intake.turnOffIntake();
+                        intake.turnOffIntake();
                         init = false;
                     }
                     else {

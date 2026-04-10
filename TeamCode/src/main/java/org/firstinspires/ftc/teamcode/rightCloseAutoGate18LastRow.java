@@ -55,7 +55,7 @@ public class rightCloseAutoGate18LastRow extends LinearOpMode {
     public double edgeScoreHeading = Math.toRadians(48 + SCORE_HEADING_OFFSET);
     private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop, goToWallHumanPlayer, grabPickupHumanPlayer, scorePickupHumanPlayer, goToReleaseBalls, collectBalls, moveBackCollectBalls, scoreCollectBalls, goToPark; //define path chains (muliple paths interpolated)
 
-    private final Pose startPose = new Pose(129, 116+AUTO_Y_OFFSET, Math.toRadians(180)); // Start Pose of our robot
+    private final Pose startPose = new Pose(128, 116+AUTO_Y_OFFSET, Math.toRadians(180)); // Start Pose of our robot
     private final Pose scorePose = new Pose(90, 94, scoreHeading);
     private final Pose scoreParkPose = new Pose(86.5, 99, Math.toRadians(SCORE_HEADING_PARK));
     private final Pose edgeScorePose = new Pose(86.6, 76, edgeScoreHeading);
@@ -223,7 +223,7 @@ public class rightCloseAutoGate18LastRow extends LinearOpMode {
                 }
                 else{ //move to scoring position
                     follower.followPath(scorePreload, true);
-                    intake.turnOnIntakeAuto();
+//                    intake.turnOnIntakeAuto();
                     shooter.initializeBurstClosePreload(); //prestart shooter
                     shooter.turnOnShooterAuto();
                     setPathState(1);
@@ -336,7 +336,7 @@ public class rightCloseAutoGate18LastRow extends LinearOpMode {
             case 7: //move to score position for collected balls
                 if (!follower.isBusy()) {
                     if (init){
-//                        intake.turnOffIntake();
+                        intake.turnOffIntake();
                         shooter.initializeBurstCloseEdge(); //prestart shooter
                         shooter.turnOnShooterAuto();
                         shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
@@ -401,7 +401,7 @@ public class rightCloseAutoGate18LastRow extends LinearOpMode {
             case 11: //second move to score position for collected balls
                 if (!follower.isBusy()) {
                     if (init){
-//                        intake.turnOffIntake();
+                        intake.turnOffIntake();
                         shooter.initializeBurstCloseEdge(); //prestart shooter
                         shooter.turnOnShooterAuto();
                         shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
@@ -514,7 +514,7 @@ public class rightCloseAutoGate18LastRow extends LinearOpMode {
             case 17: //move to score position for top row
                 if (!follower.isBusy()) {
                     if (init){
-//                        intake.turnOffIntake();
+                        intake.turnOffIntake();
                         init = false;
                     }
                     else {
