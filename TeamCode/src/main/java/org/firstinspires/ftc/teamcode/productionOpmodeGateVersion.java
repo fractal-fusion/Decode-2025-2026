@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.HeadingInterpolator;
@@ -37,8 +38,13 @@ public class productionOpmodeGateVersion extends LinearOpMode {
         shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
 
         //build paths for teleop in init
-        PathChain goToLeverPosition = follower.pathBuilder()
+        PathChain goToLeverPositionFromFar = follower.pathBuilder()
                 .addPath(new Path(new BezierLine(follower::getPose, PoseManager.currentLeverPose)))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, PoseManager.currentLeverPose.getHeading(), 0.8))
+                .build();
+
+        PathChain goToLeverPositionFromClose = follower.pathBuilder()
+                .addPath(new Path(new BezierCurve(follower::getPose, PoseManager.currentLeverControlPoint, PoseManager.currentLeverPose)))
                 .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, PoseManager.currentLeverPose.getHeading(), 0.8))
                 .build();
 
@@ -100,7 +106,13 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             }
             else if (gamepad1.dpad_right){
                 if(!drivetrain.isFollowing){
-                    follower.followPath(goToLeverPosition, true);
+                    if(drivetrain.isFarOdometry(follower.getPose())){
+                        follower.followPath(goToLeverPositionFromFar, true);
+
+                    }
+                    else{
+                        follower.followPath(goToLeverPositionFromClose, true);
+                    }
                     drivetrain.isFollowing = true;
                 }
             }
@@ -114,7 +126,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             }
             else if (gamepad1.y) {
                 //sotm
-                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPowerOdo(-drivetrain.calculateOdoGoalBearing(follower.getPose(), drivetrain.calculateVirtualGoalPose(follower, drivetrain.calculateAirTime(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)), PoseManager.currentGoalAutoAlignPose))));
+                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculatePrimaryPIDAutoAlignPowerOdo(-drivetrain.calculateOdoGoalBearing(follower.getPose(), drivetrain.calculateVirtualGoalPose(follower, drivetrain.calculateAirTime(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose)), PoseManager.currentGoalAutoAlignPose))));
 //                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculNGateAutoAlignPowerOdo(-drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose)));
                 drivetrain.holdPose = follower.getPose();
             }
@@ -126,7 +138,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
 //                }
 
                 //proportional drive auto align
-                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateAutoAlignPowerOdo(-drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose)));
+                drivetrain.driveAutoAlign(gamepad1, drivetrain.calculateSecondaryPIDAutoAlignPowerOdo(-drivetrain.calculateOdoGoalBearing(follower.getPose(), PoseManager.currentGoalAutoAlignPose)));
 
                 drivetrain.holdPose = follower.getPose();
             }

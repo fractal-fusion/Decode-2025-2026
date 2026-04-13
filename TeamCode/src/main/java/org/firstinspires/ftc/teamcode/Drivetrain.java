@@ -38,7 +38,7 @@ public class Drivetrain {
     public static double AUTO_ALIGN_MAX_SPEED = 0.8; //auto alignment speed is clipped to minimum negative this and maximum positive this (bilateral tolerance)
     public static double AUTO_ALIGN_GAIN_LIMELIGHT = 0.0175; //converts tx from limelight to power
     public static double AUTO_ALIGN_GAIN_ODO = 0.85; //converts odometry bearing to power
-    public static double SECONDARY_PID_THRESHOLD = 0.2; //less than this stop applying micro power which shifts the robot
+    public static double SECONDARY_PID_THRESHOLD = 0.2; //less than this switch to secondary pid
     public static double AUTO_ALIGN_INTEGRAL_ODO = 0.005;
     public static double ODO_HEADING_VALID_RANGE = 1.5;
     public static double RELOCALIZATION_VELOCITY_THRESHOLD = 0.1;
@@ -195,7 +195,21 @@ public class Drivetrain {
         return Range.clip(bearing * AUTO_ALIGN_GAIN_LIMELIGHT, -AUTO_ALIGN_MAX_SPEED, AUTO_ALIGN_MAX_SPEED);
     }
 
-    public double calculateAutoAlignPowerOdo(double error) {
+    public double calculatePrimaryPIDAutoAlignPowerOdo(double error) {
+        double derivative = error - lastError;
+
+        integralSum = integralSum + (error * headingPIDTimer.getElapsedTimeSeconds());
+
+        double power = (P * error) + (I * integralSum) + (D * derivative);
+
+        lastError = error;
+
+        headingPIDTimer.resetTimer();
+
+        return power;
+    }
+
+    public double calculateSecondaryPIDAutoAlignPowerOdo(double error) {
         if (Math.abs(error) > SECONDARY_PID_THRESHOLD){ //send power when not between -deadzone or +deadzone
             double derivative = error - lastError;
 

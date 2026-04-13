@@ -13,11 +13,9 @@ public class PoseManager {
 
     public static double RED_FAR_SHOOTING_HEADING = 67;
     public static double RED_LEVER_HEADING = 33;
-//    public static double BLUE_FAR_SHOOTING_HEADING = 70 + 45;
-//    public static double BLUE_LEVER_HEADING = RED_LEVER_HEADING + 90;
+
 
     public static Pose currentPose = new Pose();
-//    public static Team currentTeam = Team.NONE;
 
     //real coordinates for pedro calculation
     public static Pose RED_GOAL_REAL_POSITION = new Pose(144, 144);
@@ -36,6 +34,10 @@ public class PoseManager {
     public static Pose RED_LEVER_POSITION = new Pose(134.5,59.5, Math.toRadians(RED_LEVER_HEADING));
     public static Pose BLUE_LEVER_POSITION = RED_LEVER_POSITION.mirror();
 
+    public static Pose RED_LEVER_CONTROL_POINT = new Pose(106, 47.7);
+    public static Pose BLUE_LEVER_CONTROL_POINT = RED_LEVER_CONTROL_POINT.mirror();
+
+
     public static Pose RED_FAR_POSITION = new Pose(83,14, Math.toRadians(RED_FAR_SHOOTING_HEADING));
     public static Pose BLUE_FAR_POSITION = RED_FAR_POSITION.mirror();
 
@@ -43,6 +45,7 @@ public class PoseManager {
     public static Pose currentGoalPose = RED_GOAL_DISTANCE_POSITION; //start on red in case teleop is started without first starting auto
     public static Pose currentGoalAutoAlignPose = RED_GOAL_AUTOALIGN_POSITION;
     public static Pose currentLeverPose = RED_LEVER_POSITION;
+    public static Pose currentLeverControlPoint = RED_LEVER_CONTROL_POINT;
     public static Pose currentFarPose = RED_FAR_POSITION;
     public static Pose currentRealGoalPose = RED_GOAL_REAL_POSITION;
 
@@ -52,6 +55,7 @@ public class PoseManager {
             currentGoalPose = BLUE_GOAL_DISTANCE_POSITION;
             currentGoalAutoAlignPose = BLUE_GOAL_AUTOALIGN_POSITION;
             currentLeverPose = BLUE_LEVER_POSITION;
+            currentLeverControlPoint = BLUE_LEVER_CONTROL_POINT;
             currentFarPose = BLUE_FAR_POSITION;
             currentRealGoalPose = BLUE_GOAL_REAL_POSITION;
         }
@@ -59,6 +63,7 @@ public class PoseManager {
             currentGoalPose = RED_GOAL_DISTANCE_POSITION;
             currentGoalAutoAlignPose = RED_GOAL_AUTOALIGN_POSITION;
             currentLeverPose = RED_LEVER_POSITION;
+            currentLeverControlPoint = RED_LEVER_CONTROL_POINT;
             currentFarPose = RED_FAR_POSITION;
             currentRealGoalPose = RED_GOAL_REAL_POSITION;
         }
