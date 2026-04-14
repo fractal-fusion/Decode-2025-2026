@@ -184,7 +184,7 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             else {
                 intake.turnOffIntake();
                 shooter.cycling = false;
-                if (!shooter.on) { //make sure shooter is off after cycling and not shooting
+                if (!shooter.on && !shooter.constant) { //make sure shooter is off after cycling and not shooting
                     shooter.turnOffShooterRestingRpm();
                     shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
 //                    shooter.setRampPosition(0);
@@ -204,13 +204,13 @@ public class productionOpmodeGateVersion extends LinearOpMode {
                 shooter.toggleShooterClose();
             }
             else if (gamepad2.y){
-                intake.setDriverPower(Intake.DRIVER_FAR_SHOOTING_POWER);
-                shooter.toggleShooterFar();
+//                intake.setDriverPower(Intake.DRIVER_FAR_SHOOTING_POWER);
+                shooter.toggleShooterConstantRegression();
             }
 
             //constantly update shooter velocity for close regression
             //DYNAMIC FAR AND CLOSE
-            if(shooter.on){
+            if(shooter.on || shooter.constant){
                 //reduce driver speed if too close or too far to goal inside close zone
                 if(drivetrain.ifSlowDriverOdometry(drivetrain.calculateOdoGoalDistance(follower.getPose(), PoseManager.currentGoalPose))) {
                     intake.setDriverPower(Intake.DRIVER_CLOSE_SLOW_SHOOTING_POWER);
@@ -235,7 +235,9 @@ public class productionOpmodeGateVersion extends LinearOpMode {
 
             //open the gate when scoring so balls can pass to shooter motors
             shooter.update();
-            shooter.controlShooterGate();
+            if (!shooter.constant) {
+                shooter.controlShooterGate();
+            }
 
 //            //no longer use limelight for far and close detection
 //            if (limelight.isFar) {
@@ -251,6 +253,9 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             //indicator light control
             if (gamepad1.y){
                 indicatorLight.setIndicatorLight(IndicatorLight.INDICATOR_LIGHT_ORANGE);
+            }
+            else if (shooter.constant){
+                indicatorLight.setIndicatorLight(IndicatorLight.INDICATOR_LIGHT_BLUE);
             }
             else if (limelight.getBearing() >= -Limelight.HEADING_VALID_RANGE && limelight.getBearing() <= Limelight.HEADING_VALID_RANGE && limelight.getBearing() != 0.0){
                 indicatorLight.setIndicatorLight(IndicatorLight.INDICATOR_LIGHT_GREEN);

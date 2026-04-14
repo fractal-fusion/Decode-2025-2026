@@ -112,7 +112,7 @@ public class productionOpmodePitchVersion extends LinearOpMode {
                 shooter.toggleShooterClose();
             }
             else if (gamepad2.y){
-                shooter.toggleShooterFar();
+                shooter.toggleShooterConstantRegression();
             }
 
             //flatten the pitch when scoring so balls can pass to shooter motors

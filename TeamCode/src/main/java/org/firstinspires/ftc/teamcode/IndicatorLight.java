@@ -11,6 +11,7 @@ public class IndicatorLight {
     public static double INDICATOR_LIGHT_PURPLE = 0.722;
     public static double INDICATOR_LIGHT_GREEN = 0.500;
     public static double INDICATOR_LIGHT_ORANGE = 0.350;
+    public static double INDICATOR_LIGHT_BLUE = 0.575;
     private double currentColor = 0.0;
 
     public IndicatorLight(OpMode linearopmode){

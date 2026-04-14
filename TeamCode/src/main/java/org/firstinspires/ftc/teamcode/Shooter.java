@@ -69,6 +69,7 @@ public class Shooter{
     public double testRampPosition = 0;
     public double testPitchPosition = 0;
     public boolean on = false; //boolean for on or off shooter
+    public boolean constant = false; //boolean for if regression is constantly running
     public boolean cycling = false; //boolean for cycling or not
     public boolean passedThreshold = false; //boolean for once the shooter reaches velocity
     public static double LOWER_THRESHOLD_RPM_OFFSET = TARGET_RPM_TOLERANCE_RPM_CLOSE; //set to close since passed threshold will be set to false regardless of close rpm offset if its "at" lower threshold;
@@ -258,35 +259,26 @@ public class Shooter{
         }
 
         if(on){
-            setRampPosition(CLOSE_RAMP_SCORE_POSITION);
-            turnOnShooter();
+            if (constant){
+                shooterGate.setPosition(GATE_OPEN_POSITION);
+            }
+            else {
+                turnOnShooter();
+            }
         }
         else {
-            setRampPosition(0);
-            turnOffShooterRestingRpm(); //will get overridden in teleop
+            if (constant){
+                shooterGate.setPosition(GATE_CLOSED_POSITION);
+            }
+            else{
+                setRampPosition(0);
+                turnOffShooterRestingRpm(); //will get overridden in teleop
+            }
         }
     }
-    public void toggleShooterFar(){
-
+    public void toggleShooterConstantRegression(){
         if (currentGamepad.y && !previousGamepad.y){
-            resetShooterClosedTimer();
-            resetShooterOpenTimer();
-            atVelocityTimer.resetTimer();
-
-            setCurrentTargetRPMTicksPerSecond(FAR_TARGET_RPM);
-//            setCurrentShooterClosedSeconds(FAR_DEBOUNCE);
-
-
-            on = !on;
-        }
-
-        if(on){
-//            setRampPosition(FAR_RAMP_SCORE_POSITION);
-            turnOnShooter();
-        }
-        else {
-            setRampPosition(0);
-            turnOffShooterRestingRpm(); //will get overridden in teleop
+            constant = !constant;
         }
     }
 
