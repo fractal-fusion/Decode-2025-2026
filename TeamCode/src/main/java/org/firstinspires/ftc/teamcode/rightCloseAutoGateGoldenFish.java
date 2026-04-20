@@ -158,7 +158,7 @@ public class rightCloseAutoGateGoldenFish extends LinearOpMode {
         drivetrain = new Drivetrain(this);
         shooter = new Shooter(this);
         intake = new Intake(this, Intake.FLICKER_CLOSE_POSITION);
-//        camera = new Camera(, 3);
+//        camera = new Camera(this, 3);
 
         //initialize timers so they can be checked in the state machine
         pathTimer = new Timer();

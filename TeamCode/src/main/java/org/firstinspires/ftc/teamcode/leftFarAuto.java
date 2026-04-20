@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
 @Config
@@ -24,7 +24,7 @@ public class leftFarAuto extends LinearOpMode {
     private int pathState = 0; //finite state machine variable
     private boolean init = true;
     public static double FIRST_INTAKE_DELAY_TIME = 1.5;
-    public static double FOLLOWING_INTAKE_DELAY_TIME = 0.5;
+    public static double FOLLOWING_INTAKE_DELAY_TIME = 1.8;
 
     public static double SHOOTER_ON_DELAY_PRELOAD = 0.9; //prevent motors from revving up too much when shooting preloads
     public static double RELEASE_BALLS_WAIT_TIME = 0.15; //time to wait at the chamber
@@ -34,15 +34,16 @@ public class leftFarAuto extends LinearOpMode {
     public static double INTAKE_X_OFFSET = 0.5;
     public static double SCORE_HEADING_OFFSET = 0; //score heading offset since center of goals are not exactly 45 degrees
     public static double MAX_POWER = 1;
+    public static double COLLECT_BALLS_MAX_POWER = 0.75;
 
     //variables to keep track of how long each score took in order to implement failsafes based on the opmode timer
     private double scorePreloadTime = 0.0;
     private double scorePickupTopTime = 0.0;
     private double scorePickupMiddleTime = 0.0;
     private double scorePickupBottomTime = 0.0;
-    public double scoreHeading = 67;
+    public double scoreHeading = 65;
 
-    private PathChain scorePreload, collectHumanPlayer, scoreHumanPlayer, goToPark; //define path chains (muliple paths interpolated)
+    private PathChain scorePreload, collectHumanPlayer, moveBackHumanPlayer, scoreHumanPlayer, goToPark; //define path chains (muliple paths interpolated)
 
     private final Pose startPose = new Pose(89.5, 8+AUTO_Y_OFFSET, Math.toRadians(90)).mirror(); // Start Pose of our robot
     private final Pose scorePose =  new Pose(83,14, Math.toRadians(scoreHeading)).mirror();
@@ -57,14 +58,6 @@ public class leftFarAuto extends LinearOpMode {
                 .build();
         collectHumanPlayer = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, collectHumanPlayerPose))
-                .setLinearHeadingInterpolation(scorePose.getHeading(), collectHumanPlayerPose.getHeading())
-                .setTimeoutConstraint(250)
-
-                .addPath(new BezierLine(collectHumanPlayerPose, moveBackHumanPlayerPose))
-                .setConstantHeadingInterpolation(collectHumanPlayerPose.getHeading())
-                .setTimeoutConstraint(250)
-
-                .addPath(new BezierLine(moveBackHumanPlayerPose, collectHumanPlayerPose))
                 .setConstantHeadingInterpolation(collectHumanPlayerPose.getHeading())
                 .setTimeoutConstraint(250)
 
@@ -182,7 +175,7 @@ public class leftFarAuto extends LinearOpMode {
                         init = false;
                     }
                     else{
-                        follower.followPath(collectHumanPlayer, false);
+                        follower.followPath(collectHumanPlayer, COLLECT_BALLS_MAX_POWER, false);
                         setPathState(3);
                     }
                 }
@@ -190,6 +183,7 @@ public class leftFarAuto extends LinearOpMode {
             case 3: //move to score human player
                 if (!follower.isBusy()) {
                     if (init){
+                        intake.turnOffIntake();
                         init = false;
                     }
                     else{
@@ -229,7 +223,7 @@ public class leftFarAuto extends LinearOpMode {
                         init = false;
                     }
                     else{
-                        follower.followPath(collectHumanPlayer, false);
+                        follower.followPath(collectHumanPlayer, COLLECT_BALLS_MAX_POWER, false);
                         setPathState(6);
                     }
                 }
@@ -237,6 +231,7 @@ public class leftFarAuto extends LinearOpMode {
             case 6: //move to score human player
                 if (!follower.isBusy()) {
                     if (init){
+                        intake.turnOffIntake();
                         init = false;
                     }
                     else{
@@ -276,7 +271,7 @@ public class leftFarAuto extends LinearOpMode {
                         init = false;
                     }
                     else{
-                        follower.followPath(collectHumanPlayer, false);
+                        follower.followPath(collectHumanPlayer, COLLECT_BALLS_MAX_POWER, false);
                         setPathState(9);
                     }
                 }
@@ -284,6 +279,7 @@ public class leftFarAuto extends LinearOpMode {
             case 9: //move to score human player
                 if (!follower.isBusy()) {
                     if (init){
+                        intake.turnOffIntake();
                         init = false;
                     }
                     else{

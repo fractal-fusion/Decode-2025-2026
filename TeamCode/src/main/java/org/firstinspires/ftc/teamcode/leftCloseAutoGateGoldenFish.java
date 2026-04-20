@@ -23,8 +23,8 @@ public class leftCloseAutoGateGoldenFish extends LinearOpMode {
     private Pose currentPose;
     private int pathState = 0; //finite state machine variable
     private boolean init = true;
-    public static double INTAKE_DELAY_TIME = 0.05;
-    public static double INTAKE_DELAY_TIME_PRELOAD = 0.1;
+    public static double INTAKE_DELAY_TIME = 0.015;
+    public static double INTAKE_DELAY_TIME_PRELOAD = 0.05;
     public static double WALL_HUMAN_PLAYER_X = 128;
     public static double INTAKE_HUMAN_PLAYER_X = 136.43;
 //    public static double INTAKE_HUMAN_PLAYER_FLICKER_TIME = 3;
@@ -37,8 +37,8 @@ public class leftCloseAutoGateGoldenFish extends LinearOpMode {
     public static double AUTO_Y_OFFSET = 0;
     public static double INTAKE_X_OFFSET = 0;
     public static double RELEASE_BALLS_Y = 70.2;
-    public static double COLLECT_BALLS_Y = 60 + 1.7; //TODO: check if this is right auto position
-    public static double COLLECT_HEADING = 33;
+    public static double COLLECT_BALLS_Y = 60 + 1;
+    public static double COLLECT_HEADING = 32;
     public static double SCORE_HEADING_OFFSET = -0.5; //score heading offset since center of goals are not exactly 45 degrees
     public static double SCORE_HEADING_PRELOAD_TOLERANCE = 0.1;
     public static double SCORE_HEADING_PRELOAD = 44.5;
@@ -56,7 +56,7 @@ public class leftCloseAutoGateGoldenFish extends LinearOpMode {
     public double edgeScoreHeading = Math.toRadians(48 + SCORE_HEADING_OFFSET);
     private PathChain scorePreload, grabPickupBottom, scorePickupBottom, grabPickupMiddle, scorePickupMiddle, grabPickupTop, scorePickupTop, goToWallHumanPlayer, grabPickupHumanPlayer, scorePickupHumanPlayer, goToReleaseBalls, collectBalls, moveBackCollectBalls, scoreCollectBalls, goToPark; //define path chains (muliple paths interpolated)
 
-    private final Pose startPose = new Pose(129, 115+AUTO_Y_OFFSET, Math.toRadians(180)).mirror(); // Start Pose of our robot
+    private final Pose startPose = new Pose(128, 116+AUTO_Y_OFFSET, Math.toRadians(180)).mirror(); // Start Pose of our robot
     private final Pose scorePose = new Pose(90, 94, scoreHeading).mirror();
     private final Pose scoreParkPose = new Pose(86.5, 99, Math.toRadians(SCORE_HEADING_PARK)).mirror();
     private final Pose edgeScorePose = new Pose(86.6, 76, edgeScoreHeading).mirror();
@@ -223,6 +223,7 @@ public class leftCloseAutoGateGoldenFish extends LinearOpMode {
                 }
                 else{ //move to scoring position
                     follower.followPath(scorePreload, true);
+//                    intake.turnOnIntakeAuto();
                     shooter.initializeBurstClosePreload(); //prestart shooter
                     shooter.turnOnShooterAuto();
                     setPathState(1);
@@ -234,7 +235,7 @@ public class leftCloseAutoGateGoldenFish extends LinearOpMode {
 //                            intializeBurstClose();
 //                            turnOnShooterAuto();
                         shooter.setGatePosition(Shooter.GATE_OPEN_POSITION);
-
+                        intake.turnOffIntake();
                         init = false;
                     }
                     else{
@@ -349,7 +350,7 @@ public class leftCloseAutoGateGoldenFish extends LinearOpMode {
             case 9: //move to score position for collected balls
                 if (!follower.isBusy()) {
                     if (init){
-//                        intake.turnOffIntake();
+                        intake.turnOffIntake();
                         shooter.initializeBurstCloseEdge(); //prestart shooter
                         shooter.turnOnShooterAuto();
                         shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
@@ -361,7 +362,7 @@ public class leftCloseAutoGateGoldenFish extends LinearOpMode {
                     }
                 }
                 break;
-            case 10:
+            case 10: //shoot collected balls
                 if (!follower.isBusy()) {
                     if(init){
                         shooter.ballsShot = 6;
@@ -414,7 +415,7 @@ public class leftCloseAutoGateGoldenFish extends LinearOpMode {
             case 13: //second move to score position for collected balls
                 if (!follower.isBusy()) {
                     if (init){
-//                        intake.turnOffIntake();
+                        intake.turnOffIntake();
                         shooter.initializeBurstCloseEdge(); //prestart shooter
                         shooter.turnOnShooterAuto();
                         shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
@@ -469,6 +470,7 @@ public class leftCloseAutoGateGoldenFish extends LinearOpMode {
                 break;
             case 16: //move to score position for top row
                 if (!follower.isBusy()) {
+                    intake.turnOffIntake();
                     follower.followPath(scorePickupTop, true);
                     shooter.initializeBurstPark(); //prestart shooter
                     shooter.turnOnShooterAuto();

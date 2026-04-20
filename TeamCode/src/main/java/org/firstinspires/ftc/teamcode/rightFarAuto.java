@@ -183,6 +183,7 @@ public class rightFarAuto extends LinearOpMode {
             case 3: //move to score human player
                 if (!follower.isBusy()) {
                     if (init){
+                        intake.turnOffIntake();
                         init = false;
                     }
                     else{
@@ -230,6 +231,7 @@ public class rightFarAuto extends LinearOpMode {
             case 6: //move to score human player
                 if (!follower.isBusy()) {
                     if (init){
+                        intake.turnOffIntake();
                         init = false;
                     }
                     else{
@@ -277,6 +279,7 @@ public class rightFarAuto extends LinearOpMode {
             case 9: //move to score human player
                 if (!follower.isBusy()) {
                     if (init){
+                        intake.turnOffIntake();
                         init = false;
                     }
                     else{
