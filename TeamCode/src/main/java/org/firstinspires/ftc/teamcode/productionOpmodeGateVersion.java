@@ -254,14 +254,16 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             if (gamepad1.y){
                 indicatorLight.setIndicatorLight(IndicatorLight.INDICATOR_LIGHT_ORANGE);
             }
-            else if (shooter.constant){
-                indicatorLight.setIndicatorLight(IndicatorLight.INDICATOR_LIGHT_BLUE);
-            }
             else if (limelight.getBearing() >= -Limelight.HEADING_VALID_RANGE && limelight.getBearing() <= Limelight.HEADING_VALID_RANGE && limelight.getBearing() != 0.0){
                 indicatorLight.setIndicatorLight(IndicatorLight.INDICATOR_LIGHT_GREEN);
             }
             else {
-                indicatorLight.setIndicatorLight(IndicatorLight.INDICATOR_LIGHT_PURPLE);
+                if (shooter.constant){
+                    indicatorLight.setIndicatorLight(IndicatorLight.INDICATOR_LIGHT_BLUE);
+                }
+                else{
+                    indicatorLight.setIndicatorLight(IndicatorLight.INDICATOR_LIGHT_PURPLE);
+                }
             }
 
 //            telemetry.addData("intake current time:", intake.currentTime);
