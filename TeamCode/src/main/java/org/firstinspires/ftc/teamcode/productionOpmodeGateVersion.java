@@ -12,7 +12,6 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-
 @TeleOp(name="productionOpmodeGateVersion", group="Robot")
 public class productionOpmodeGateVersion extends LinearOpMode {
 
@@ -329,4 +328,3 @@ public class productionOpmodeGateVersion extends LinearOpMode {
         }
     }
 }
-
