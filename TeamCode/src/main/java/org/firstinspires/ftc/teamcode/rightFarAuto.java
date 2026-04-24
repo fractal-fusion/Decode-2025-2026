@@ -34,22 +34,22 @@ public class rightFarAuto extends LinearOpMode {
     public static double INTAKE_X_OFFSET = 0.5;
     public static double SCORE_HEADING_OFFSET = 0; //score heading offset since center of goals are not exactly 45 degrees
     public static double MAX_POWER = 1;
-    public static double COLLECT_BALLS_MAX_POWER = 0.75;
+    public static double COLLECT_BALLS_MAX_POWER = 1;
 
     //variables to keep track of how long each score took in order to implement failsafes based on the opmode timer
     private double scorePreloadTime = 0.0;
     private double scorePickupTopTime = 0.0;
     private double scorePickupMiddleTime = 0.0;
     private double scorePickupBottomTime = 0.0;
-    public double scoreHeading = 65;
+    public double scoreHeading = 60.5;
 
     private PathChain scorePreload, collectHumanPlayer, moveBackHumanPlayer, scoreHumanPlayer, goToPark; //define path chains (muliple paths interpolated)
 
     private final Pose startPose = new Pose(89.5, 8+AUTO_Y_OFFSET, Math.toRadians(90)); // Start Pose of our robot
-    private final Pose scorePose =  new Pose(83,14, Math.toRadians(scoreHeading));
-    private final Pose collectHumanPlayerPose = new Pose(131, 8, Math.toRadians(0));
-    private final Pose moveBackHumanPlayerPose = new Pose(127, 8, Math.toRadians(0));
-    private final Pose parkPose = new Pose(100,14, Math.toRadians(0));
+    private final Pose scorePose =  new Pose(83,20, Math.toRadians(scoreHeading));
+    private final Pose collectHumanPlayerPose = new Pose(143.5, 12, Math.toRadians(0));
+    private final Pose moveBackHumanPlayerPose = new Pose(127, 12, Math.toRadians(0));
+    private final Pose parkPose = new Pose(120,14, Math.toRadians(0));
 
     public void buildPaths() {
         scorePreload = follower.pathBuilder()

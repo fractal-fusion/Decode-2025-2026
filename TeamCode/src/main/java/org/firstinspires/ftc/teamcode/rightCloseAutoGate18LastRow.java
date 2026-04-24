@@ -67,7 +67,7 @@ public class rightCloseAutoGate18LastRow extends LinearOpMode {
     private final Pose releaseBallsPoseControlPoint1 = new Pose(98.141, 66.904);
     private final Pose collectBallsPose = new Pose(133.2, COLLECT_BALLS_Y, Math.toRadians(COLLECT_HEADING));
     private final Pose collectBallsPoseControlPoint1 = new Pose(80, 72);
-    private final Pose moveBackCollectBallsPose = new Pose(133, COLLECT_BALLS_Y-3, Math.toRadians(COLLECT_HEADING));
+    private final Pose moveBackCollectBallsPose = new Pose(133.2, COLLECT_BALLS_Y-3, Math.toRadians(COLLECT_HEADING));
     private final Pose scoreCollectBallsPoseControlPoint1 = new Pose(80, 69.341);
     private final Pose grabPickupMiddlePose = new Pose(136 + INTAKE_X_OFFSET, 57, Math.toRadians(0));
     private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(94, 64);
