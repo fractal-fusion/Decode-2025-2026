@@ -12,7 +12,7 @@ public class PoseManager {
     }
 
     public static double RED_FAR_SHOOTING_HEADING = 67;
-    public static double RED_LEVER_HEADING = 33;
+    public static double RED_LEVER_HEADING = 27;
 
 
     public static Pose currentPose = new Pose();
@@ -29,16 +29,16 @@ public class PoseManager {
     public static double RED_GOAL_AUTOALIGN_Y = 135;
 
     public static Pose RED_GOAL_AUTOALIGN_POSITION = new Pose(RED_GOAL_AUTOALIGN_X, RED_GOAL_AUTOALIGN_Y);
-    public static Pose BLUE_GOAL_AUTOALIGN_POSITION = new Pose(RED_GOAL_AUTOALIGN_X, RED_GOAL_AUTOALIGN_Y).mirror();
+    public static Pose BLUE_GOAL_AUTOALIGN_POSITION = RED_GOAL_AUTOALIGN_POSITION.mirror();
 
-    public static Pose RED_LEVER_POSITION = new Pose(134.5,59.5, Math.toRadians(RED_LEVER_HEADING));
+    public static Pose RED_LEVER_POSITION = new Pose(133.2,60.5, Math.toRadians(RED_LEVER_HEADING));
     public static Pose BLUE_LEVER_POSITION = RED_LEVER_POSITION.mirror();
 
-    public static Pose RED_LEVER_CONTROL_POINT = new Pose(106, 47.7);
+    public static Pose RED_LEVER_CONTROL_POINT = new Pose(108.436, 58.333);
     public static Pose BLUE_LEVER_CONTROL_POINT = RED_LEVER_CONTROL_POINT.mirror();
 
 
-    public static Pose RED_FAR_POSITION = new Pose(83,14, Math.toRadians(RED_FAR_SHOOTING_HEADING));
+    public static Pose RED_FAR_POSITION = new Pose(83,20, Math.toRadians(RED_FAR_SHOOTING_HEADING));
     public static Pose BLUE_FAR_POSITION = RED_FAR_POSITION.mirror();
 
     //define where team-specific poses are stored

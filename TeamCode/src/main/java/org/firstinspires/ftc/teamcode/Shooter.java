@@ -10,6 +10,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+
 @Config
 public class Shooter{
     public Gamepad currentGamepad = new Gamepad(); //gamepads for rising edge detector
@@ -506,6 +508,9 @@ public class Shooter{
         setTargetRPMToleranceRPM(TARGET_RPM_TOLERANCE_RPM_CLOSE);
     }
 
+    public double getCurrent(){
+        return ((DcMotorEx) shooterRight).getCurrent(CurrentUnit.AMPS) + ((DcMotorEx) shooterLeft).getCurrent(CurrentUnit.AMPS);
+    }
 
 // back motors outside, front motors at second to outside, shooters at second to inside, and rest at inside.
 }

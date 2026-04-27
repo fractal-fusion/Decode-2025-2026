@@ -322,6 +322,10 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             telemetry.addLine("------------------------------------------------------");
 
             telemetry.addData("heading PID timer", drivetrain.headingPIDTimer.getElapsedTimeSeconds());
+
+            telemetry.addLine("------------------------------------------------------");
+            telemetry.addData("shooter current", shooter.getCurrent());
+
             Drawing.drawDebug(follower);
 
             telemetry.update();
