@@ -105,13 +105,13 @@ public class productionOpmodeGateVersion extends LinearOpMode {
             }
             else if (gamepad1.dpad_right){
                 if(!drivetrain.isFollowing){
-                    if(drivetrain.isFarOdometry(follower.getPose())){
-                        follower.followPath(goToLeverPositionFromFar, true);
-
-                    }
-                    else{
-                        follower.followPath(goToLeverPositionFromClose, true);
-                    }
+//                    if(drivetrain.isFarOdometry(follower.getPose())){
+//                        follower.followPath(goToLeverPositionFromFar, true);
+//
+//                    }
+//                    else{
+                       follower.followPath(goToLeverPositionFromClose, true);
+//                }
                     drivetrain.isFollowing = true;
                 }
             }

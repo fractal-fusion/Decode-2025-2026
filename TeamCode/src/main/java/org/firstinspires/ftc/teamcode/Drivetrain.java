@@ -43,11 +43,11 @@ public class Drivetrain {
     public static double ODO_HEADING_VALID_RANGE = 1.5;
     public static double RELOCALIZATION_VELOCITY_THRESHOLD = 0.1;
 
-    public static double P = 0.6;
+    public static double P = 0.525;
     public static double I = 0;
     public static double D = 0;
 
-    public static double SECONDARY_P = 2;
+    public static double SECONDARY_P = 1.8;
     public static double SECONDARY_I = 0;
     public static double SECONDARY_D = 0;
     public Timer headingPIDTimer = new Timer();
