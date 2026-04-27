@@ -35,7 +35,7 @@ public class leftCloseAutoGate15 extends LinearOpMode {
     public static double HEADING_INTERPOLATION_END_PERCENTAGE = 0.65;
     public static double AUTO_Y_OFFSET = 0;
     public static double INTAKE_X_OFFSET = 0;
-//    public static double RELEASE_BALLS_Y = 74.2;
+    //    public static double RELEASE_BALLS_Y = 74.2;
     public static double COLLECT_BALLS_Y = 60 + 1;
     public static double COLLECT_HEADING = 32;
     public static double SCORE_HEADING_OFFSET = -0.5; //score heading offset since center of goals are not exactly 45 degrees
@@ -60,7 +60,7 @@ public class leftCloseAutoGate15 extends LinearOpMode {
     private final Pose scorePreloadPose = new Pose(90, 94, Math.toRadians(SCORE_HEADING_PRELOAD)).mirror();
     private final Pose grabPickupTopPose = new Pose(127 + INTAKE_X_OFFSET, 82, Math.toRadians(0)).mirror();
     private final Pose grabPickupTopPoseControlPoint1 = new Pose(80, 81).mirror();
-//    private final Pose releaseBallsPose = new Pose(128.5, RELEASE_BALLS_Y, Math.toRadians(0));
+    //    private final Pose releaseBallsPose = new Pose(128.5, RELEASE_BALLS_Y, Math.toRadians(0));
     private final Pose releaseBallsPoseControlPoint1 = new Pose(98.141, 66.904).mirror();
     private final Pose collectBallsPose = new Pose(134, COLLECT_BALLS_Y, Math.toRadians(COLLECT_HEADING)).mirror();
     private final Pose collectBallsPoseControlPoint1 = new Pose(80, 72).mirror();
@@ -68,7 +68,7 @@ public class leftCloseAutoGate15 extends LinearOpMode {
     private final Pose scoreCollectBallsPoseControlPoint1 = new Pose(80, 69.341).mirror();
     private final Pose grabPickupMiddlePose = new Pose(132 + INTAKE_X_OFFSET, 54, Math.toRadians(0)).mirror();
     private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(80, 54).mirror();
-//    private final Pose scorePickupMiddlePoseControlPoint1 = new Pose(80, 69.341);
+    //    private final Pose scorePickupMiddlePoseControlPoint1 = new Pose(80, 69.341);
     private final Pose grabPickupBottomPose = new Pose(132.5 + INTAKE_X_OFFSET, 36, Math.toRadians(0)).mirror();
     private final Pose grabPickupBottomPoseControlPoint1 = new Pose(80, 24).mirror();
     private final Pose goToWallHumanPlayerPose = new Pose(WALL_HUMAN_PLAYER_X, 45, Math.toRadians(315)).mirror();

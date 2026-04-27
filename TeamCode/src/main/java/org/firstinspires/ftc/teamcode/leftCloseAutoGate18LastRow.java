@@ -25,20 +25,21 @@ public class leftCloseAutoGate18LastRow extends LinearOpMode {
     private boolean init = true;
     public static double INTAKE_DELAY_TIME = 0.015;
     public static double INTAKE_DELAY_TIME_PRELOAD = 0.05;
+    public static double TURN_OFF_INTAKE_DELAY_TIME = 1.4;
     public static double WALL_HUMAN_PLAYER_X = 128;
     public static double INTAKE_HUMAN_PLAYER_X = 134.8;
 //    public static double INTAKE_HUMAN_PLAYER_FLICKER_TIME = 3;
 
-    public static double RELEASE_BALLS_WAIT_TIME = 0.05; //time to wait at the chamber
-    public static double SECOND_RELEASE_BALLS_WAIT_TIME = 0.1; //time to wait at the chamber
+    public static double RELEASE_BALLS_WAIT_TIME = 2.2; //time to wait at the chamber
+    public static double SECOND_RELEASE_BALLS_WAIT_TIME = 2.5; //time to wait at the chamber
     public static double COLLECT_ALL_BALLS_WAIT_TIME = 0;
     public static double HEADING_INTERPOLATION_END_PERCENTAGE = 0.65;
     public static double AUTO_Y_OFFSET = 0;
     public static double INTAKE_X_OFFSET = 0;
-//    public static double RELEASE_BALLS_Y = 74.2;
+    //    public static double RELEASE_BALLS_Y = 74.2;
     public static double COLLECT_BALLS_Y = 59;
     public static double COLLECT_HEADING = 27;
-    public static double SCORE_HEADING_OFFSET = -3; //score heading offset since center of goals are not exactly 45 degrees
+    public static double SCORE_HEADING_OFFSET = 1.5; //score heading offset since center of goals are not exactly 45 degrees
     public static double SCORE_HEADING_PRELOAD_TOLERANCE = 0.1;
     public static double SCORE_HEADING_PRELOAD = 44.5;
     public static double SCORE_HEADING_PARK = 33.5;
@@ -57,22 +58,22 @@ public class leftCloseAutoGate18LastRow extends LinearOpMode {
 
     private final Pose startPose = new Pose(128, 116+AUTO_Y_OFFSET, Math.toRadians(180)).mirror(); // Start Pose of our robot
     private final Pose scorePose = new Pose(90, 94, scoreHeading).mirror();
-    private final Pose scoreParkPose = new Pose(88.5, 100.5, Math.toRadians(SCORE_HEADING_PARK)).mirror();
-    private final Pose edgeScorePose = new Pose(88, 78, edgeScoreHeading).mirror();
+    private final Pose scoreParkPose = new Pose(88.5, 104.5, Math.toRadians(SCORE_HEADING_PARK)).mirror();
+    private final Pose edgeScorePose = new Pose(90, 82, edgeScoreHeading).mirror();
     private final Pose scorePreloadPose = new Pose(90, 94, Math.toRadians(SCORE_HEADING_PRELOAD)).mirror();
-    private final Pose grabPickupTopPose = new Pose(127 + INTAKE_X_OFFSET, 83, Math.toRadians(0)).mirror();
-    private final Pose grabPickupTopPoseControlPoint1 = new Pose(83.033, 75.4).mirror();
-//    private final Pose releaseBallsPose = new Pose(128.5, RELEASE_BALLS_Y, Math.toRadians(0));
+    private final Pose grabPickupTopPose = new Pose(130.8 + INTAKE_X_OFFSET, 89, Math.toRadians(0)).mirror();
+    private final Pose grabPickupTopPoseControlPoint1 = new Pose(83.033, 80).mirror();
+    //    private final Pose releaseBallsPose = new Pose(128.5, RELEASE_BALLS_Y, Math.toRadians(0));
     private final Pose releaseBallsPoseControlPoint1 = new Pose(98.141, 66.904).mirror();
-    private final Pose collectBallsPose = new Pose(132.5, COLLECT_BALLS_Y, Math.toRadians(COLLECT_HEADING)).mirror();
+    private final Pose collectBallsPose = new Pose(133.2, COLLECT_BALLS_Y, Math.toRadians(COLLECT_HEADING)).mirror();
     private final Pose collectBallsPoseControlPoint1 = new Pose(80, 72).mirror();
-    private final Pose moveBackCollectBallsPose = new Pose(132.5, COLLECT_BALLS_Y-3, Math.toRadians(COLLECT_HEADING)).mirror();
+    private final Pose moveBackCollectBallsPose = new Pose(133.2, COLLECT_BALLS_Y-3, Math.toRadians(COLLECT_HEADING)).mirror();
     private final Pose scoreCollectBallsPoseControlPoint1 = new Pose(80, 69.341).mirror();
-    private final Pose grabPickupMiddlePose = new Pose(130 + INTAKE_X_OFFSET, 60, Math.toRadians(0)).mirror();
-    private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(80, 54).mirror();
-//    private final Pose scorePickupMiddlePoseControlPoint1 = new Pose(80, 69.341);
-    private final Pose grabPickupBottomPose = new Pose(130 + INTAKE_X_OFFSET, 40, Math.toRadians(0)).mirror();
-    private final Pose grabPickupBottomPoseControlPoint1 = new Pose(80, 24).mirror();
+    private final Pose grabPickupMiddlePose = new Pose(136 + INTAKE_X_OFFSET, 57, Math.toRadians(0)).mirror();
+    private final Pose grabPickupMiddlePoseControlPoint1 = new Pose(94, 64).mirror();
+    private final Pose scorePickupMiddlePoseControlPoint1 = new Pose(93, 69.341).mirror();
+    private final Pose grabPickupBottomPose = new Pose(135.9 + INTAKE_X_OFFSET, 33, Math.toRadians(0)).mirror();
+    private final Pose grabPickupBottomPoseControlPoint1 = new Pose(90, 40).mirror();
     private final Pose goToWallHumanPlayerPose = new Pose(WALL_HUMAN_PLAYER_X, 45, Math.toRadians(315)).mirror();
     private final Pose grabPickupHumanPlayerPose = new Pose(INTAKE_HUMAN_PLAYER_X, 5, Math.toRadians(270)).mirror();
     private final Pose parkPose = new Pose(100,70, Math.toRadians(0)).mirror();
@@ -97,6 +98,7 @@ public class leftCloseAutoGate18LastRow extends LinearOpMode {
         scorePickupTop = follower.pathBuilder()
                 .addPath(new BezierLine(grabPickupTopPose, scoreParkPose))
                 .setLinearHeadingInterpolation(grabPickupTopPose.getHeading(), scoreParkPose.getHeading())
+                .addTemporalCallback(TURN_OFF_INTAKE_DELAY_TIME, intake::turnOffIntake)
                 .build();
         grabPickupMiddle = follower.pathBuilder()
                 .addPath(new BezierCurve(scorePose, grabPickupMiddlePoseControlPoint1, grabPickupMiddlePose))
@@ -104,17 +106,20 @@ public class leftCloseAutoGate18LastRow extends LinearOpMode {
 //                .addPoseCallback(new Pose(130, 58), intake::holdFlicker, 0.5)
                 .build();
         scorePickupMiddle = follower.pathBuilder()
-                .addPath(new BezierLine(grabPickupMiddlePose, edgeScorePose))
+                .addPath(new BezierCurve(grabPickupMiddlePose, scorePickupMiddlePoseControlPoint1, edgeScorePose))
                 .setLinearHeadingInterpolation(grabPickupMiddlePose.getHeading(), edgeScorePose.getHeading())
+                .addTemporalCallback(TURN_OFF_INTAKE_DELAY_TIME, intake::turnOffIntake)
                 .build();
         grabPickupBottom = follower.pathBuilder()
                 .addPath(new BezierCurve(edgeScorePose, grabPickupBottomPoseControlPoint1, grabPickupBottomPose))
                 .setLinearHeadingInterpolation(edgeScorePose.getHeading(), grabPickupBottomPose.getHeading(), HEADING_INTERPOLATION_END_PERCENTAGE)
+                .setTimeoutConstraint(30)
 //                .addPoseCallback(new Pose(130, 36), intake::holdFlicker, 0.5)
                 .build();
         scorePickupBottom = follower.pathBuilder()
                 .addPath(new BezierLine(grabPickupBottomPose, edgeScorePose))
                 .setLinearHeadingInterpolation(grabPickupBottomPose.getHeading(), edgeScorePose.getHeading())
+                .addTemporalCallback(TURN_OFF_INTAKE_DELAY_TIME, intake::turnOffIntake)
                 .build();
         goToWallHumanPlayer = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, goToWallHumanPlayerPose))
@@ -144,6 +149,7 @@ public class leftCloseAutoGate18LastRow extends LinearOpMode {
         scoreCollectBalls = follower.pathBuilder()
                 .addPath(new BezierLine(collectBallsPose, edgeScorePose))
                 .setConstantHeadingInterpolation(edgeScorePose.getHeading())
+                .addTemporalCallback(TURN_OFF_INTAKE_DELAY_TIME, intake::turnOffIntake)
                 .build();
         goToPark = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, parkPose))
@@ -271,7 +277,7 @@ public class leftCloseAutoGate18LastRow extends LinearOpMode {
             case 3: //move to score position for middle row
                 if (!follower.isBusy()) {
                     if (init){
-                        intake.turnOffIntake();
+//                        intake.turnOffIntake();
                         shooter.initializeBurstCloseEdge(); //prestart shooter, shooter already on
                         shooter.turnOnShooterAuto();
                         shooter.setGatePosition(Shooter.GATE_OPEN_POSITION);
@@ -336,7 +342,7 @@ public class leftCloseAutoGate18LastRow extends LinearOpMode {
             case 7: //move to score position for collected balls
                 if (!follower.isBusy()) {
                     if (init){
-                        intake.turnOffIntake();
+//                        intake.turnOffIntake();
                         shooter.initializeBurstCloseEdge(); //prestart shooter
                         shooter.turnOnShooterAuto();
                         shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
@@ -401,7 +407,7 @@ public class leftCloseAutoGate18LastRow extends LinearOpMode {
             case 11: //second move to score position for collected balls
                 if (!follower.isBusy()) {
                     if (init){
-                        intake.turnOffIntake();
+//                        intake.turnOffIntake();
                         shooter.initializeBurstCloseEdge(); //prestart shooter
                         shooter.turnOnShooterAuto();
                         shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
@@ -457,7 +463,7 @@ public class leftCloseAutoGate18LastRow extends LinearOpMode {
             case 14: //move to score position for bottom row
                 if (!follower.isBusy()) {
                     if (init){
-                        intake.turnOffIntake();
+//                        intake.turnOffIntake();
                         init = false;
                     }
                     else{
@@ -514,7 +520,7 @@ public class leftCloseAutoGate18LastRow extends LinearOpMode {
             case 17: //move to score position for top row
                 if (!follower.isBusy()) {
                     if (init){
-                        intake.turnOffIntake();
+//                        intake.turnOffIntake();
                         init = false;
                     }
                     else {
