@@ -62,7 +62,7 @@ public class Shooter{
     public static double TARGET_RPM_TOLERANCE_RPM_CLOSE = 100;
     public static double TARGET_RPM_TOLERANCE_RPM_FAR = 30;
     public static double REGRESSION_RPM_OFFSET_LIMELIGHT = 25;
-    public static double REGRESSION_RPM_OFFSET_ODOMETRY_CLOSE = 25;
+    public static double REGRESSION_RPM_OFFSET_ODOMETRY_CLOSE = 150;
     public static double REGRESSION_RPM_OFFSET_ODOMETRY_FAR = 0;
     public static double REGRESSION_RESTING_RPM = 2800;
     public double targetRPMToleranceRPM = TARGET_RPM_TOLERANCE_RPM_CLOSE; //initially set to the tolerance for close

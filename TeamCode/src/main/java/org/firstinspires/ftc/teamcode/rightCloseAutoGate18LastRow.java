@@ -37,7 +37,7 @@ public class rightCloseAutoGate18LastRow extends LinearOpMode {
     public static double AUTO_Y_OFFSET = 0;
     public static double INTAKE_X_OFFSET = 0;
 //    public static double RELEASE_BALLS_Y = 74.2;
-    public static double COLLECT_BALLS_Y = 59;
+    public static double COLLECT_BALLS_Y = 60.5;
     public static double COLLECT_HEADING = 27;
     public static double SCORE_HEADING_OFFSET = 1.5; //score heading offset since center of goals are not exactly 45 degrees
     public static double SCORE_HEADING_PRELOAD_TOLERANCE = 0.1;
